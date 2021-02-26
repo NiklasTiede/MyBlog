@@ -1,0 +1,14 @@
+baseURL = "http://the-coding-lab.com"
+languageCode = "en-us"
+title = "The Coding Lab"
+theme = "jeffprod"
+
+# use github pages for deployment (docs)
+publishDir = "docs"
+
+[permalinks]
+    post = "/:year/:filename"
+
+[taxonomies]
+    tag = "tags"
+    archive = "archives"
