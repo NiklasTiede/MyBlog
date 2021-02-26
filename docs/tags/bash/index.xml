@@ -2,34 +2,34 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>bash on The Coding Lab</title>
-    <link>http://the-coding-lab.com/tags/bash/</link>
+    <link>https://the-coding-lab.com/tags/bash/</link>
     <description>Recent content in bash on The Coding Lab</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 25 Feb 2021 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://the-coding-lab.com/tags/bash/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://the-coding-lab.com/tags/bash/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Publishing at Anaconda - 9/9</title>
-      <link>http://the-coding-lab.com/2021/9-publishing-at-anaconda/</link>
+      <link>https://the-coding-lab.com/2021/9-publishing-at-anaconda/</link>
       <pubDate>Thu, 25 Feb 2021 00:00:00 +0000</pubDate>
       
-      <guid>http://the-coding-lab.com/2021/9-publishing-at-anaconda/</guid>
+      <guid>https://the-coding-lab.com/2021/9-publishing-at-anaconda/</guid>
       <description>&lt;p&gt;Heya fellows,&lt;/p&gt;
 &lt;p&gt;This is part 9 of the multi-part series &amp;ldquo;The Evolution of a Script&amp;rdquo;. The code of this post can be found on Github (see &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/tree/9-Publishing-at-Anaconda&#34;&gt;here&lt;/a&gt;).&lt;/p&gt;
 &lt;h4 id=&#34;contents&#34;&gt;Contents&lt;/h4&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/1-the-evolution-of-a-script&#34;&gt;A Simple Script&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/2-sys-module&#34;&gt;Sys Module&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;Argparse Module&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/4-distribution-via-installation-script&#34;&gt;Distribution via Installation Script&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;Distribution via Setup File&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/6-testing-and-continous-integration&#34;&gt;Testing and Continuous Integration&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/7-documentation&#34;&gt;Documentation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;&lt;strong&gt;Publishing at Anaconda&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/1-the-evolution-of-a-script&#34;&gt;A Simple Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/2-sys-module&#34;&gt;Sys Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;Argparse Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/4-distribution-via-installation-script&#34;&gt;Distribution via Installation Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;Distribution via Setup File&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/6-testing-and-continous-integration&#34;&gt;Testing and Continuous Integration&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/7-documentation&#34;&gt;Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;&lt;strong&gt;Publishing at Anaconda&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;When a &lt;code&gt;setup.py&lt;/code&gt; file was already created, it&amp;rsquo;s pretty simple to go a step further and make an &lt;a href=&#34;https://anaconda.org&#34;&gt;Anaconda&lt;/a&gt; package. The metadata of the &lt;code&gt;setup.py&lt;/code&gt; file can be imported via jinja2 templating into the &lt;code&gt;meta.yml&lt;/code&gt; file.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;{&lt;span style=&#34;color:#ae81ff&#34;&gt;% set data = load_setup_py_data() %}&lt;/span&gt;
@@ -137,23 +137,23 @@ echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Uploading conda packages
     
     <item>
       <title>Distribution via Installation Script - 4/9</title>
-      <link>http://the-coding-lab.com/2021/4-distribution-via-installation-script/</link>
+      <link>https://the-coding-lab.com/2021/4-distribution-via-installation-script/</link>
       <pubDate>Sat, 06 Feb 2021 00:00:00 +0000</pubDate>
       
-      <guid>http://the-coding-lab.com/2021/4-distribution-via-installation-script/</guid>
+      <guid>https://the-coding-lab.com/2021/4-distribution-via-installation-script/</guid>
       <description>&lt;p&gt;Heya fellows,&lt;/p&gt;
 &lt;p&gt;This is part 4 of the multi-part series &amp;ldquo;The Evolution of a Script&amp;rdquo;. The code of this post can be found on Github (see &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/tree/4-Distributing-by-Installscript&#34;&gt;here&lt;/a&gt;).&lt;/p&gt;
 &lt;h4 id=&#34;contents&#34;&gt;Contents&lt;/h4&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/1-the-evolution-of-a-script&#34;&gt;A Simple Script&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/2-sys-module&#34;&gt;Sys Module&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;Argparse Module&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/4-distribution-via-installation-script&#34;&gt;&lt;strong&gt;Distribution via Installation Script&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;Distribution via Setup File&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/6-testing-and-continous-integration&#34;&gt;Testing and Continuous Integration&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/7-documentation&#34;&gt;Documentation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/1-the-evolution-of-a-script&#34;&gt;A Simple Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/2-sys-module&#34;&gt;Sys Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;Argparse Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/4-distribution-via-installation-script&#34;&gt;&lt;strong&gt;Distribution via Installation Script&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;Distribution via Setup File&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/6-testing-and-continous-integration&#34;&gt;Testing and Continuous Integration&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/7-documentation&#34;&gt;Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;We created a useful tool, but wouldn&amp;rsquo;t it be nice if we could make it accessible to others? So let&amp;rsquo;s share it! At first, we have to make a snapshot of our virtual environment.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ pip freeze &amp;gt; requirements.txt

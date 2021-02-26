@@ -2,34 +2,34 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>testing on The Coding Lab</title>
-    <link>http://the-coding-lab.com/tags/testing/</link>
+    <link>https://the-coding-lab.com/tags/testing/</link>
     <description>Recent content in testing on The Coding Lab</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 16 Feb 2021 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://the-coding-lab.com/tags/testing/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://the-coding-lab.com/tags/testing/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Testing and CI - 6/9</title>
-      <link>http://the-coding-lab.com/2021/6-testing-and-continous-integration/</link>
+      <link>https://the-coding-lab.com/2021/6-testing-and-continous-integration/</link>
       <pubDate>Tue, 16 Feb 2021 00:00:00 +0000</pubDate>
       
-      <guid>http://the-coding-lab.com/2021/6-testing-and-continous-integration/</guid>
+      <guid>https://the-coding-lab.com/2021/6-testing-and-continous-integration/</guid>
       <description>&lt;p&gt;Heya fellows,&lt;/p&gt;
 &lt;p&gt;This is part 6 of the multi-part series &amp;ldquo;The Evolution of a Script&amp;rdquo;. The code of this post can be found on Github (see &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/tree/6-Testing-and-CI&#34;&gt;here&lt;/a&gt;).&lt;/p&gt;
 &lt;h4 id=&#34;contents&#34;&gt;Contents&lt;/h4&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/1-the-evolution-of-a-script&#34;&gt;A Simple Script&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/2-sys-module&#34;&gt;Sys Module&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;Argparse Module&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/4-distribution-via-installation-script&#34;&gt;Distribution via Installation Script&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;Distribution via Setup File&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/6-testing-and-continous-integration&#34;&gt;&lt;strong&gt;Testing and Continuous Integration&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/7-documentation&#34;&gt;Documentation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/1-the-evolution-of-a-script&#34;&gt;A Simple Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/2-sys-module&#34;&gt;Sys Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;Argparse Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/4-distribution-via-installation-script&#34;&gt;Distribution via Installation Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;Distribution via Setup File&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/6-testing-and-continous-integration&#34;&gt;&lt;strong&gt;Testing and Continuous Integration&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/7-documentation&#34;&gt;Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;When projects grow a good test suite ensures
 that new features added don&amp;rsquo;t cause the application to break. It improves the maintainability of the project. The complexity of small projects is very low and a testing is not necessary yet. But for the sake of this tutorial we will write a small test suite to demonstrate testing and continuous integration. We will use &lt;code&gt;pytest&lt;/code&gt;.&lt;/p&gt;
