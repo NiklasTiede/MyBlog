@@ -1,0 +1,949 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>python on The Coding Lab</title>
+    <link>http://the-coding-lab.com/tags/python/</link>
+    <description>Recent content in python on The Coding Lab</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 25 Feb 2021 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://the-coding-lab.com/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Publishing at Anaconda - 9/9</title>
+      <link>http://the-coding-lab.com/2021/9-publishing-at-anaconda/</link>
+      <pubDate>Thu, 25 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://the-coding-lab.com/2021/9-publishing-at-anaconda/</guid>
+      <description>&lt;p&gt;Heya fellows,&lt;/p&gt;
+&lt;p&gt;This is part 9 of the multi-part series &amp;ldquo;The Evolution of a Script&amp;rdquo;. The code of this post can be found on Github (see &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/tree/9-Publishing-at-Anaconda&#34;&gt;here&lt;/a&gt;).&lt;/p&gt;
+&lt;h4 id=&#34;contents&#34;&gt;Contents&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/1-the-evolution-of-a-script&#34;&gt;A Simple Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/2-sys-module&#34;&gt;Sys Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;Argparse Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/4-distribution-via-installation-script&#34;&gt;Distribution via Installation Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;Distribution via Setup File&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/6-testing-and-continous-integration&#34;&gt;Testing and Continuous Integration&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/7-documentation&#34;&gt;Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;&lt;strong&gt;Publishing at Anaconda&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;When a &lt;code&gt;setup.py&lt;/code&gt; file was already created, it&amp;rsquo;s pretty simple to go a step further and make an &lt;a href=&#34;https://anaconda.org&#34;&gt;Anaconda&lt;/a&gt; package. The metadata of the &lt;code&gt;setup.py&lt;/code&gt; file can be imported via jinja2 templating into the &lt;code&gt;meta.yml&lt;/code&gt; file.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;{&lt;span style=&#34;color:#ae81ff&#34;&gt;% set data = load_setup_py_data() %}&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;package&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;tihttp&amp;#39;&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;version&lt;/span&gt;: {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;data[&amp;#39;version&amp;#39;] }}&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;source&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;path&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;..&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;build&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;number&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;entry_points&lt;/span&gt;:
+    {&lt;span style=&#34;color:#ae81ff&#34;&gt;% for entry_point in data[&amp;#39;entry_points&amp;#39;][&amp;#39;console_scripts&amp;#39;] %}&lt;/span&gt;
+    - {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;entry_point }}&lt;/span&gt;
+    {&lt;span style=&#34;color:#ae81ff&#34;&gt;% endfor %}&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;script&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;python -m pip install --no-deps --ignore-installed .&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;requirements&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;build&lt;/span&gt;:
+    - &lt;span style=&#34;color:#ae81ff&#34;&gt;python&lt;/span&gt;
+    - &lt;span style=&#34;color:#ae81ff&#34;&gt;pip&lt;/span&gt;
+    - &lt;span style=&#34;color:#ae81ff&#34;&gt;setuptools&lt;/span&gt;
+
+  &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;:
+    - &lt;span style=&#34;color:#ae81ff&#34;&gt;python&lt;/span&gt;
+    {&lt;span style=&#34;color:#ae81ff&#34;&gt;% for dep in data[&amp;#39;install_requires&amp;#39;] %}&lt;/span&gt;
+    - {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;dep.lower() }}&lt;/span&gt;
+    {&lt;span style=&#34;color:#ae81ff&#34;&gt;% endfor %}&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;test&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;imports&lt;/span&gt;:
+    - {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;data[&amp;#39;name&amp;#39;] }}&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;source_files&lt;/span&gt;:
+    - &lt;span style=&#34;color:#ae81ff&#34;&gt;tests&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;requires&lt;/span&gt;:
+    {&lt;span style=&#34;color:#ae81ff&#34;&gt;% for test_dep in data[&amp;#39;extras_require&amp;#39;][&amp;#39;dev&amp;#39;] %}&lt;/span&gt;
+    - {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;test_dep.lower() }}&lt;/span&gt;
+    {&lt;span style=&#34;color:#ae81ff&#34;&gt;% endfor %}&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;commands&lt;/span&gt;:
+    - &lt;span style=&#34;color:#ae81ff&#34;&gt;pytest tests&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;about&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;home&lt;/span&gt;: {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;data[&amp;#39;url&amp;#39;] }}&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;license&lt;/span&gt;: {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;data[&amp;#39;license&amp;#39;] }}&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;summary&lt;/span&gt;: {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;data[&amp;#39;description&amp;#39;] }}&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;doc_source_url&lt;/span&gt;: {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;data[&amp;#39;url&amp;#39;] + &amp;#39;/blob/master/README.md&amp;#39; }}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we can build the package.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ conda build .
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The generated file &lt;code&gt;tihttp-0.1.0-py37_0.tar.bz2&lt;/code&gt; can be found within the &lt;code&gt;anaconda3/conda-build/linux-64&lt;/code&gt; directory. To upload the package to the anaconda repository we have to register and then we can use the &lt;code&gt;anaconda upload&lt;/code&gt; command.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ anaconda upload home/niklas/anaconda3/conda-build/linux-64/tihttp-0.1.0-py37_0.tar.bz2
+
+$ conda install -c niklastiede tihttp
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;But building and uploading packages for different Python interpreter versions and different operating systems is tedious. This work can be automated by a bash script:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/bin/bash
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;
+export PATH&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/anaconda3/bin:$PATH
+pkg&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;tihttp&amp;#39;&lt;/span&gt;
+array&lt;span style=&#34;color:#f92672&#34;&gt;=(&lt;/span&gt; 3.6 3.7 3.8 3.9 &lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# delete old built packages&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; -d $HOME/conda-bld/ &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+    rm -r $HOME/conda-bld/
+&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i in $HOME/anaconda3/conda-bld/linux-64/$pkg*; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+    echo $i
+    rm $i
+&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Deleting old conda packages done!&amp;#34;&lt;/span&gt;
+
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# building conda packages&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i in &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;array[@]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+    echo $i
+	conda build --py $i .
+&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Building conda packages done!&amp;#34;&lt;/span&gt;
+
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# converting conda packages to other platforms&lt;/span&gt;
+platforms&lt;span style=&#34;color:#f92672&#34;&gt;=(&lt;/span&gt; osx-64 linux-32 linux-64 win-32 win-64 &lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; file in $HOME/anaconda3/conda-bld/linux-64/$pkg*; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+    echo $file
+    conda convert --platform all $file  -o $HOME/conda-bld/
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; platform in &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;platforms[@]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+        conda convert --platform $platform $file  -o $HOME/conda-bld/
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;converting packages to other platforms done!&amp;#34;&lt;/span&gt;
+
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# uploading packages&lt;/span&gt;
+find $HOME/conda-bld/**/$pkg*.tar.bz2 | &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; read file
+&lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+    anaconda upload $file
+&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Uploading conda packages done!&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;!-- raw HTML omitted --&gt;
+</description> 
+    </item>
+    
+    <item>
+      <title>Publishing at PyPI - 8/9</title>
+      <link>http://the-coding-lab.com/2021/8-publishing-at-pypi/</link>
+      <pubDate>Tue, 23 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://the-coding-lab.com/2021/8-publishing-at-pypi/</guid>
+      <description>&lt;p&gt;Heya fellows,&lt;/p&gt;
+&lt;p&gt;This is part 8 of the multi-part series &amp;ldquo;The Evolution of a Script&amp;rdquo;. The code of this post can be found on Github (see &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/tree/8-Publishing-at-PyPI&#34;&gt;here&lt;/a&gt;).&lt;/p&gt;
+&lt;h4 id=&#34;contents&#34;&gt;Contents&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/1-the-evolution-of-a-script&#34;&gt;A Simple Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/2-sys-module&#34;&gt;Sys Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;Argparse Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/4-distribution-via-installation-script&#34;&gt;Distribution via Installation Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;Distribution via Setup File&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/6-testing-and-continous-integration&#34;&gt;Testing and Continuous Integration&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/7-documentation&#34;&gt;Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;&lt;strong&gt;Publishing at PyPI&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Ok, now people can download our project from github and use it. But in our daily work we use the Python Packaging Index to install things. So how do we release our package on PyPI? First we have to decide which versioning scheme we will use. Semantic versioning (&lt;a href=&#34;https://semver.org/&#34;&gt;semver.org&lt;/a&gt;) and calendar versioning (&lt;a href=&#34;https://calver.org/&#34;&gt;calver.org&lt;/a&gt;) are commonly used. We decide to use semantic versioning in the following. Github allows us to make images of our project (tags). Often the tagging corresponds with the package release on PyPI. So let&amp;rsquo;s first create a tag:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ git add .
+$ git commit -m &amp;quot;v1.0.0&amp;quot;
+$ git tag !$
+$ git push origin &amp;quot;v1.0.0&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Tags are a great opportunity to see a project in reverse at every stage of its development. Next we will generate a source distribution (.tar.gz) and a wheel distribution (.whl).&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip install wheel
+
+$ python setup.py sdist bdist_wheel
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The generated files can be found within the &lt;code&gt;dist&lt;/code&gt; directory. Now we have to register at &lt;a href=&#34;https://pypi.org/&#34;&gt;PyPI&lt;/a&gt; before we can upload our project. For testing purposes it&amp;rsquo;s convenient to upload the project to &lt;a href=&#34;https://test.pypi.org/&#34;&gt;TestPyPI&lt;/a&gt; first. So, let&amp;rsquo;s do that.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip install twine
+
+$ twine upload --repository testpypi dist/*
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now let&amp;rsquo;s test installing &lt;code&gt;tihttp&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip install -i https://test.pypi.org/pypi/ --extra-index-url https://pypi.org/simple tihttp
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Our tools works perfectly fine!&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ tihttp -H google.com
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;p&gt;And now that we are sure that everything works, it&amp;rsquo;s time to upload things to PyPI.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ twine upload --repository pypi dist/*
+
+$ pip install tihttp
+&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
+</description> 
+    </item>
+    
+    <item>
+      <title>Documentation - 7/9</title>
+      <link>http://the-coding-lab.com/2021/7-documentation/</link>
+      <pubDate>Fri, 19 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://the-coding-lab.com/2021/7-documentation/</guid>
+      <description>&lt;p&gt;Heya fellows,&lt;/p&gt;
+&lt;p&gt;This is part 7 of the multi-part series &amp;ldquo;The Evolution of a Script&amp;rdquo;. The code of this post can be found on Github (see &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/tree/7-Documentation&#34;&gt;here&lt;/a&gt;).&lt;/p&gt;
+&lt;h4 id=&#34;contents&#34;&gt;Contents&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/1-the-evolution-of-a-script&#34;&gt;A Simple Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/2-sys-module&#34;&gt;Sys Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;Argparse Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/4-distribution-via-installation-script&#34;&gt;Distribution via Installation Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;Distribution via Setup File&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/6-testing-and-continous-integration&#34;&gt;Testing and Continuous Integration&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/7-documentation&#34;&gt;&lt;strong&gt;Documentation&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Documentation can be supplied in different formats. Command line tools have a usage help (&lt;code&gt;--help&lt;/code&gt;). For smaller projects the &lt;code&gt;README.md&lt;/code&gt; can be sufficient enough whereas projects like libraries benefit from a more extensive hosted technical documentation (see &lt;a href=&#34;https://readthedocs.org/&#34;&gt;readthedocs&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s create some documentation! &lt;code&gt;sphinx&lt;/code&gt; is a tool that will help us to simplify this process.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip install sphinx
+
+$ mkdir docs
+$ cd docs
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Sphinx will ask us a couple of questions:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sphinx-quickstart
+
+&amp;gt; Separate source and build directories (y/n) [n]: y
+&amp;gt; Project name: tinyHTTPie
+&amp;gt; Author name(s): Niklas Tiede
+&amp;gt; Project release []: 0.1.0
+&amp;gt; Project language [en]: enter
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;To create the documentation we have to use the &lt;code&gt;make html&lt;/code&gt; command within the &lt;code&gt;docs&lt;/code&gt; directory. This creates the HTML of our documentation.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ cd ..
+$ make html
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;If we open the &lt;code&gt;index.html&lt;/code&gt; file in the browser we can see how our documentation will look like. But its appearance is pretty puristic. Therefore we use an often used theme to let it look nicer.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip install sphinx_rtd_theme
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now we have to customize the &lt;code&gt;conf.py&lt;/code&gt; file. We add the following lines:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sphinx_rtd_theme
+
+extensions &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;sphinx_rtd_theme&amp;#34;&lt;/span&gt;,]
+pygments_style &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;sphinx&amp;#34;&lt;/span&gt;
+version &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;0.1.0&amp;#39;&lt;/span&gt;
+html_theme &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;sphinx_rtd_theme&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And render again.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ make html
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now it looks way better! Ok, next we wanna write some more content. The documentation should be written in the reStructuredText (.rst) syntax. Here&amp;rsquo;s a nice &lt;a href=&#34;https://github.com/ralsina/rst-cheatsheet/blob/master/rst-cheatsheet.rst&#34;&gt;cheat sheet&lt;/a&gt;. A previewer will speed up things. I&amp;rsquo;ve added some documentation about tinyHTTPie, see &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/index.rst&#34;&gt;index.rst&lt;/a&gt;, &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/install.rst&#34;&gt;install.rst&lt;/a&gt; and &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/tutorial.rst&#34;&gt;tutorial.rst&lt;/a&gt;. The last step is to publish our documentation. We have to register at &lt;a href=&#34;https://readthedocs.org/&#34;&gt;readthedocs.org&lt;/a&gt; and let it hook our repository.&lt;/p&gt;
+&lt;p&gt;Voilà! A nice &lt;a href=&#34;https://tinyhttpie.readthedocs.io/en/latest/&#34;&gt;tinyHTTPie documentation&lt;/a&gt; was created! I hope you see how easy it is to setup such a good-looking documentation.&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+</description> 
+    </item>
+    
+    <item>
+      <title>Testing and CI - 6/9</title>
+      <link>http://the-coding-lab.com/2021/6-testing-and-continous-integration/</link>
+      <pubDate>Tue, 16 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://the-coding-lab.com/2021/6-testing-and-continous-integration/</guid>
+      <description>&lt;p&gt;Heya fellows,&lt;/p&gt;
+&lt;p&gt;This is part 6 of the multi-part series &amp;ldquo;The Evolution of a Script&amp;rdquo;. The code of this post can be found on Github (see &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/tree/6-Testing-and-CI&#34;&gt;here&lt;/a&gt;).&lt;/p&gt;
+&lt;h4 id=&#34;contents&#34;&gt;Contents&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/1-the-evolution-of-a-script&#34;&gt;A Simple Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/2-sys-module&#34;&gt;Sys Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;Argparse Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/4-distribution-via-installation-script&#34;&gt;Distribution via Installation Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;Distribution via Setup File&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/6-testing-and-continous-integration&#34;&gt;&lt;strong&gt;Testing and Continuous Integration&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/7-documentation&#34;&gt;Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;When projects grow a good test suite ensures
+that new features added don&amp;rsquo;t cause the application to break. It improves the maintainability of the project. The complexity of small projects is very low and a testing is not necessary yet. But for the sake of this tutorial we will write a small test suite to demonstrate testing and continuous integration. We will use &lt;code&gt;pytest&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The tests will be stored within a separate folder. Here&amp;rsquo;s the structure of the project.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;├── LICENSE
+├── README.md
+├── setup.py
+├── tihttp.py
+├── tests
+│  ├── __init__.py
+│  └── test_tihttp.py
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We place a &lt;code&gt;test_tihttp.py&lt;/code&gt; within the &lt;code&gt;tests&lt;/code&gt; folder. It contains out test suite.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; tihttp &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; main
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;test_GET_body&lt;/span&gt;(capsys):
+    main([&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;-B&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;http://jsonplaceholder.typicode.com/todos?userId=1&amp;#34;&lt;/span&gt;])
+    captured &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; capsys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;readouterr()
+    result &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; captured&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;out
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;with&lt;/span&gt; open(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tests/jsonplaceholder.json&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; f:
+        output &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; f&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;read()
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;assert&lt;/span&gt; result &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; output
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We compare the expected output with a request against an API. The API will return a similar response so it&amp;rsquo;s will give us a feedback if our application is working or if it was broken. We place a .json files into the same folder which is used for comparison. We will let &lt;code&gt;pytest&lt;/code&gt; execute the test:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip install pytest
+$ pytest
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Our test passes. Next we add pytest to our extra requirements in the &lt;code&gt;setup.py&lt;/code&gt; file.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;extras_require&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dev&amp;#39;&lt;/span&gt;: [
+        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pytest&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#75715e&#34;&gt;# pip install tihttp[dev]&lt;/span&gt;
+    ],
+},
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This gives us the possibility to install extra dependencies (testing, linting tools etc.) easily by adding a &lt;code&gt;[dev]&lt;/code&gt; to the package name.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip install .[dev]
+$ pip install tihttp[dev]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We tested all of this with python 3.7.3. But how does our application behave when executed on a different interpreter version? So let&amp;rsquo;s test it against different Python versions! We use tox. It lets us run tests in multiple virtualenvs.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip install tox
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Tox needs a recipe to know which virtualenv/commands to create/execute. This recipe the &lt;code&gt;tox.ini&lt;/code&gt; file.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;[tox]&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;envlist&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;py36,py37,py38,py39&lt;/span&gt;
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;[testenv]&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;deps&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    pytest&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;commands&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    pytest&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If some of the Python interpreters are missing on your system, install them from the deadsnakes archive:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo add-apt-repository ppa:deadsnakes/ppa
+$ sudo apt install python3.5 python3.6 python3.7 python3.8 python3.9
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now let&amp;rsquo;s test across different interpreters!&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ tox
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;If you wanna test against a specific environment or execute only one test, then type:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ tox -e py38
+$ tox -e py38 -- test/main_test.py   # executes only single test
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Ok, we did the test locally, but when working in a team using continuous integration is pretty convenient. We set a &lt;code&gt;integrate.yaml&lt;/code&gt; file up within a &lt;code&gt;.github/workflows&lt;/code&gt; directory to tell github actions what jobs to execute. The following github actions file will test across different platforms and Python versions.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Python package&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;on&lt;/span&gt;: [&lt;span style=&#34;color:#ae81ff&#34;&gt;push]&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;jobs&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;:
+    &lt;span style=&#34;color:#f92672&#34;&gt;runs-on&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ matrix.os }}&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;strategy&lt;/span&gt;:
+      &lt;span style=&#34;color:#f92672&#34;&gt;matrix&lt;/span&gt;:
+        &lt;span style=&#34;color:#f92672&#34;&gt;python-version&lt;/span&gt;: [&lt;span style=&#34;color:#ae81ff&#34;&gt;3.6&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.7&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.8&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.9&lt;/span&gt;]
+        &lt;span style=&#34;color:#f92672&#34;&gt;os&lt;/span&gt;: [&lt;span style=&#34;color:#ae81ff&#34;&gt;ubuntu-latest, macos-latest, windows-latest]&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;steps&lt;/span&gt;:
+      - &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;actions/checkout@v2&lt;/span&gt;
+      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Set up Python ${{ matrix.python-version }}&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;actions/setup-python@v2&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
+          &lt;span style=&#34;color:#f92672&#34;&gt;python-version&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ matrix.python-version }}&lt;/span&gt;
+      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Cache pip&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;actions/cache@v2&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
+          &lt;span style=&#34;color:#f92672&#34;&gt;path&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;~/.cache/pip&lt;/span&gt;
+          &lt;span style=&#34;color:#f92672&#34;&gt;key&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ runner.os }}-pip-${{ hashFiles(&amp;#39;requirements.txt&amp;#39;) }}&lt;/span&gt;
+          &lt;span style=&#34;color:#f92672&#34;&gt;restore-keys&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;            ${{ runner.os }}-pip-
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;            ${{ runner.os }}-&lt;/span&gt;            
+      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Install dependencies&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          python -m pip install --upgrade pip
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          pip install flake8 pytest pytest-cov
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          pip install -r requirements.txt&lt;/span&gt;          
+      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Lint with flake8&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          # stop the build if there are Python syntax errors or undefined names
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics&lt;/span&gt;          
+      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Test with pytest&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          &lt;/span&gt;          &lt;span style=&#34;color:#ae81ff&#34;&gt;pytest&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Don&amp;rsquo;t be intimidated by the length of this job. It&amp;rsquo;s just illustrating how powerful continuous integration is.&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+</description> 
+    </item>
+    
+    <item>
+      <title>Distribution via Setup File - 5/9</title>
+      <link>http://the-coding-lab.com/2021/5-distribution-via-setup-file/</link>
+      <pubDate>Thu, 11 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://the-coding-lab.com/2021/5-distribution-via-setup-file/</guid>
+      <description>&lt;p&gt;Heya fellows,&lt;/p&gt;
+&lt;p&gt;This is part 5 of the multi-part series &amp;ldquo;The Evolution of a Script&amp;rdquo;. The code of this post can be found on Github (see &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/tree/5-Distributing-by-Setup-File&#34;&gt;here&lt;/a&gt;).&lt;/p&gt;
+&lt;h4 id=&#34;contents&#34;&gt;Contents&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/1-the-evolution-of-a-script&#34;&gt;A Simple Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/2-sys-module&#34;&gt;Sys Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;Argparse Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/4-distribution-via-installation-script&#34;&gt;Distribution via Installation Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;&lt;strong&gt;Distribution via Setup File&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/6-testing-and-continous-integration&#34;&gt;Testing and Continuous Integration&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/7-documentation&#34;&gt;Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;We have to write a &lt;code&gt;setup.py&lt;/code&gt; file and then we can use &lt;code&gt;pip install&lt;/code&gt; easily our script. We have to be in the directory of the &lt;code&gt;setup.py&lt;/code&gt; file and type:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip install .
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This installs the tool into the active virtual environment. But how does a &lt;code&gt;setup.py&lt;/code&gt; file looks like? Here&amp;rsquo;s a template containing the most important key-value pairs:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; pathlib
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; setuptools
+
+setuptools&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;setup(
+    name&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tihttp&amp;#34;&lt;/span&gt;,
+    version&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;0.1.0&amp;#34;&lt;/span&gt;,
+
+    package_dir&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;src&amp;#34;&lt;/span&gt;},
+    packages&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;setuptools&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;find_packages(where&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;src&amp;#34;&lt;/span&gt;),
+
+    install_requires&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[
+        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;requests&amp;gt;=2.21&amp;#34;&lt;/span&gt;,
+    ],
+
+    entry_points&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{
+        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;console_scripts&amp;#34;&lt;/span&gt;:
+        [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tihttp=tihttp.main:run_main&amp;#34;&lt;/span&gt;]
+        },
+)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The &lt;code&gt;package_dir&lt;/code&gt; and &lt;code&gt;packages&lt;/code&gt; values are necessary when a source layout is used, so that &lt;code&gt;setup.py&lt;/code&gt; knows where to look for the packages. We used here a source layout to show these key-values and how &lt;code&gt;entry_points&lt;/code&gt; change when used.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://the-coding-lab.com/img/script_entrypoint.png&#34; alt=&#34;script entrypoint&#34;&gt;&lt;/p&gt;
+&lt;p&gt;The entry point is where the command line tool is invoked from. &lt;code&gt;tihttp&lt;/code&gt; can be easily installed locally by typing:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip install .
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Another big advantage of this setup is that pip allows to install a package in editable mode&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip install -e .
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This allows to continue developing while testing the tool easily.&lt;/p&gt;
+&lt;p&gt;What do the other keys do?
+platforms restricts&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+</description> 
+    </item>
+    
+    <item>
+      <title>Argparse Module - 3/9</title>
+      <link>http://the-coding-lab.com/2021/3-argparse-module/</link>
+      <pubDate>Mon, 01 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://the-coding-lab.com/2021/3-argparse-module/</guid>
+      <description>&lt;p&gt;Heya fellows,&lt;/p&gt;
+&lt;p&gt;This is part 3 of the multi-part series &amp;ldquo;The Evolution of a Script&amp;rdquo;. The code of this post can be found on Github (see &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/tree/3-Argparse-Module&#34;&gt;here&lt;/a&gt;).&lt;/p&gt;
+&lt;h4 id=&#34;contents&#34;&gt;Contents&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/1-the-evolution-of-a-script&#34;&gt;A Simple Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/2-sys-module&#34;&gt;Sys Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;&lt;strong&gt;Argparse Module&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/4-distribution-via-installation-script&#34;&gt;Distribution via Installation Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;Distribution via Setup File&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/6-testing-and-continous-integration&#34;&gt;Testing and Continuous Integration&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/7-documentation&#34;&gt;Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;One of the big benefits of using argparse is that it generates a usage help (a &lt;code&gt;--help&lt;/code&gt; flag) automatically. It&amp;rsquo;s common practice to separate the events which are triggered by flags from the creation of the argumentparser. Here&amp;rsquo;s a argparse template I often use.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; argparse
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(argv&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;None):
+
+    parser &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; build_parser()
+    args &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;parse_args(argv)
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;arg_name:
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;pass&lt;/span&gt;
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;build_parser&lt;/span&gt;():
+    parser &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; argparse&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ArgumentParser()
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;# positional/optional arguments:&lt;/span&gt;
+    parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add_argument()
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; parser
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;run_main&lt;/span&gt;():
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(main())
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Exception&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stderr&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;write(e)
+        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; __name__ &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;:
+    run_main()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If you&amp;rsquo;re wondering where the arguments from outside are passed into the script: the default value of the &lt;code&gt;argv&lt;/code&gt; identifier is None. Argparse knows then internally that it has to use the arguments from outside.&lt;/p&gt;
+&lt;p&gt;When converting our script into an argparse tool we can throw all the logic away which informs the user about incorrect usage. All this is now done by &lt;code&gt;argparse&lt;/code&gt;! We wrap argparse around our script:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; argparse
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sys
+
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(argv&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;None):
+    parser &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; build_parser()
+    args &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;parse_args(argv)
+
+    url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;URL:
+        url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;URL
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://www.&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; url:
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; url[:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;www.&amp;#39;&lt;/span&gt;:
+            url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; url[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:]
+        url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; url
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+        resp &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(url)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exceptions&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;RequestException &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Response Failed.&amp;#39;&lt;/span&gt;)
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+
+    header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
+    body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;()
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(body)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;build_parser&lt;/span&gt;():
+    parser &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; argparse&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ArgumentParser(
+        prog&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;tihttp&amp;#39;&lt;/span&gt;,
+        description&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;A tiny HTTP client for sending GET requests.&amp;#39;&lt;/span&gt;
+    )
+
+    parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add_argument(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;URL&amp;#39;&lt;/span&gt;,action&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;store&amp;#39;&lt;/span&gt;,)
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; parser
+
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;run_main&lt;/span&gt;():
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(main())
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Exception&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stderr&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;write(e)
+        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; __name__ &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;:
+    run_main()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Adding the &lt;code&gt;-H&lt;/code&gt;, &lt;code&gt;-B&lt;/code&gt; flags and the boolean logic returns a more sophisticated version of our script:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; argparse
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sys
+
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(argv&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;None):
+    parser &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; build_parser()
+    args &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;parse_args(argv)
+
+    url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;URL:
+        url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;URL
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://www.&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; url:
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; url[:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;www.&amp;#39;&lt;/span&gt;:
+            url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; url[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:]
+        url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; url
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+        resp &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(url)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exceptions&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;RequestException &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Response Failed.&amp;#39;&lt;/span&gt;)
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+
+    header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
+    body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;body &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;header:
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(body)
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;header &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;body:
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+            &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;header &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;body) &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;header &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;body):
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+            &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;()
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(body)
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;build_parser&lt;/span&gt;():
+    parser &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; argparse&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ArgumentParser(
+        prog&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;tihttp&amp;#39;&lt;/span&gt;,
+        description&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;A tiny HTTP client for sending GET requests.&amp;#39;&lt;/span&gt;
+    )
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;# positional arguments:&lt;/span&gt;
+    parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add_argument(
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;URL&amp;#39;&lt;/span&gt;,
+    action&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;store&amp;#39;&lt;/span&gt;,
+    )
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;# optional arguments:&lt;/span&gt;
+    parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add_argument(
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-H&amp;#39;&lt;/span&gt;,
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;--header-only&amp;#39;&lt;/span&gt;,
+    dest&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;header&amp;#39;&lt;/span&gt;,
+    action&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;store_true&amp;#39;&lt;/span&gt;,
+    help&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Prints only the header of the Response.&amp;#39;&lt;/span&gt;)
+
+    parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add_argument(
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-B&amp;#39;&lt;/span&gt;,
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;--body-only&amp;#39;&lt;/span&gt;,
+    dest&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;body&amp;#39;&lt;/span&gt;,
+    action&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;store_true&amp;#39;&lt;/span&gt;,
+    help&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Prints only the body of the Response.&amp;#39;&lt;/span&gt;)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; parser
+
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;run_main&lt;/span&gt;():
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(main())
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Exception&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stderr&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;write(e)
+        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; __name__ &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;:
+    run_main()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Adding the help flag returns now a nicely formatted usage help!&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ tihttp --help
+
+usage: tihttp [-h] [-H] [-B] URL
+
+A tiny HTTP client for sending GET and POST requests.
+
+positional arguments:
+  URL
+
+optional arguments:
+  -h, --help         show this help message and exit
+  -H, --header-only  Prints only the header of the Response.
+  -B, --body-only    Prints only the body of the Response.
+&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
+</description> 
+    </item>
+    
+    <item>
+      <title>Sys Module - 2/9</title>
+      <link>http://the-coding-lab.com/2021/2-sys-module/</link>
+      <pubDate>Tue, 26 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://the-coding-lab.com/2021/2-sys-module/</guid>
+      <description>&lt;p&gt;Heya fellows,&lt;/p&gt;
+&lt;p&gt;This is part 2 of the multi-part series &amp;ldquo;The Evolution of a Script&amp;rdquo;. The code of this post can be found on Github (see &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/tree/2-Sys-Module&#34;&gt;here&lt;/a&gt;).&lt;/p&gt;
+&lt;h4 id=&#34;contents&#34;&gt;Contents&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/1-the-evolution-of-a-script&#34;&gt;A Simple Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/2-sys-module&#34;&gt;&lt;strong&gt;Sys Module&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;Argparse Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/4-distribution-via-installation-script&#34;&gt;Distribution via Installation Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;Distribution via Setup File&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/6-testing-and-continous-integration&#34;&gt;Testing and Continuous Integration&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/7-documentation&#34;&gt;Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The sys modules &lt;code&gt;sys.argv&lt;/code&gt; is a list that gives us access to all command line arguments passed to the Python script. This gives us the ability to make our script more flexible. We can now change the URL we would like to request by passing an argument to the script. The first element of sys.argv (&lt;code&gt;sys.argv[0]&lt;/code&gt;) is the scripts name.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sys
+
+url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;argv[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+
+r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(url)
+
+header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
+body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To test our changes we type:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ tihttp https://the-coding-lab.com/
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Success! Our tools feels now way more like a real command line app!&lt;/p&gt;
+&lt;p&gt;Ok, next let&amp;rsquo;s make our tool more user friendly by improving error handling. We&amp;rsquo;re used to enter a URL without schema, but every browser uses the HTTP method as its default scheme. So this is what we would like to implement for our tool.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
+
+url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;argv[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://www.&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; url:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; url[:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;www.&amp;#39;&lt;/span&gt;:
+        url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; url[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:]
+    url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; url
+
+resp &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(url)
+
+header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
+body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Ok. But even if the URL was typed correctly several errors when communicating with the server can happen. The status code (3 digit number) returned will give us more information about why the error occurred. The first digit represents the class. The responses are grouped in 5 classes.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Status Code&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;th&gt;Class&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;200&lt;/td&gt;
+&lt;td&gt;Success&lt;/td&gt;
+&lt;td&gt;Successful Responses&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;301&lt;/td&gt;
+&lt;td&gt;Moved Permanently&lt;/td&gt;
+&lt;td&gt;Redirects&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;302&lt;/td&gt;
+&lt;td&gt;Moved Temporarily&lt;/td&gt;
+&lt;td&gt;Redirects&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;304&lt;/td&gt;
+&lt;td&gt;Not modified&lt;/td&gt;
+&lt;td&gt;Redirects&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;400&lt;/td&gt;
+&lt;td&gt;Bad request&lt;/td&gt;
+&lt;td&gt;Client Error&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;401&lt;/td&gt;
+&lt;td&gt;Unauthorized&lt;/td&gt;
+&lt;td&gt;Client Error&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;403&lt;/td&gt;
+&lt;td&gt;Forbidden&lt;/td&gt;
+&lt;td&gt;Client Error&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;404&lt;/td&gt;
+&lt;td&gt;Not found&lt;/td&gt;
+&lt;td&gt;Client Error&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;500&lt;/td&gt;
+&lt;td&gt;Internal Server Error&lt;/td&gt;
+&lt;td&gt;Server Error&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;These errors are handled using Python&amp;rsquo;s exceptions.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sys
+
+
+input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;argv[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; input_url:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; input_url[:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;www.&amp;#39;&lt;/span&gt;:
+        input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; input_url[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:]
+    input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; input_url
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+    r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(url)
+&lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exceptions&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;RequestException &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Response Failed.&amp;#39;&lt;/span&gt;)
+
+header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
+body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;So good, so far. But what if a user of the tool types too many arguments or no URL at all accidentally? We have to advise our script to handle these use cases! Boolean logic solves this.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sys
+
+arg_array &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;argv[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:]
+input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+body_bool, header_bool &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; False, False
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; len(arg_array) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Too many arguments.&amp;#39;&lt;/span&gt;)
+    sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; len(arg_array) &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:
+    input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; arg_array[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; input_url:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;No URL was given.&amp;#39;&lt;/span&gt;)
+    sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; input_url:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; input_url[:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;www.&amp;#39;&lt;/span&gt;:
+        input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; input_url[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:]
+    input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; input_url
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+    r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(input_url)
+&lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exceptions&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;RequestException &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Response Failed.&amp;#39;&lt;/span&gt;)
+header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
+body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now let&amp;rsquo;s add some options. It would be nice if the user could decide if we he wants to print only the header or the body of the response. Usually command line tools use flags to give options. We will use a &lt;code&gt;-H&lt;/code&gt; flag to display only the header and &lt;code&gt;-B&lt;/code&gt; flag to display only the body.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sys
+
+arg_array, input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;argv[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:], &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+body_bool, header_bool &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; False, False
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-b&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; arg_array:
+    arg_array&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;remove(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-b&amp;#39;&lt;/span&gt;)
+    body_bool &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; True
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-h&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; arg_array:
+    arg_array&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;remove(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-h&amp;#39;&lt;/span&gt;)
+    header_bool &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; True
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; len(arg_array) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Too many arguments&amp;#39;&lt;/span&gt;)
+    sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; len(arg_array) &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:
+    input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; arg_array[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; input_url:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;No URL was given&amp;#39;&lt;/span&gt;)
+    sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; input_url:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; input_url[:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;www.&amp;#39;&lt;/span&gt;:
+        input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; input_url[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:]
+    input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; input_url
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+    r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(input_url)
+&lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exceptions&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;RequestException &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Response Failed.&amp;#39;&lt;/span&gt;)
+header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
+body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; body_bool &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; header_bool:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(body)
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; header_bool &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; body_bool:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (body_bool &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; header_bool) &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; body_bool &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; header_bool):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;()
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(body)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Some testing proves that we can use now two options:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ tihttp -H https://the-coding-lab.com/
+$ tihttp -B https://the-coding-lab.com/
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We see that it can become quite tedious to add more functionality when limiting ourself to the&lt;code&gt; sys&lt;/code&gt; module. It needs alot of boolean logic. But Python has a library only for creating command line interfaces: &lt;code&gt;argparse&lt;/code&gt;!&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+</description> 
+    </item>
+    
+    <item>
+      <title>The Evolution of a Script - 1/9</title>
+      <link>http://the-coding-lab.com/2021/1-the-evolution-of-a-script/</link>
+      <pubDate>Thu, 21 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://the-coding-lab.com/2021/1-the-evolution-of-a-script/</guid>
+      <description>&lt;p&gt;Heya fellows,&lt;/p&gt;
+&lt;p&gt;This is part 1 of the multi-part series &amp;ldquo;The Evolution of a Script&amp;rdquo;. The code of this post can be found on Github (see &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/tree/1-Simple-Script&#34;&gt;here&lt;/a&gt;).&lt;/p&gt;
+&lt;h4 id=&#34;contents&#34;&gt;Contents&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/1-the-evolution-of-a-script&#34;&gt;&lt;strong&gt;A Simple Script&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/2-sys-module&#34;&gt;Sys Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;Argparse Module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/4-distribution-via-installation-script&#34;&gt;Distribution via Installation Script&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;Distribution via Setup File&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/6-testing-and-continous-integration&#34;&gt;Testing and Continuous Integration&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/7-documentation&#34;&gt;Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;When I started out my Journey of learning to code I went through dozens of tutorials, I rewrote many algorithms and played with several kinds of topics. During this time I was pretty busy learning Python&amp;rsquo;s basic syntax, its standard libraries and other third party packages. &amp;ldquo;You have to know which tools you can use before you&amp;rsquo;re able to create new tools&amp;rdquo; I said to myself. So I kept myself busy with learning about computer science basics and discovering frameworks, libraries and commands line apps.&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;It took me 8 month before I started to discover Github. What a phenomenal mistake of mine! Github has such a great community, people create so much admirable work, it&amp;rsquo;s so interesting to discover/use or play with other peoples projects! It took me some time to understand Python&amp;rsquo;s packaging (I really underestimated the packaging part!). So in the following I would like to take you with me on a journey of writing and releasing a tiny command line app. We will see how a simple script grows and goes through different stages of its development cycle. Some scripts of mine grow, some are just executed as plain script files. I collect these within a folder on my machine (see: &lt;a href=&#34;https://github.com/NiklasTiede/Python-Scripts-Collection&#34;&gt;Collection of Python Scripts&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;Exploring the web through the command line is a fascinating experience. We will use the &lt;code&gt;requests&lt;/code&gt; library to create a little &lt;a href=&#34;https://github.com/httpie/httpie&#34;&gt;HTTPie&lt;/a&gt; clone. HTTP clients are used to test how an API behaves when sending GET and POST requests to it.&lt;/p&gt;
+&lt;h1 id=&#34;1-a-simple-script&#34;&gt;1. A Simple Script&lt;/h1&gt;
+&lt;p&gt;First we will create a simple script which can perform GET requests. I keep all my scripts within a &lt;code&gt;MyScripts&lt;/code&gt; folder. Then I create a project folder, and a virtual environment using &lt;code&gt;pipenv&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ cd ~/MyScripts
+$ mkdir tinyHTTPie
+$ cd tinyHTTPie
+
+$ pipenv --python 3.7
+$ pipenv shell
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Then we have to create our project file and install dependencies:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ touch tihttp.py
+$ pip install requests
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Lets write our script. We want to print the header of the response. I used the &lt;code&gt;OrderedDict&lt;/code&gt; object imported from the &lt;code&gt;collections&lt;/code&gt; library to sort the keys of the dictionary.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
+
+resp &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://the-coding-lab.com/&amp;#39;&lt;/span&gt;)
+
+header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
+body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;When we execute the script&amp;hellip;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ python tihttp.py
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&amp;hellip;the metadata of the request are returned successfully.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;Accept-Ranges: bytes
+Access-Control-Allow-Origin: *
+Age: 124
+Cache-Control: max-age=600
+Connection: keep-alive
+Content-Encoding: gzip
+Content-Length: 5764
+Content-Type: text/html; charset=utf-8
+Date: Tue, 16 Feb 2021 14:39:59 GMT
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;But when you realize that a script of yours is pretty useful, you might think &amp;ldquo;How could I turn this script into an easy-to-use command?&amp;rdquo;. At first, you have to add a shebang line to stick the scripts virtual environment to it permanently. The &lt;code&gt;which python&lt;/code&gt; command or &lt;code&gt;pipenv --py&lt;/code&gt; will return the path to the Python interpreter of the virtual environment. It will look like:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;/home/niklas/.local/share/virtualenvs/tinyHTTPie-iqhOkNUA/bin/python ~/tinyHTTPie/tihttp.py
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now this path has to be added to the head of the script as a shebang line. We can do this from the command line.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pybin=$(pipenv --py)
+$ echo -e &amp;quot;#\!${pybin}\n\n$(cat tihttp.py)&amp;quot; &amp;gt; tihttp.py
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The head of the file should look like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/home/niklas/.local/share/virtualenvs/tiny-HTTPie-clone-iqhOkNUA/bin/python&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
+&lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To make the script executable we have to give permissions. Then we can just type the path to the script and it will be interpreted by the specified Python interpreter.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ chmod +x tiny_HTTPie_clone.py
+$ ./tihttp.py
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Giving the path an alias will make it easier for us to remember/use our tool. To allow us to use the alias in every new shell session, we add it to the &lt;code&gt;.bashrc&lt;/code&gt; file (or wherever you&amp;rsquo;re storing your aliases).&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ echo &amp;quot;\nalias tihttp=&#39;~/MyScripts/tiny_HTTPie_clone.py&#39;&amp;quot; &amp;gt;&amp;gt; ~/.bashrc
+$ source ~/.bashrc
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now you can call your script in each new shell session no matter where you are on the filesystem.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ tihttp
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;But there is still a problem: every time our tools sends a GET request to a website we have to change the URL by opening the file, changing the URL, saving and executing it. Would it not be nicer to add the URL as argument to our &lt;code&gt;tihttp&lt;/code&gt; command? Python&amp;rsquo;s &lt;code&gt;sys&lt;/code&gt; module from the standard library comes here to our rescue!&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+</description> 
+    </item>
+    
+  </channel>
+</rss>

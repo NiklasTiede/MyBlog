@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>The Coding Lab  | Distribution via Installation Script - 4/9</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
+    <link rel="stylesheet" href="http://the-coding-lab.com/css/blog.css" />
+    </head>
+<body>
+
+    
+    <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="http://the-coding-lab.com">Home</a>
+        </div>
+    </nav>
+    
+
+    
+    <section class="hero is-info is-medium">
+        <div class="hero-body" style="background-image: url(http://the-coding-lab.com/img/bg-blog.jpg);">
+            <div class="container has-text-centered">
+                <br>
+                <h1 class="title is-size-1">
+                    
+                        Distribution via Installation Script - 4/9
+                    
+                </h1>
+                
+            </div>
+        </div>
+    </section>
+
+
+<div class="container">
+    <div class="section">
+    
+
+<div class="columns">
+    <div class="column is-9">
+        <div class="tile is-child box">
+            <div class="content">
+                <p>Heya fellows,</p>
+<p>This is part 4 of the multi-part series &ldquo;The Evolution of a Script&rdquo;. The code of this post can be found on Github (see <a href="https://github.com/NiklasTiede/tinyHTTPie/tree/4-Distributing-by-Installscript">here</a>).</p>
+<h4 id="contents">Contents</h4>
+<ol>
+<li><a href="/2021/1-the-evolution-of-a-script">A Simple Script</a></li>
+<li><a href="/2021/2-sys-module">Sys Module</a></li>
+<li><a href="/2021/3-argparse-module/">Argparse Module</a></li>
+<li><a href="/2021/4-distribution-via-installation-script"><strong>Distribution via Installation Script</strong></a></li>
+<li><a href="/2021/5-distribution-via-setup-file">Distribution via Setup File</a></li>
+<li><a href="/2021/6-testing-and-continous-integration">Testing and Continuous Integration</a></li>
+<li><a href="/2021/7-documentation">Documentation</a></li>
+<li><a href="/2021/8-publishing-at-pypi">Publishing at PyPI</a></li>
+<li><a href="/2021/9-publishing-at-anaconda">Publishing at Anaconda</a></li>
+</ol>
+<p>We created a useful tool, but wouldn&rsquo;t it be nice if we could make it accessible to others? So let&rsquo;s share it! At first, we have to make a snapshot of our virtual environment.</p>
+<pre><code>$ pip freeze &gt; requirements.txt
+</code></pre><p>Thereafter we create a new Git repository and push it to Github!</p>
+<pre><code>$ echo &quot;# tinyHTTPie&quot; &gt;&gt; README.md
+$ git init
+$ git add .
+$ git commit -m &quot;first commit&quot;
+$ git branch -M main
+$ git remote add origin https://github.com/NiklasTiede/tinyHTTPie.git
+$ git push -u origin main
+</code></pre><p>Now others will be able to download our project using the <code>clone</code> command:</p>
+<pre><code>$ git clone https://github.com/NiklasTiede/tinyHTTPie.git
+</code></pre><p>Now they have to rebuild it by recreating the virtual environment, extracting the Python interpreter path, adding a shebang line to the script and an alias to <code>.bashrc</code>. Quite laborious. A bash script automates this process!</p>
+<p>I store all my scripts within a <code>MyScripts</code> folder so the bash script will create it.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#66d9ef">if</span> <span style="color:#f92672">[[</span> ! -d ~/MyScripts <span style="color:#f92672">]]</span>; <span style="color:#66d9ef">then</span>
+    mkdir ~/MyScripts
+    folder1<span style="color:#f92672">=</span>~/MyScripts
+    echo <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>folder1<span style="color:#e6db74">}</span><span style="color:#e6db74"> was generated.&#34;</span>
+<span style="color:#66d9ef">fi</span>
+<span style="color:#66d9ef">if</span> <span style="color:#f92672">[[</span> ! -d ~/MyScripts/tinyHTTPie <span style="color:#f92672">]]</span>; <span style="color:#66d9ef">then</span>
+    mkdir ~/MyScripts/tinyHTTPie
+    folder2<span style="color:#f92672">=</span>~/MyScripts/tinyHTTPie
+    echo <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>folder2<span style="color:#e6db74">}</span><span style="color:#e6db74"> was generated.&#34;</span>
+<span style="color:#66d9ef">fi</span>
+</code></pre></div><p>Then the <code>tihttp.p</code>y and <code>requirements.txt</code> will be copied.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">PWD<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>pwd<span style="color:#66d9ef">)</span>
+REQUIREMENTS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$PWD<span style="color:#e6db74">/requirements.txt&#34;</span>
+SCRIPT<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$PWD<span style="color:#e6db74">/tihttp.py&#34;</span>
+TARGET<span style="color:#f92672">=</span>~/MyScripts/tinyHTTPie
+
+cp <span style="color:#e6db74">&#34;</span>$REQUIREMENTS<span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;</span>$TARGET<span style="color:#e6db74">&#34;</span>
+cp <span style="color:#e6db74">&#34;</span>$SCRIPT<span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;</span>$TARGET<span style="color:#e6db74">&#34;</span>
+cd ~/MyScripts/tinyhttp
+</code></pre></div><p>The Python interpreter version is checked.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">PYVER<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>python --version<span style="color:#66d9ef">)</span>
+CURRENT_PY_VERSION<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>PYVER:7:11<span style="color:#e6db74">}</span>
+testvercomp <span style="color:#e6db74">${</span>CURRENT_PY_VERSION<span style="color:#e6db74">}</span> 3.0.0 <span style="color:#e6db74">&#39;&gt;&#39;</span>
+<span style="color:#66d9ef">if</span> <span style="color:#f92672">[[</span> <span style="color:#66d9ef">$(</span>echo $CURRENT_PY_VERSION | grep <span style="color:#e6db74">&#39;2.&#39;</span>*<span style="color:#66d9ef">)</span> <span style="color:#f92672">]]</span>; <span style="color:#66d9ef">then</span>
+    echo <span style="color:#e6db74">&#34;first digit is 2, you&#39;re python version is too low&#34;</span>
+<span style="color:#66d9ef">elif</span> <span style="color:#f92672">[[</span> <span style="color:#66d9ef">$(</span>echo $CURRENT_PY_VERSION | grep <span style="color:#e6db74">&#39;3.&#39;</span>*<span style="color:#66d9ef">)</span> <span style="color:#f92672">]]</span>; <span style="color:#66d9ef">then</span>
+    echo <span style="color:#e6db74">&#34;first digit is 3, you&#39;re python versions fulfills the requirements!&#34;</span>
+<span style="color:#66d9ef">fi</span>
+</code></pre></div><p><code>pipenv</code> will be installed if it is not yet installed.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#66d9ef">if</span> <span style="color:#f92672">[[</span> ! <span style="color:#66d9ef">$(</span>pipenv<span style="color:#66d9ef">)</span> <span style="color:#f92672">]]</span>; <span style="color:#66d9ef">then</span>
+    echo <span style="color:#e6db74">&#34;pipenv not existent, so installing via pip...&#34;</span>
+    pip install pipenv
+    echo <span style="color:#e6db74">&#34;...pipenv was installed?&#34;</span>
+<span style="color:#66d9ef">fi</span>
+</code></pre></div><p>THe virtual environment will be rebuilt.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">pipenv install -r requirements.txt
+</code></pre></div><p>The shebang line is added.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">pybin<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>pipenv --py<span style="color:#66d9ef">)</span>
+echo -e <span style="color:#e6db74">&#34;#\!</span><span style="color:#e6db74">${</span>pybin<span style="color:#e6db74">}</span><span style="color:#e6db74">\n\n</span><span style="color:#66d9ef">$(</span>cat tinyhttp.py.py<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> &gt; tinyhttp.py
+</code></pre></div><p>The shebang is checked.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">EXIS_HEADLINE<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>head -n <span style="color:#ae81ff">1</span> tinyhttp.py<span style="color:#66d9ef">)</span>
+EXP_HEADLINE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;#!</span><span style="color:#e6db74">${</span>pybin<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+<span style="color:#66d9ef">if</span> <span style="color:#f92672">[[</span> $EXIS_HEADLINE <span style="color:#f92672">==</span> $EXP_HEADLINE <span style="color:#f92672">&amp;&amp;</span> <span style="color:#e6db74">${#</span>EXIS_HEADLINE<span style="color:#e6db74">}</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">${#</span>EXP_HEADLINE<span style="color:#e6db74">}</span> <span style="color:#f92672">]]</span>; <span style="color:#66d9ef">then</span>
+    echo <span style="color:#e6db74">&#34;shebang line was added correctly!&#34;</span>
+<span style="color:#66d9ef">elif</span> <span style="color:#f92672">[[</span> $EXIS_HEADLINE !<span style="color:#f92672">=</span> $EXP_HEADLINE <span style="color:#f92672">||</span> <span style="color:#e6db74">${#</span>EXIS_HEADLINE<span style="color:#e6db74">}</span> !<span style="color:#f92672">=</span> <span style="color:#e6db74">${#</span>EXP_HEADLINE<span style="color:#e6db74">}</span> <span style="color:#f92672">]]</span>; <span style="color:#66d9ef">then</span>
+    echo <span style="color:#e6db74">&#34;shebang was NOT added correctly!&#34;</span>
+<span style="color:#66d9ef">fi</span>
+</code></pre></div><p>File permissions are given.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">chmod +x ~/MyScripts/tiniHTTP/tiny_HTTPie_clone.py
+</code></pre></div><p>The script adds the alias to the configuration file.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">SHELL<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>printenv SHELL<span style="color:#66d9ef">)</span>
+MYSHELL<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>SHELL:5:10<span style="color:#e6db74">}</span>
+ALIASFILE<span style="color:#f92672">=</span>~/.bashrc
+
+<span style="color:#66d9ef">if</span> <span style="color:#f92672">[[</span> $MYSHELL  <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;zsh&#34;</span> <span style="color:#f92672">]]</span>; <span style="color:#66d9ef">then</span>
+    echo <span style="color:#e6db74">&#34;You&#39;re default shell is ZSH.&#34;</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[[</span> -e ~/.aliases <span style="color:#f92672">]]</span>; <span style="color:#66d9ef">then</span>
+        ALIASFILE<span style="color:#f92672">=</span>~/.aliases
+        echo <span style="color:#e6db74">&#34;You&#39;re storing your files within the .aliases file.&#34;</span>
+    <span style="color:#66d9ef">elif</span> <span style="color:#f92672">[[</span> -e ~/.zshrc <span style="color:#f92672">]]</span>; <span style="color:#66d9ef">then</span>
+        ALIASFILE<span style="color:#f92672">=</span>~/.zshrc
+        echo <span style="color:#e6db74">&#34;You&#39;re storing your files within the .zshrc file.&#34;</span>
+    <span style="color:#66d9ef">fi</span>
+<span style="color:#66d9ef">elif</span> <span style="color:#f92672">[[</span> $MYSHELL  <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;bash&#34;</span> <span style="color:#f92672">]]</span>; <span style="color:#66d9ef">then</span>
+    echo <span style="color:#e6db74">&#34;You&#39;re default shell is BASH.&#34;</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[[</span> -e ~/.aliases <span style="color:#f92672">]]</span>; <span style="color:#66d9ef">then</span>
+        ALIASFILE<span style="color:#f92672">=</span>~/.aliases
+        echo <span style="color:#e6db74">&#34;You&#39;re storing your files within the .aliases file.&#34;</span>
+    <span style="color:#66d9ef">elif</span> <span style="color:#f92672">[[</span> -e ~/.bashrc <span style="color:#f92672">]]</span>; <span style="color:#66d9ef">then</span>
+        ALIASFILE<span style="color:#f92672">=</span>~/.bashrc
+        echo <span style="color:#e6db74">&#34;You&#39;re storing your files within the .bashrc file.&#34;</span>
+    <span style="color:#66d9ef">fi</span>
+<span style="color:#66d9ef">fi</span>
+</code></pre></div><p>And thats it! Puh, pretty much work and it&rsquo;s still pretty prone to errors (adding the script to the PATH instead of using an alias would make things less error prone). But there&rsquo;s a better solution to distribute packages in a standardized way: writing a <code>setup.py</code> file!</p>
+<!-- raw HTML omitted -->
+
+            </div>
+        </div>
+    </div>
+    <div class="column is-3">
+        <div class="card">
+    <div class="card-content">
+        <h1 class="title is-5">Tags</h1>
+        <div class="tags">
+        
+            <span class="tag"><a href="http://the-coding-lab.com/tags/bash">bash</a></span>
+        
+            <span class="tag"><a href="http://the-coding-lab.com/tags/cli">cli</a></span>
+        
+            <span class="tag"><a href="http://the-coding-lab.com/tags/packaging">packaging</a></span>
+        
+            <span class="tag"><a href="http://the-coding-lab.com/tags/python">python</a></span>
+        
+            <span class="tag"><a href="http://the-coding-lab.com/tags/scripting">scripting</a></span>
+        
+            <span class="tag"><a href="http://the-coding-lab.com/tags/testing">testing</a></span>
+        
+        </div>          
+    </div>
+</div><br>
+        <div class="card">
+    <div class="card-content">
+        <h1 class="title is-5">Recent posts</h1>
+        
+            <h1><a href="http://the-coding-lab.com/2021/9-publishing-at-anaconda/">Publishing at Anaconda - 9/9</a></h1>
+            <time class="has-text-grey-light is-size-7">25 February 2021</time>
+        
+            <h1><a href="http://the-coding-lab.com/2021/8-publishing-at-pypi/">Publishing at PyPI - 8/9</a></h1>
+            <time class="has-text-grey-light is-size-7">23 February 2021</time>
+        
+            <h1><a href="http://the-coding-lab.com/2021/7-documentation/">Documentation - 7/9</a></h1>
+            <time class="has-text-grey-light is-size-7">19 February 2021</time>
+        
+            <h1><a href="http://the-coding-lab.com/2021/6-testing-and-continous-integration/">Testing and CI - 6/9</a></h1>
+            <time class="has-text-grey-light is-size-7">16 February 2021</time>
+        
+            <h1><a href="http://the-coding-lab.com/2021/5-distribution-via-setup-file/">Distribution via Setup File - 5/9</a></h1>
+            <time class="has-text-grey-light is-size-7">11 February 2021</time>
+        
+    </div>
+</div>
+    <br>
+                
+  
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h1 class="title is-5">Related posts</h1>
+      
+      
+            <h1><a href="http://the-coding-lab.com/2021/9-publishing-at-anaconda/">Publishing at Anaconda - 9/9</a></h1>
+            <time class="has-text-grey-light is-size-7">25 February 2021</time>
+      
+            <h1><a href="http://the-coding-lab.com/2021/8-publishing-at-pypi/">Publishing at PyPI - 8/9</a></h1>
+            <time class="has-text-grey-light is-size-7">23 February 2021</time>
+      
+            <h1><a href="http://the-coding-lab.com/2021/7-documentation/">Documentation - 7/9</a></h1>
+            <time class="has-text-grey-light is-size-7">19 February 2021</time>
+      
+            <h1><a href="http://the-coding-lab.com/2021/6-testing-and-continous-integration/">Testing and CI - 6/9</a></h1>
+            <time class="has-text-grey-light is-size-7">16 February 2021</time>
+      
+            <h1><a href="http://the-coding-lab.com/2021/5-distribution-via-setup-file/">Distribution via Setup File - 5/9</a></h1>
+            <time class="has-text-grey-light is-size-7">11 February 2021</time>
+      
+            <h1><a href="http://the-coding-lab.com/2021/3-argparse-module/">Argparse Module - 3/9</a></h1>
+            <time class="has-text-grey-light is-size-7">1 February 2021</time>
+      
+            <h1><a href="http://the-coding-lab.com/2021/2-sys-module/">Sys Module - 2/9</a></h1>
+            <time class="has-text-grey-light is-size-7">26 January 2021</time>
+      
+    </div>
+</div>
+
+    
+<br>
+        <div class="card">
+    <div class="card-content">
+        <h1 class="title is-5">Archives</h1>
+        
+            <a href="http://the-coding-lab.com/archives/2021">2021</a> (9)<br>
+        
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+    </div>
+</div>
+
+<footer class="footer has-background-grey-darker has-text-white">
+    <div class="content has-text-centered">
+        <p>
+            <span class="icon is-large"><a href="/index.xml" class="mysocial" rel="me"><i class="fas fa-rss fa-3x"></i></a></span>&nbsp;&nbsp;
+            <span class="icon is-large"><a href="https://github.com/NiklasTiede" class="mysocial" rel="me"><i class="fab fa-github fa-3x"></i></a></span>&nbsp;&nbsp;
+            <span class="icon is-large"><a href="mailto:niklastiede2@gmail.com" class="mysocial" rel="me"><i class="fas fa-envelope fa-3x"></i></a></span>&nbsp;&nbsp;
+            <span class="icon is-large"><a href="https://www.linkedin.com/in/niklas-tiede-3b57451b6/" class="mysocial" rel="me"><i class="fab fa-linkedin fa-3x"></i></a></span>&nbsp;&nbsp;
+            <span class="icon is-large"><a href="https://dev.to/niklastiede" class="mysocial" rel="me"><i class="fab fa-dev fa-3x"></i></a></span>&nbsp;&nbsp;
+            <br><br>
+            Copyright &copy; The Coding Lab 2021 - Theme by <a href="https://jeffprod.com" class="mysocial">JeffProd.com</a>
+            - <a class="mysocial" href="http://the-coding-lab.com/about">About</a>
+        </p>
+    </div>
+</footer>
+
+<script defer src="https://use.fontawesome.com/releases/v5.4.0/js/all.js"></script>
+</body>
+</html>
