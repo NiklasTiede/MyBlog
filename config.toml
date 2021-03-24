@@ -3,6 +3,8 @@ languageCode = "en-us"
 title = "The Coding Lab"
 theme = "jeffprod"
 
+googleAnalytics = "G-G6WV3H8X5T"
+
 # use github pages for deployment (docs)
 publishDir = "docs"
 
@@ -12,3 +14,4 @@ publishDir = "docs"
 [taxonomies]
     tag = "tags"
     archive = "archives"
+
