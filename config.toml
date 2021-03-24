@@ -1,9 +1,9 @@
+googleAnalytics = "G-G6WV3H8X5T"
+
 baseURL = "https://the-coding-lab.com/"
 languageCode = "en-us"
 title = "The Coding Lab"
 theme = "jeffprod"
-
-googleAnalytics = "G-G6WV3H8X5T"
 
 # use github pages for deployment (docs)
 publishDir = "docs"
