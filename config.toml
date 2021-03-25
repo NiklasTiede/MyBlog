@@ -1,4 +1,5 @@
 googleAnalytics = "UA-192987769-1"
+disqusShortname = "the-coding-lab"
 
 baseURL = "https://the-coding-lab.com/"
 languageCode = "en-us"
