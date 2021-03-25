@@ -107,7 +107,7 @@ if [[ ! $(pipenv) ]]; then
 fi
 ```
 
-THe virtual environment will be rebuilt.
+The virtual environment will be rebuilt.
 
 ```bash
 pipenv install -r requirements.txt
