@@ -12,7 +12,6 @@ categories = [
     "cli",
 ]
 menu = "main"
-draft = true
 +++
 
 Heya fellows,

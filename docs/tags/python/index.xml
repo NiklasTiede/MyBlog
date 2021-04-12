@@ -6,32 +6,10 @@
     <description>Recent content in python on The Coding Lab</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 12 Apr 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 31 Mar 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://the-coding-lab.com/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Building a Renaming Tool</title>
-      <link>https://the-coding-lab.com/2021/renaming-tool/</link>
-      <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://the-coding-lab.com/2021/renaming-tool/</guid>
-      <description>&lt;p&gt;Heya fellows,&lt;/p&gt;
-&lt;p align=&#34;justify&#34;&gt;
-When i switched from windows to linux 
-I used whitespaces within folder/file names. But when switching to linux i this is not good pravtice due to the command line.
-AT our luck the autocomplete capabilities add \ before the whitespaces to prevent being recognized as 2 args. but still, this seemed to me a nice task to create a tool which converts all files containg whites
-&lt;/p&gt;
-&lt;p&gt;So, lets build such a command line tool using Pythons standard library &lt;code&gt;argparse&lt;/code&gt;!&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;show some aspects of argparse&lt;/li&gt;
-&lt;li&gt;how to store settings permamently within an app: .init files&lt;/li&gt;
-&lt;li&gt;github action workflow, how to publish easily to pypi.org
--&amp;gt; interessantes reinbringen!&lt;/li&gt;
-&lt;/ul&gt;
-</description> 
-    </item>
     
     <item>
       <title>Turning a Website into an API</title>
