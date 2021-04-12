@@ -89,7 +89,7 @@ if (!doNotTrack) {
 <li><a href="/2021/9-publishing-at-anaconda">Publishing at Anaconda</a></li>
 </ol>
 <p>When I started out my Journey of learning to code I went through dozens of tutorials, I rewrote many algorithms and played with several kinds of topics. During this time I was pretty busy learning Python&rsquo;s basic syntax, its standard libraries and other third party packages. &ldquo;You have to know which tools you can use before you&rsquo;re able to create new tools&rdquo; I said to myself. So I kept myself busy with learning about computer science basics and discovering frameworks, libraries and commands line apps.</p>
-<!-- raw HTML omitted -->
+<!-- ![cute tortoise](/img/tortoise.jpg) -->
 <p>It took me 8 month before I started to discover Github. What a phenomenal mistake of mine! Github has such a great community, people create so much admirable work, it&rsquo;s so interesting to discover/use or play with other peoples projects! It took me some time to understand Python&rsquo;s packaging (I really underestimated the packaging part!). So in the following I would like to take you with me on a journey of writing and releasing a tiny command line app. We will see how a simple script grows and goes through different stages of its development cycle. Some scripts of mine grow, some are just executed as plain script files. I collect these within a folder on my machine (see: <a href="https://github.com/NiklasTiede/Python-Scripts-Collection">Collection of Python Scripts</a>).</p>
 <p>Exploring the web through the command line is a fascinating experience. We will use the <code>requests</code> library to create a little <a href="https://github.com/httpie/httpie">HTTPie</a> clone. HTTP clients are used to test how an API behaves when sending GET and POST requests to it.</p>
 <h1 id="1-a-simple-script">1. A Simple Script</h1>
@@ -146,7 +146,9 @@ $ source ~/.bashrc
 </code></pre><p>Now you can call your script in each new shell session no matter where you are on the filesystem.</p>
 <pre><code>$ tihttp
 </code></pre><p>But there is still a problem: every time our tools sends a GET request to a website we have to change the URL by opening the file, changing the URL, saving and executing it. Would it not be nicer to add the URL as argument to our <code>tihttp</code> command? Python&rsquo;s <code>sys</code> module from the standard library comes here to our rescue!</p>
-<!-- raw HTML omitted -->
+<div>
+<p align="center"> <a href="/posts/2-sys-module">section 2 >></a> </p>
+</div>
 
             </div>
         </div>
@@ -169,12 +171,20 @@ $ source ~/.bashrc
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/testing">testing</a></span>
         
+            <span class="tag"><a href="https://the-coding-lab.com/tags/webdev">webdev</a></span>
+        
         </div>          
     </div>
 </div><br>
         <div class="card">
     <div class="card-content">
         <h1 class="title is-5">Recent posts</h1>
+        
+            <h1><a href="https://the-coding-lab.com/2021/renaming-tool/">Building a Renaming Tool</a></h1>
+            <time class="has-text-grey-light is-size-7">12 April 2021</time>
+        
+            <h1><a href="https://the-coding-lab.com/2021/github-trending-api/">Turning a Website into an API</a></h1>
+            <time class="has-text-grey-light is-size-7">31 March 2021</time>
         
             <h1><a href="https://the-coding-lab.com/2021/9-publishing-at-anaconda/">Publishing at Anaconda - 9/9</a></h1>
             <time class="has-text-grey-light is-size-7">25 February 2021</time>
@@ -184,12 +194,6 @@ $ source ~/.bashrc
         
             <h1><a href="https://the-coding-lab.com/2021/7-documentation/">Documentation - 7/9</a></h1>
             <time class="has-text-grey-light is-size-7">19 February 2021</time>
-        
-            <h1><a href="https://the-coding-lab.com/2021/6-testing-and-continous-integration/">Testing and CI - 6/9</a></h1>
-            <time class="has-text-grey-light is-size-7">16 February 2021</time>
-        
-            <h1><a href="https://the-coding-lab.com/2021/5-distribution-via-setup-file/">Distribution via Setup File - 5/9</a></h1>
-            <time class="has-text-grey-light is-size-7">11 February 2021</time>
         
     </div>
 </div>
@@ -204,6 +208,12 @@ $ source ~/.bashrc
         <h1 class="title is-5">Related posts</h1>
       
       
+            <h1><a href="https://the-coding-lab.com/2021/renaming-tool/">Building a Renaming Tool</a></h1>
+            <time class="has-text-grey-light is-size-7">12 April 2021</time>
+      
+            <h1><a href="https://the-coding-lab.com/2021/github-trending-api/">Turning a Website into an API</a></h1>
+            <time class="has-text-grey-light is-size-7">31 March 2021</time>
+      
             <h1><a href="https://the-coding-lab.com/2021/9-publishing-at-anaconda/">Publishing at Anaconda - 9/9</a></h1>
             <time class="has-text-grey-light is-size-7">25 February 2021</time>
       
@@ -219,12 +229,6 @@ $ source ~/.bashrc
             <h1><a href="https://the-coding-lab.com/2021/5-distribution-via-setup-file/">Distribution via Setup File - 5/9</a></h1>
             <time class="has-text-grey-light is-size-7">11 February 2021</time>
       
-            <h1><a href="https://the-coding-lab.com/2021/4-distribution-via-installation-script/">Distribution via Installation Script - 4/9</a></h1>
-            <time class="has-text-grey-light is-size-7">6 February 2021</time>
-      
-            <h1><a href="https://the-coding-lab.com/2021/3-argparse-module/">Argparse Module - 3/9</a></h1>
-            <time class="has-text-grey-light is-size-7">1 February 2021</time>
-      
     </div>
 </div>
 
@@ -234,7 +238,7 @@ $ source ~/.bashrc
     <div class="card-content">
         <h1 class="title is-5">Archives</h1>
         
-            <a href="https://the-coding-lab.com/archives/2021">2021</a> (9)<br>
+            <a href="https://the-coding-lab.com/archives/2021">2021</a> (11)<br>
         
     </div>
 </div>

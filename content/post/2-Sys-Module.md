@@ -2,7 +2,6 @@
 title = "Sys Module - 2/9"
 description = "Pythons sys module is used to create a tiny command line app."
 tags = [
-    "scripting",
     "python",
     "cli",
 ]
@@ -10,7 +9,6 @@ date = "2021-01-26"
 archives = "2021"
 categories = [
     "Python",
-    "Scripting",
     "CLI"
 ]
 menu = "main"

@@ -2,7 +2,6 @@
 title = "Publishing at PyPI - 8/9"
 description = "A description"
 tags = [
-    "scripting",
     "python",
     "packaging",
 ]
@@ -10,7 +9,6 @@ date = "2021-02-23"
 archives = "2021"
 categories = [
     "Python",
-    "Scripting",
     "Packaging",
 ]
 menu = "main"

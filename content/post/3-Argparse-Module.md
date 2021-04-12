@@ -2,7 +2,6 @@
 title = "Argparse Module - 3/9"
 description = "A description"
 tags = [
-    "scripting",
     "python",
     "cli",
 ]
@@ -10,7 +9,6 @@ date = "2021-02-01"
 archives = "2021"
 categories = [
     "Python",
-    "Scripting",
     "CLI",
 ]
 menu = "main"

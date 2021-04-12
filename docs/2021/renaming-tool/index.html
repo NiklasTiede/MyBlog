@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>The Coding Lab  | Publishing at PyPI - 8/9</title>
+    <title>The Coding Lab  | Building a Renaming Tool</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
@@ -54,7 +54,7 @@ if (!doNotTrack) {
                 <br>
                 <h1 class="title is-size-1">
                     
-                        Publishing at PyPI - 8/9
+                        Building a Renaming Tool
                     
                 </h1>
                 
@@ -75,44 +75,18 @@ if (!doNotTrack) {
         <div class="tile is-child box">
             <div class="content">
                 <p>Heya fellows,</p>
-<p>This is part 8 of the multi-part series &ldquo;The Evolution of a Script&rdquo;. The code of this post can be found on Github (see <a href="https://github.com/NiklasTiede/tinyHTTPie/tree/8-Publishing-at-PyPI">here</a>).</p>
-<h4 id="contents">Contents</h4>
-<ol>
-<li><a href="/2021/1-the-evolution-of-a-script">A Simple Script</a></li>
-<li><a href="/2021/2-sys-module">Sys Module</a></li>
-<li><a href="/2021/3-argparse-module/">Argparse Module</a></li>
-<li><a href="/2021/4-distribution-via-installation-script">Distribution via Installation Script</a></li>
-<li><a href="/2021/5-distribution-via-setup-file">Distribution via Setup File</a></li>
-<li><a href="/2021/6-testing-and-continous-integration">Testing and Continuous Integration</a></li>
-<li><a href="/2021/7-documentation">Documentation</a></li>
-<li><a href="/2021/8-publishing-at-pypi"><strong>Publishing at PyPI</strong></a></li>
-<li><a href="/2021/9-publishing-at-anaconda">Publishing at Anaconda</a></li>
-</ol>
-<p>Ok, now people can download our project from github and use it. But in our daily work we use the Python Packaging Index to install things. So how do we release our package on PyPI? First we have to decide which versioning scheme we will use. Semantic versioning (<a href="https://semver.org/">semver.org</a>) and calendar versioning (<a href="https://calver.org/">calver.org</a>) are commonly used. We decide to use semantic versioning in the following. Github allows us to make images of our project (tags). Often the tagging corresponds with the package release on PyPI. So let&rsquo;s first create a tag:</p>
-<pre><code>$ git add .
-$ git commit -m &quot;v1.0.0&quot;
-$ git tag !$
-$ git push origin &quot;v1.0.0&quot;
-</code></pre><p>Tags are a great opportunity to see a project in reverse at every stage of its development. Next we will generate a source distribution (.tar.gz) and a wheel distribution (.whl).</p>
-<pre><code>$ pip install wheel
-
-$ python setup.py sdist bdist_wheel
-</code></pre><p>The generated files can be found within the <code>dist</code> directory. Now we have to register at <a href="https://pypi.org/">PyPI</a> before we can upload our project. For testing purposes it&rsquo;s convenient to upload the project to <a href="https://test.pypi.org/">TestPyPI</a> first. So, let&rsquo;s do that.</p>
-<pre><code>$ pip install twine
-
-$ twine upload --repository testpypi dist/*
-</code></pre><p>Now let&rsquo;s test installing <code>tihttp</code>.</p>
-<pre><code>$ pip install -i https://test.pypi.org/pypi/ --extra-index-url https://pypi.org/simple tihttp
-</code></pre><p>Our tools works perfectly fine!</p>
-<pre><code>$ tihttp -H google.com
-</code></pre><hr>
-<p>And now that we are sure that everything works, it&rsquo;s time to upload things to PyPI.</p>
-<pre><code>$ twine upload --repository pypi dist/*
-
-$ pip install tihttp
-</code></pre><div>
-    <p align="center"><a href="/posts/7-documentation"><< section 7</a> | <a href="/posts/9-publishing-at-anaconda">section 9 >></a> </p>
-</div>
+<p align="justify">
+When i switched from windows to linux 
+I used whitespaces within folder/file names. But when switching to linux i this is not good pravtice due to the command line.
+AT our luck the autocomplete capabilities add \ before the whitespaces to prevent being recognized as 2 args. but still, this seemed to me a nice task to create a tool which converts all files containg whites
+</p>
+<p>So, lets build such a command line tool using Pythons standard library <code>argparse</code>!</p>
+<ul>
+<li>show some aspects of argparse</li>
+<li>how to store settings permamently within an app: .init files</li>
+<li>github action workflow, how to publish easily to pypi.org
+-&gt; interessantes reinbringen!</li>
+</ul>
 
             </div>
         </div>
@@ -172,14 +146,14 @@ $ pip install tihttp
         <h1 class="title is-5">Related posts</h1>
       
       
-            <h1><a href="https://the-coding-lab.com/2021/renaming-tool/">Building a Renaming Tool</a></h1>
-            <time class="has-text-grey-light is-size-7">12 April 2021</time>
-      
             <h1><a href="https://the-coding-lab.com/2021/github-trending-api/">Turning a Website into an API</a></h1>
             <time class="has-text-grey-light is-size-7">31 March 2021</time>
       
             <h1><a href="https://the-coding-lab.com/2021/9-publishing-at-anaconda/">Publishing at Anaconda - 9/9</a></h1>
             <time class="has-text-grey-light is-size-7">25 February 2021</time>
+      
+            <h1><a href="https://the-coding-lab.com/2021/8-publishing-at-pypi/">Publishing at PyPI - 8/9</a></h1>
+            <time class="has-text-grey-light is-size-7">23 February 2021</time>
       
             <h1><a href="https://the-coding-lab.com/2021/7-documentation/">Documentation - 7/9</a></h1>
             <time class="has-text-grey-light is-size-7">19 February 2021</time>

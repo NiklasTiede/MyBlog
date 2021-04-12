@@ -6,10 +6,32 @@
     <description>Recent content in cli on The Coding Lab</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 01 Feb 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 12 Apr 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://the-coding-lab.com/tags/cli/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Building a Renaming Tool</title>
+      <link>https://the-coding-lab.com/2021/renaming-tool/</link>
+      <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://the-coding-lab.com/2021/renaming-tool/</guid>
+      <description>&lt;p&gt;Heya fellows,&lt;/p&gt;
+&lt;p align=&#34;justify&#34;&gt;
+When i switched from windows to linux 
+I used whitespaces within folder/file names. But when switching to linux i this is not good pravtice due to the command line.
+AT our luck the autocomplete capabilities add \ before the whitespaces to prevent being recognized as 2 args. but still, this seemed to me a nice task to create a tool which converts all files containg whites
+&lt;/p&gt;
+&lt;p&gt;So, lets build such a command line tool using Pythons standard library &lt;code&gt;argparse&lt;/code&gt;!&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;show some aspects of argparse&lt;/li&gt;
+&lt;li&gt;how to store settings permamently within an app: .init files&lt;/li&gt;
+&lt;li&gt;github action workflow, how to publish easily to pypi.org
+-&amp;gt; interessantes reinbringen!&lt;/li&gt;
+&lt;/ul&gt;
+</description> 
+    </item>
     
     <item>
       <title>Argparse Module - 3/9</title>
@@ -226,7 +248,9 @@ optional arguments:
   -h, --help         show this help message and exit
   -H, --header-only  Prints only the header of the Response.
   -B, --body-only    Prints only the body of the Response.
-&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;div&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/2-sys-module&#34;&gt;&lt;&lt; section 2&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/4-distribution-via-installation-script&#34;&gt;section 4 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+&lt;/div&gt;
 </description> 
     </item>
     
@@ -464,7 +488,9 @@ body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style
 &lt;pre&gt;&lt;code&gt;$ tihttp -H https://the-coding-lab.com/
 $ tihttp -B https://the-coding-lab.com/
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We see that it can become quite tedious to add more functionality when limiting ourself to the&lt;code&gt; sys&lt;/code&gt; module. It needs alot of boolean logic. But Python has a library only for creating command line interfaces: &lt;code&gt;argparse&lt;/code&gt;!&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
+&lt;div&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/1-the-evolution-of-a-script&#34;&gt;&lt;&lt; section 1&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/3-argparse-module/&#34;&gt;section 3 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+&lt;/div&gt;
 </description> 
     </item>
     

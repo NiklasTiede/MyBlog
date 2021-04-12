@@ -2,7 +2,6 @@
 title = "Testing and CI - 6/9"
 description = "A description"
 tags = [
-    "scripting",
     "python",
     "testing",
 ]
@@ -10,7 +9,6 @@ date = "2021-02-16"
 archives = "2021"
 categories = [
     "Python",
-    "Scripting",
     "Testing",
 ]
 menu = "main"

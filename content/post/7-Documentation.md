@@ -2,7 +2,6 @@
 title = "Documentation - 7/9"
 description = "A description"
 tags = [
-    "scripting",
     "python",
     "packaging",
 ]
@@ -10,7 +9,6 @@ date = "2021-02-19"
 archives = "2021"
 categories = [
     "Python",
-    "Scripting",
     "Packaging",
 ]
 menu = "main"

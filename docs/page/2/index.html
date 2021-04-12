@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
+	<meta name="generator" content="Hugo 0.80.0" />
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>The Coding Lab  | Publishing at PyPI - 8/9</title>
+    <title>The Coding Lab  | The Coding Lab</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
     <link rel="stylesheet" href="https://the-coding-lab.com/css/blog.css" />
+    <link rel="alternate" type="application/rss+xml" href="https://the-coding-lab.com/index.xml" title="The Coding Lab" />
     
 <script type="application/javascript">
 var doNotTrack = false;
@@ -54,7 +56,7 @@ if (!doNotTrack) {
                 <br>
                 <h1 class="title is-size-1">
                     
-                        Publishing at PyPI - 8/9
+                        The Coding Lab
                     
                 </h1>
                 
@@ -70,50 +72,29 @@ if (!doNotTrack) {
     <div class="section">
     
 
+
 <div class="columns">
     <div class="column is-9">
         <div class="tile is-child box">
             <div class="content">
-                <p>Heya fellows,</p>
-<p>This is part 8 of the multi-part series &ldquo;The Evolution of a Script&rdquo;. The code of this post can be found on Github (see <a href="https://github.com/NiklasTiede/tinyHTTPie/tree/8-Publishing-at-PyPI">here</a>).</p>
-<h4 id="contents">Contents</h4>
-<ol>
-<li><a href="/2021/1-the-evolution-of-a-script">A Simple Script</a></li>
-<li><a href="/2021/2-sys-module">Sys Module</a></li>
-<li><a href="/2021/3-argparse-module/">Argparse Module</a></li>
-<li><a href="/2021/4-distribution-via-installation-script">Distribution via Installation Script</a></li>
-<li><a href="/2021/5-distribution-via-setup-file">Distribution via Setup File</a></li>
-<li><a href="/2021/6-testing-and-continous-integration">Testing and Continuous Integration</a></li>
-<li><a href="/2021/7-documentation">Documentation</a></li>
-<li><a href="/2021/8-publishing-at-pypi"><strong>Publishing at PyPI</strong></a></li>
-<li><a href="/2021/9-publishing-at-anaconda">Publishing at Anaconda</a></li>
-</ol>
-<p>Ok, now people can download our project from github and use it. But in our daily work we use the Python Packaging Index to install things. So how do we release our package on PyPI? First we have to decide which versioning scheme we will use. Semantic versioning (<a href="https://semver.org/">semver.org</a>) and calendar versioning (<a href="https://calver.org/">calver.org</a>) are commonly used. We decide to use semantic versioning in the following. Github allows us to make images of our project (tags). Often the tagging corresponds with the package release on PyPI. So let&rsquo;s first create a tag:</p>
-<pre><code>$ git add .
-$ git commit -m &quot;v1.0.0&quot;
-$ git tag !$
-$ git push origin &quot;v1.0.0&quot;
-</code></pre><p>Tags are a great opportunity to see a project in reverse at every stage of its development. Next we will generate a source distribution (.tar.gz) and a wheel distribution (.whl).</p>
-<pre><code>$ pip install wheel
-
-$ python setup.py sdist bdist_wheel
-</code></pre><p>The generated files can be found within the <code>dist</code> directory. Now we have to register at <a href="https://pypi.org/">PyPI</a> before we can upload our project. For testing purposes it&rsquo;s convenient to upload the project to <a href="https://test.pypi.org/">TestPyPI</a> first. So, let&rsquo;s do that.</p>
-<pre><code>$ pip install twine
-
-$ twine upload --repository testpypi dist/*
-</code></pre><p>Now let&rsquo;s test installing <code>tihttp</code>.</p>
-<pre><code>$ pip install -i https://test.pypi.org/pypi/ --extra-index-url https://pypi.org/simple tihttp
-</code></pre><p>Our tools works perfectly fine!</p>
-<pre><code>$ tihttp -H google.com
-</code></pre><hr>
-<p>And now that we are sure that everything works, it&rsquo;s time to upload things to PyPI.</p>
-<pre><code>$ twine upload --repository pypi dist/*
-
-$ pip install tihttp
-</code></pre><div>
-    <p align="center"><a href="/posts/7-documentation"><< section 7</a> | <a href="/posts/9-publishing-at-anaconda">section 9 >></a> </p>
-</div>
-
+                <h3>Welcome to my blog !</h3>
+                <hr>
+                
+                    <article class="media">
+                        <div class="media-content">
+                            <div class="content">
+                                <p class="title is-4"><a href="https://the-coding-lab.com/2021/1-the-evolution-of-a-script/">The Evolution of a Script - 1/9</a></p>
+                                <p class="subtitle is-size-6 has-text-grey-light">
+                                    Published at January 21, 2021 &middot;
+                                    <i class="far fa-clock"></i>&nbsp;4 min read
+                                </p>
+                                <p>Heya fellows,
+This is part 1 of the multi-part series &ldquo;The Evolution of a Script&rdquo;. The code of this post can be found on Github (see here).
+Contents  A Simple Script Sys Module Argparse Module Distribution via Installation Script Distribution via Setup File Testing and Continuous Integration Documentation Publishing at PyPI Publishing at Anaconda  When I started out my Journey of learning to code I went through dozens of tutorials, I rewrote many algorithms and played with several kinds of topics....</p>
+                            </div>
+                        </div>
+                    </article>
+                
             </div>
         </div>
     </div>
@@ -162,42 +143,6 @@ $ pip install tihttp
     </div>
 </div>
     <br>
-                
-  
-
-
-
-<div class="card">
-    <div class="card-content">
-        <h1 class="title is-5">Related posts</h1>
-      
-      
-            <h1><a href="https://the-coding-lab.com/2021/renaming-tool/">Building a Renaming Tool</a></h1>
-            <time class="has-text-grey-light is-size-7">12 April 2021</time>
-      
-            <h1><a href="https://the-coding-lab.com/2021/github-trending-api/">Turning a Website into an API</a></h1>
-            <time class="has-text-grey-light is-size-7">31 March 2021</time>
-      
-            <h1><a href="https://the-coding-lab.com/2021/9-publishing-at-anaconda/">Publishing at Anaconda - 9/9</a></h1>
-            <time class="has-text-grey-light is-size-7">25 February 2021</time>
-      
-            <h1><a href="https://the-coding-lab.com/2021/7-documentation/">Documentation - 7/9</a></h1>
-            <time class="has-text-grey-light is-size-7">19 February 2021</time>
-      
-            <h1><a href="https://the-coding-lab.com/2021/6-testing-and-continous-integration/">Testing and CI - 6/9</a></h1>
-            <time class="has-text-grey-light is-size-7">16 February 2021</time>
-      
-            <h1><a href="https://the-coding-lab.com/2021/5-distribution-via-setup-file/">Distribution via Setup File - 5/9</a></h1>
-            <time class="has-text-grey-light is-size-7">11 February 2021</time>
-      
-            <h1><a href="https://the-coding-lab.com/2021/3-argparse-module/">Argparse Module - 3/9</a></h1>
-            <time class="has-text-grey-light is-size-7">1 February 2021</time>
-      
-    </div>
-</div>
-
-    
-<br>
         <div class="card">
     <div class="card-content">
         <h1 class="title is-5">Archives</h1>
@@ -207,6 +152,25 @@ $ pip install tihttp
     </div>
 </div>
 
+    </div>
+</div>
+<div class="columns">
+    <div class="column is-9">
+        <nav class="pagination is-centered is-rounded" role="navigation" aria-label="pagination">
+            <a class="pagination-previous" href="/">Previous</a>
+            
+            <ul class="pagination-list">
+                
+                <li class="pagination__item">
+                    <a class="pagination-link" aria-label="Goto page 1" href="/">1</a>
+                </li>
+                
+                <li class="pagination__item">
+                    <a class="pagination-link is-current" aria-label="Goto page 2" href="/page/2/">2</a>
+                </li>
+                
+            </ul>
+        </nav>
     </div>
 </div>
 

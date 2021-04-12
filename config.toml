@@ -1,6 +1,5 @@
 googleAnalytics = "UA-192987769-1"
 
-
 baseURL = "https://the-coding-lab.com/"
 languageCode = "en-us"
 title = "The Coding Lab"
@@ -16,3 +15,6 @@ publishDir = "docs"
     tag = "tags"
     archive = "archives"
 
+# html is omitted by default, turn this behavior off:
+[markup.goldmark.renderer]
+unsafe= true

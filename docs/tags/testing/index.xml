@@ -123,7 +123,9 @@ $ tox -e py38 -- test/main_test.py   # executes only single test
         &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          &lt;/span&gt;          &lt;span style=&#34;color:#ae81ff&#34;&gt;pytest&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Don&amp;rsquo;t be intimidated by the length of this job. It&amp;rsquo;s just illustrating how powerful continuous integration is.&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
+&lt;div&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/5-distribution-via-setup-file&#34;&gt;&lt;&lt; section 5&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/7-documentation&#34;&gt;section 7 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+&lt;/div&gt;
 </description> 
     </item>
     

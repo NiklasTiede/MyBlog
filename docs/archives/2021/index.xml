@@ -6,10 +6,324 @@
     <description>Recent content in 2021 on The Coding Lab</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 25 Feb 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 12 Apr 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://the-coding-lab.com/archives/2021/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Building a Renaming Tool</title>
+      <link>https://the-coding-lab.com/2021/renaming-tool/</link>
+      <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://the-coding-lab.com/2021/renaming-tool/</guid>
+      <description>&lt;p&gt;Heya fellows,&lt;/p&gt;
+&lt;p align=&#34;justify&#34;&gt;
+When i switched from windows to linux 
+I used whitespaces within folder/file names. But when switching to linux i this is not good pravtice due to the command line.
+AT our luck the autocomplete capabilities add \ before the whitespaces to prevent being recognized as 2 args. but still, this seemed to me a nice task to create a tool which converts all files containg whites
+&lt;/p&gt;
+&lt;p&gt;So, lets build such a command line tool using Pythons standard library &lt;code&gt;argparse&lt;/code&gt;!&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;show some aspects of argparse&lt;/li&gt;
+&lt;li&gt;how to store settings permamently within an app: .init files&lt;/li&gt;
+&lt;li&gt;github action workflow, how to publish easily to pypi.org
+-&amp;gt; interessantes reinbringen!&lt;/li&gt;
+&lt;/ul&gt;
+</description> 
+    </item>
+    
+    <item>
+      <title>Turning a Website into an API</title>
+      <link>https://the-coding-lab.com/2021/github-trending-api/</link>
+      <pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://the-coding-lab.com/2021/github-trending-api/</guid>
+      <description>&lt;p&gt;Heya fellows,&lt;/p&gt;
+&lt;p align=&#34;justify&#34;&gt;
+The amount of interesting data which can be found on websites is increasing from day to day. These data are scraped by search engines to improve search results, they&#39;re collected to create machine learning models or just processed and other services/apps are recreated from them. 
+&lt;/p&gt;
+&lt;p&gt;The latter can be achieved by scraping data and then exposing them as RESTful API to other developers so they can build their services/apps around it.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://the-coding-lab.com/img/api_scheme.svg&#34; alt=&#34;scraping API Scheme&#34;&gt;&lt;/p&gt;
+&lt;p align=&#34;justify&#34;&gt;
+Non-coding solutions like &lt;a href=&#34;https://apify.com&#34; target=”_blank” &gt;APIFY&lt;/a&gt; or &lt;a href=&#34;https://www.scraping-bot.io/&#34; target=”_blank” &gt;scrapingbot&lt;/a&gt; emerged in recent years to simplify this process. Data are scraped from popular (e-commerce) platforms and they are served over an API as developer-friendly JSON. But these apply only to big, popular platforms and cannot be applied to every website. 
+&lt;/p&gt;
+&lt;p align=&#34;justify&#34;&gt;
+So I thought it would be nice to build such a web scraping API to learn more about web scraping and web development. I found this unofficial &lt;a href=&#34;https://github.com/huchenme/github-trending-api&#34; target=”_blank” &gt;Github trending API&lt;/a&gt; written in Javascript. It is not available anymore. So I planned to rewrite this API in Python and make it accessible.
+&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;contents&#34;&gt;Contents&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;#1-scraping-repository-data&#34;&gt;Web Scraping&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#2-fastapi&#34;&gt;FastAPI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#3-deployment-on-heroku&#34;&gt;Deployment&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#4-conclusion-and-future-directions&#34;&gt;Conclusion and Future Directions&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#5-references&#34;&gt;References&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p align=&#34;justify&#34;&gt;
+Python has great 3rd party packages for web scraping like &lt;a href=&#34;https://github.com/scrapy/scrapy&#34; target=”_blank” &gt;Scrapy&lt;/a&gt;, &lt;a href=&#34;https://pypi.org/project/beautifulsoup4/&#34; target=”_blank” &gt;BeautifulSoup&lt;/a&gt; or &lt;a href=&#34;https://github.com/psf/requests-html&#34; target=”_blank” &gt;Requests-HTML&lt;/a&gt; to name just a few. I will use BeautifulSoup and the &lt;a href=&#34;https://github.com/aio-libs/aiohttp&#34; target=”_blank” &gt;aiohttp&lt;/a&gt; package to perform asynchronous requests via the HTTP protocol. FastAPI has a nice built-in documentation and makes extensive use of pydantic which makes data parsing and validation pretty intuitive.
+&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;1-scraping-repository-data&#34;&gt;1. Scraping Repository Data&lt;/h1&gt;
+&lt;p&gt;At first I wrote some Python code to scrape the desired data. I saved a sample of the trending repositories HTML to avoid sending dozens of requests to Github. I use &lt;a href=&#34;https://github.com/httpie/httpie&#34; target=”_blank” &gt;HTTPie&lt;/a&gt; as HTTP client to perform requests via the terminal.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ http -b https://github.com/trending &amp;gt; repositories.html
+$ wc repositories.html
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The HTML file has a size of 695 KB. The wordcount shows that ~710.000 characters are distributed over ~6000 lines. The file contains 25 repositories waiting for me to be scraped 🙂. Each repository is enclosed by an article-tag.&lt;/p&gt;
+&lt;p&gt;I opened the file from Python and tried to scrape the HTML document.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; bs4
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;with&lt;/span&gt; open(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;repositories.html&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;r&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; f:
+    articles_html &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; f&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;read()
+
+soup &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; bs4&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;BeautifulSoup(articles_html, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;lxml&amp;#34;&lt;/span&gt;)
+articles &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;  soup&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;find_all(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;article&amp;#34;&lt;/span&gt;, class_&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Box-row&amp;#34;&lt;/span&gt;)
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;number of articles: {len(articles)}&amp;#39;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After trying to scrape different repository data I realized that BeautifulSoup does not find all articles reliably. Some research revealed that others observed this as well. So I wrote a filter function as a workaround. This function filters all HTML out which is enclosed by the article-tags.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;filter_articles&lt;/span&gt;(raw_html: str) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; str:
+
+    raw_html &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; raw_html&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;# count num of article tags (varies from 0 to 50):&lt;/span&gt;
+    article_tags_count &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+    tag &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;article&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; line &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; raw_html:
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; tag &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; line:
+            article_tags_count &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;# copy HTML enclosed by first and last article-tag:&lt;/span&gt;
+    articles_arrays, is_article &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [], False
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; line &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; raw_html:
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; tag &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; line:
+            article_tags_count &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+            is_article &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; True
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; is_article:
+            articles_arrays&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(line)
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; article_tags_count:
+            is_article &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; False
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;join(articles_arrays)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The now created &amp;lsquo;bs4.element.ResultSet&amp;rsquo; instances have always the expected length. Next we have to access the data within the soup and store them into a dictionary. The tags containing the desired data can be accessed using soups find-method or by going along the DOM tree via dot-notation. The latter is preferred performance-wise! Each repository is described by 12 properties. The function became quite lengthy, so I&amp;rsquo;ll show only a part of the function (scraping 4 properties).&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;scraping_repositories&lt;/span&gt;(
+    matches: bs4&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;element&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ResultSet, 
+    since: str
+) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; typing&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;List[typing&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Dict]:
+
+    trending_repositories &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; rank, match &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; enumerate(matches):
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;# relative url&lt;/span&gt;
+        rel_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; match&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;h1&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;a[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;href&amp;#34;&lt;/span&gt;]
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;# name of repo&lt;/span&gt;
+        repository_name &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; rel_url&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/&amp;#34;&lt;/span&gt;)[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;# author (username):&lt;/span&gt;
+        username &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; rel_url&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/&amp;#34;&lt;/span&gt;)[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;]
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;# language and color&lt;/span&gt;
+        progr_language &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; match&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;find(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;span&amp;#34;&lt;/span&gt;, itemprop&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;programmingLanguage&amp;#34;&lt;/span&gt;)
+            language &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; progr_language&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get_text(strip&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;True)
+            lang_color_tag &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; match&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;find(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;span&amp;#34;&lt;/span&gt;, class_&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;repo-language-color&amp;#34;&lt;/span&gt;)
+            lang_color &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; lang_color_tag[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;style&amp;#34;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;split()[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;:
+            lang_color, language &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; None, None
+
+        repositories &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
+            &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;rank&amp;#34;&lt;/span&gt;: rank &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,
+            &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;username&amp;#34;&lt;/span&gt;: username,
+            &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;repositoryName&amp;#34;&lt;/span&gt;: repository_name,
+            &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;language&amp;#34;&lt;/span&gt;: language,
+            &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;languageColor&amp;#34;&lt;/span&gt;: lang_color,
+        }
+        trending_repositories&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(repositories)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; trending_repositories
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;For data about trending developers I have written a another scraping function. Ok, now that we can scrape the HTML, users have to be able to retrieve the data via a GET request.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;2-fastapi&#34;&gt;2. FastAPI&lt;/h1&gt;
+&lt;p&gt;FastAPI makes building APIs a breeze. Here&amp;rsquo;s an example:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; fastapi
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; uvicorn
+
+app &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; fastapi&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;FastAPI()
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;@app.get&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/&amp;#34;&lt;/span&gt;)
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;index&lt;/span&gt;(myArg: str &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; None):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; {&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;data&amp;#34;&lt;/span&gt;: myArg}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; __name__ &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;__main__&amp;#34;&lt;/span&gt;:
+    uvicorn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;run(app, port&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;8000&lt;/span&gt;, host&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;0.0.0.0&amp;#34;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The path operation decorator &lt;code&gt;@app.get(&amp;quot;/&amp;quot;)&lt;/code&gt; handles requests that go to the &lt;code&gt;&amp;quot;/&amp;quot;&lt;/code&gt; route using a GET operation. The path operation function &lt;code&gt;index()&lt;/code&gt; let&amp;rsquo;s us handle query parameters. The code snippet contains an optional query parameter.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ http -b http://0.0.0.0:8000/?myArg=hello
+
+{
+    &amp;quot;data&amp;quot;: &amp;quot;hello&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We will create endpoints similar to the endpoints on Github. The programming language can be specified by a path parameter whereas the date range and the spoken language can be specified by an optional query parameter. Here&amp;rsquo;s an example:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;/c++?since=weekly&amp;amp;spoken_lang=de&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;FastAPI lets us define a set of allowed data which can be selected by the user. We have to create classes which contain the allowed properties and inherit from the &lt;code&gt;Enum&lt;/code&gt; class.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;AllowedDateRanges&lt;/span&gt;(str, Enum):
+    daily &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;daily&amp;#34;&lt;/span&gt;
+    weekly &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;weekly&amp;#34;&lt;/span&gt;
+    monthly &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;monthly&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;When opening FastAPIs documentation we will see that only 3 options for the date range will be available:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://the-coding-lab.com/img/docs_parameters.png&#34; alt=&#34;allowed parameters&#34;&gt;&lt;/p&gt;
+&lt;p&gt;The code for the routing will be written within a &lt;code&gt;main.py&lt;/code&gt; file. The path operation function accepts only allowed path parameters (programming languages) and optional query parameters (date ranges and spoken languages).&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;@app.get&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/repositories/{prog_lang}&amp;#34;&lt;/span&gt;)
+async &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;trending_repositories_by_progr_language&lt;/span&gt;(
+    since: AllowedDateRanges &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; None,
+):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; {&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;dateRange&amp;#34;&lt;/span&gt;: since}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Ok, now I know how the endpoints should look like, but before the user can choose between different options at all, I have to make make the web scraping dynamic by requesting the desired HTML from Github instead of just opening a local HTML copy. Pythons well-known &lt;code&gt;requests&lt;/code&gt; module does the job. The goal is to let the user select between different parameters. The parameters of the request are redirected as payload to Github to receive the desired HTML.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
+
+payload &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;since&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;daily&amp;#39;&lt;/span&gt;, 
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;spoken_language_code&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;en&amp;#39;&lt;/span&gt;,
+    }
+
+prog_lang &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;c++&amp;#39;&lt;/span&gt;
+
+resp &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;https://github.com/trending/{prog_lang}&amp;#34;&lt;/span&gt;, params&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;payload)
+raw_html &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Next, I will put the 3 parts together: the user can request data of trending repositories. The shown path operation function gives us the ability to specify the search for trending repositories (by programming language, period of time and spoken language. These arguments are redirected as payload to request the desired HTML which is at last scraped and returned as JSON.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;@app.get&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/repositories/{prog_lang}&amp;#34;&lt;/span&gt;)
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;trending_repositories_by_progr_language&lt;/span&gt;(
+    prog_lang: AllowedProgrammingLanguages,
+    since: AllowedDateRanges &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; None,
+    spoken_lang: AllowedSpokenLanguages &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; None,
+):
+
+    payload &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;since&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;daily&amp;#34;&lt;/span&gt;}
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; since:
+        payload[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;since&amp;#34;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; since&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_value_
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; spoken_lang:
+        payload[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;spoken_lang&amp;#34;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; spoken_lang&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_value_
+
+    resp &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;https://github.com/trending/{prog_lang}&amp;#34;&lt;/span&gt;, params&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;payload)
+    raw_html &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+
+    articles_html &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; filter_articles(raw_html)
+    soup &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; make_soup(articles_html)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; scraping_repositories(soup, since&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;payload[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;since&amp;#34;&lt;/span&gt;])
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;But how does the app perform? Professional tools like &lt;a href=&#34;https://httpd.apache.org/docs/2.4/programs/ab.html&#34;&gt;ApacheBench&lt;/a&gt; or &lt;a href=&#34;https://github.com/k6io/k6&#34;&gt;k6&lt;/a&gt; are commonly used to perform load testing, but in this case I wrote a small asynchronous script to bomb the application with requests. Comparing the performance of sync or async web apps without using async requests would be nonsense. I&amp;rsquo;ll call it &lt;code&gt;requests_benchmark.py&lt;/code&gt; and place it within the &lt;code&gt;tests/&lt;/code&gt; folder. Be aware that this is a rough comparison, I just want to illustrate the difference between synchronous and asynchronous code.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; asyncio
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; time
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; aiohttp
+
+URL &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;http://127.0.0.1:8000/repositories/c++?since=weekly&amp;#34;&lt;/span&gt;
+url_list &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; list([URL] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;50&lt;/span&gt;)
+
+async &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;fetch&lt;/span&gt;(session, url):
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&amp;#34;requesting a url asynchronously&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+    async &lt;span style=&#34;color:#66d9ef&#34;&gt;with&lt;/span&gt; session&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(url) &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; response:
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; await response&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;json()
+
+async &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;fetch_all&lt;/span&gt;(urls, loop):
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&amp;#34;performaning multiple requests asynchronously&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+    async &lt;span style=&#34;color:#66d9ef&#34;&gt;with&lt;/span&gt; aiohttp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ClientSession(loop&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;loop) &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; session:
+        results &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; await asyncio&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;gather(
+            &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;[fetch(session, url) &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; url &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; urls],
+            return_exceptions&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;True,
+        )
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; results
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; __name__ &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;__main__&amp;#34;&lt;/span&gt;:
+    t1_start &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; time&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;perf_counter()
+    event_loop &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; asyncio&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get_event_loop()
+    urls_duplicates &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; url_list
+    htmls &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; event_loop&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;run_until_complete(
+        fetch_all(urls_duplicates, event_loop),
+    )
+    t1_stop &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; time&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;perf_counter()
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;elapsed:&amp;#34;&lt;/span&gt;, t1_stop &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; t1_start)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;I executed the script 3 times making 20 requests on each execution. Ok now lets replace the synchronous &lt;a href=&#34;https://github.com/psf/requests&#34;&gt;requests&lt;/a&gt; library by the asynchronous &lt;a href=&#34;https://github.com/aio-libs/aiohttp&#34;&gt;aiohttp&lt;/a&gt; library. Furthermore, we add the &lt;code&gt;async&lt;/code&gt;/&lt;code&gt;await&lt;/code&gt; keywords on the right positions. Our final code will look like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;@app.get&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/repositories/{prog_lang}&amp;#34;&lt;/span&gt;)
+async &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;trending_repositories_by_progr_language&lt;/span&gt;(
+    prog_lang: AllowedProgrammingLanguages,
+    since: AllowedDateRanges &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; None,
+    spoken_language_code: AllowedSpokenLanguages &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; None,
+):
+
+    payload &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;since&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;daily&amp;#34;&lt;/span&gt;}
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; since:
+        payload[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;since&amp;#34;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; since&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;value
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; spoken_language_code:
+        payload[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;spoken_language_code&amp;#34;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; spoken_language_code&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;value
+
+    url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;https://github.com/trending/{prog_lang}&amp;#34;&lt;/span&gt;
+    sem &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; asyncio&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Semaphore()
+    async &lt;span style=&#34;color:#66d9ef&#34;&gt;with&lt;/span&gt; sem:
+        raw_html &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; await get_request(url, compress&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;True, params&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;payload)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; isinstance(raw_html, str):
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Unable to connect to Github&amp;#34;&lt;/span&gt;
+
+    articles_html &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; filter_articles(raw_html)
+    soup &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; make_soup(articles_html)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; scraping_repositories(soup, since&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;payload[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;since&amp;#34;&lt;/span&gt;])
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Again three measurements were done using the &lt;code&gt;requests_benchmark.py&lt;/code&gt; script. The average of the measurements were calculated and the requests per second of synchronous and asynchronous code are compared as a barchart. The asynchronous code performs roughly twice as good.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+&lt;img alt=&#34;load test comparison: sync vs. async&#34; src=&#34;https://the-coding-lab.com/img/sync_vs_async_load.svg&#34;&gt;
+&lt;/p&gt;
+&lt;p&gt;Three more routes will be written to cover all trending repositories and developers. Our last task then is to deploy our application.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;3-deployment-to-heroku&#34;&gt;3. Deployment to Heroku&lt;/h1&gt;
+&lt;p&gt;We&amp;rsquo;ll use Heroku which is an excellent Platform as a service (PaaS) cloud provider. To deploy our API to heroku we need a &lt;code&gt;heroku.yml&lt;/code&gt; file&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;build&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;docker&lt;/span&gt;:
+    &lt;span style=&#34;color:#f92672&#34;&gt;web&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Dockerfile&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&amp;hellip;and a Dockerfile. For the docker image we use the lightweight linux-distribution alpine. This results in a 80Mb sized image which is built when executing the &lt;code&gt;docker build -t gh-trending-api .&lt;/code&gt; command. The &lt;code&gt;lxml&lt;/code&gt; package we use for the webscraping requires &lt;code&gt;libxml&lt;/code&gt;, a C-library. Therefore we need to compile C-code and thus building the docker container can take up to several minutes.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-Dockerfile&#34; data-lang=&#34;Dockerfile&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;FROM&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; python:3.9.2-alpine3.13&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;LABEL&lt;/span&gt; maintainer&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Niklas Tiede &amp;lt;niklastiede2@gmail.com&amp;gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;WORKDIR&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; /github-trending-api&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;COPY&lt;/span&gt; ./requirements-prod.txt .&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;RUN&lt;/span&gt; apk add --update --no-cache --virtual .build-deps &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;    g++ &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;    libxml2 &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;    libxml2-dev &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;    apk add libxslt-dev &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;    pip install --no-cache-dir -r requirements-prod.txt &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;    apk del .build-deps&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;COPY&lt;/span&gt; ./app ./app&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;CMD&lt;/span&gt; uvicorn app.main:app --host 0.0.0.0 --port&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;PORT&lt;span style=&#34;color:#66d9ef&#34;&gt;:-&lt;/span&gt;5000&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we have to publish the port we defined in the &lt;code&gt;CMD&lt;/code&gt; instruction of the Dockerfile (port 5000) to the outside world. We have to map the containers port to a port on the docker host when running the container:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ docker run -p 5000:5000 gh-trending-api:latest
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Next we automate the deployment process using Github Actions. We create a &lt;code&gt;release_and_deploy.yaml&lt;/code&gt; file within a &lt;code&gt;.github/workflow/&lt;/code&gt; folder and place the following code. It contains the Github action &amp;ldquo;&lt;a href=&#34;https://github.com/marketplace/actions/deploy-to-heroku&#34;&gt;Deploy to Heroku&lt;/a&gt;&amp;rdquo; which will do the deployment for us.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;GH Release, Publishing to Docker and Deployment to Heroku&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;on&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;push&lt;/span&gt;:
+    &lt;span style=&#34;color:#f92672&#34;&gt;tags&lt;/span&gt;:
+      - &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;v*.*.*&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;jobs&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;test&lt;/span&gt;:
+    &lt;span style=&#34;color:#f92672&#34;&gt;runs-on&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;ubuntu-latest&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;steps&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;heroku-deploy&lt;/span&gt;:
+    &lt;span style=&#34;color:#f92672&#34;&gt;runs-on&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;ubuntu-latest&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;steps&lt;/span&gt;:
+    - &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;actions/checkout@master&lt;/span&gt;
+    - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Deploy on Heroku&lt;/span&gt;
+      &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;akhileshns/heroku-deploy@v3.12.12&lt;/span&gt;
+      &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
+        &lt;span style=&#34;color:#f92672&#34;&gt;heroku_api_key&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{secrets.HEROKU_API_KEY}}&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;heroku_app_name&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;gh-trending-api&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;heroku_email&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;niklastiede2@gmail.com&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We copy the &lt;code&gt;HEROKU_API_KEY&lt;/code&gt; from Heroku&amp;rsquo;s account settings and save this as a secret in our Github repository so our Github action can access it. Now each time we push a tag of our project into the remote repository, this workflow kicks in. It pushes the project to Heroku which will build and run the docker container of our application. The URL of our app can be reached at &lt;a href=&#34;https://gh-trending-api.herokuapp.com/&#34;&gt;https://gh-trending-api.herokuapp.com/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Aaaand, thats it! We deployed a nice-looking API 😙&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;4-conclusion-and-future-directions&#34;&gt;4. Conclusion and Future Directions&lt;/h1&gt;
+&lt;p&gt;Here is the full source code of the project: &lt;a href=&#34;https://github.com/NiklasTiede/Github-Trending-API&#34; target=”_blank” &gt;Github Trending API&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;It took me 3 days to build this API. Another 2 days were needed to learn how to use Pythons &lt;code&gt;async&lt;/code&gt;/&lt;code&gt;await&lt;/code&gt; syntax. But using asynchronous code increased the performance not as much as I expected it to be. The scraping itself seems to be the bottleneck of the API, it&amp;rsquo;s kinda CPU intensive. I also found out that beautifulsoups performance is not that good. Using the &lt;code&gt;.find&lt;/code&gt; method is slower than going down the DOM tree by hand.&lt;/p&gt;
+&lt;p&gt;If it turns out that this API would have a higher traffic in the future it could be interesting to implement a caching mechanism. Github updates the rankings of trending repositories only a few times per day so it would be more efficient to cache the most often used ranking in memory until Github updates the ranking to avoid requesting/scraping the same data repetitively. It would be very interesting to implement a Redis database for this job.&lt;/p&gt;
+&lt;p&gt;Ok guys, I hope you found something interesting, thanks for your attention and have a nice day!&lt;/p&gt;
+</description> 
+    </item>
     
     <item>
       <title>Publishing at Anaconda - 9/9</title>
@@ -131,7 +445,9 @@ find $HOME/conda-bld/**/$pkg*.tar.bz2 | &lt;span style=&#34;color:#66d9ef&#34;&g
     anaconda upload $file
 &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
 echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Uploading conda packages done!&amp;#34;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;!-- raw HTML omitted --&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/8-publishing-at-pypi&#34;&gt;&lt;&lt; section 8&lt;/a&gt; | &lt;/p&gt;
+&lt;/div&gt;
 </description> 
     </item>
     
@@ -177,7 +493,9 @@ $ twine upload --repository testpypi dist/*
 &lt;pre&gt;&lt;code&gt;$ twine upload --repository pypi dist/*
 
 $ pip install tihttp
-&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;div&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/7-documentation&#34;&gt;&lt;&lt; section 7&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/9-publishing-at-anaconda&#34;&gt;section 9 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+&lt;/div&gt;
 </description> 
     </item>
     
@@ -231,7 +549,9 @@ html_theme &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span sty
 &lt;pre&gt;&lt;code&gt;$ make html
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now it looks way better! Ok, next we wanna write some more content. The documentation should be written in the reStructuredText (.rst) syntax. Here&amp;rsquo;s a nice &lt;a href=&#34;https://github.com/ralsina/rst-cheatsheet/blob/master/rst-cheatsheet.rst&#34;&gt;cheat sheet&lt;/a&gt;. A previewer will speed up things. I&amp;rsquo;ve added some documentation about tinyHTTPie, see &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/index.rst&#34;&gt;index.rst&lt;/a&gt;, &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/install.rst&#34;&gt;install.rst&lt;/a&gt; and &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/tutorial.rst&#34;&gt;tutorial.rst&lt;/a&gt;. The last step is to publish our documentation. We have to register at &lt;a href=&#34;https://readthedocs.org/&#34;&gt;readthedocs.org&lt;/a&gt; and let it hook our repository.&lt;/p&gt;
 &lt;p&gt;Voilà! A nice &lt;a href=&#34;https://tinyhttpie.readthedocs.io/en/latest/&#34;&gt;tinyHTTPie documentation&lt;/a&gt; was created! I hope you see how easy it is to setup such a good-looking documentation.&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
+&lt;div&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/6-testing-and-continous-integration&#34;&gt;&lt;&lt; section 6&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/8-publishing-at-pypi&#34;&gt;section 8 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+&lt;/div&gt;
 </description> 
     </item>
     
@@ -347,7 +667,9 @@ $ tox -e py38 -- test/main_test.py   # executes only single test
         &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          &lt;/span&gt;          &lt;span style=&#34;color:#ae81ff&#34;&gt;pytest&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Don&amp;rsquo;t be intimidated by the length of this job. It&amp;rsquo;s just illustrating how powerful continuous integration is.&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
+&lt;div&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/5-distribution-via-setup-file&#34;&gt;&lt;&lt; section 5&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/7-documentation&#34;&gt;section 7 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+&lt;/div&gt;
 </description> 
     </item>
     
@@ -402,7 +724,9 @@ setuptools&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;setup(
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This allows to continue developing while testing the tool easily.&lt;/p&gt;
 &lt;p&gt;What do the other keys do?
 platforms restricts&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
+&lt;div&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/4-distribution-via-installation-script&#34;&gt;&lt;&lt; section 4&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/6-testing-and-continous-integration&#34;&gt;section 6 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+&lt;/div&gt;
 </description> 
     </item>
     
@@ -514,7 +838,9 @@ ALIASFILE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/.bashrc
     &lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
 &lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And thats it! Puh, pretty much work and it&amp;rsquo;s still pretty prone to errors (adding the script to the PATH instead of using an alias would make things less error prone). But there&amp;rsquo;s a better solution to distribute packages in a standardized way: writing a &lt;code&gt;setup.py&lt;/code&gt; file!&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
+&lt;div&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/3-argparse-module/&#34;&gt;&lt;&lt; section 3&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/5-distribution-via-setup-file&#34;&gt;section 5 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+&lt;/div&gt;
 </description> 
     </item>
     
@@ -733,7 +1059,9 @@ optional arguments:
   -h, --help         show this help message and exit
   -H, --header-only  Prints only the header of the Response.
   -B, --body-only    Prints only the body of the Response.
-&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;div&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/2-sys-module&#34;&gt;&lt;&lt; section 2&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/4-distribution-via-installation-script&#34;&gt;section 4 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+&lt;/div&gt;
 </description> 
     </item>
     
@@ -971,7 +1299,9 @@ body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style
 &lt;pre&gt;&lt;code&gt;$ tihttp -H https://the-coding-lab.com/
 $ tihttp -B https://the-coding-lab.com/
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We see that it can become quite tedious to add more functionality when limiting ourself to the&lt;code&gt; sys&lt;/code&gt; module. It needs alot of boolean logic. But Python has a library only for creating command line interfaces: &lt;code&gt;argparse&lt;/code&gt;!&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
+&lt;div&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/1-the-evolution-of-a-script&#34;&gt;&lt;&lt; section 1&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/3-argparse-module/&#34;&gt;section 3 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+&lt;/div&gt;
 </description> 
     </item>
     
@@ -996,7 +1326,7 @@ $ tihttp -B https://the-coding-lab.com/
 &lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;When I started out my Journey of learning to code I went through dozens of tutorials, I rewrote many algorithms and played with several kinds of topics. During this time I was pretty busy learning Python&amp;rsquo;s basic syntax, its standard libraries and other third party packages. &amp;ldquo;You have to know which tools you can use before you&amp;rsquo;re able to create new tools&amp;rdquo; I said to myself. So I kept myself busy with learning about computer science basics and discovering frameworks, libraries and commands line apps.&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
+&lt;!-- ![cute tortoise](/img/tortoise.jpg) --&gt;
 &lt;p&gt;It took me 8 month before I started to discover Github. What a phenomenal mistake of mine! Github has such a great community, people create so much admirable work, it&amp;rsquo;s so interesting to discover/use or play with other peoples projects! It took me some time to understand Python&amp;rsquo;s packaging (I really underestimated the packaging part!). So in the following I would like to take you with me on a journey of writing and releasing a tiny command line app. We will see how a simple script grows and goes through different stages of its development cycle. Some scripts of mine grow, some are just executed as plain script files. I collect these within a folder on my machine (see: &lt;a href=&#34;https://github.com/NiklasTiede/Python-Scripts-Collection&#34;&gt;Collection of Python Scripts&lt;/a&gt;).&lt;/p&gt;
 &lt;p&gt;Exploring the web through the command line is a fascinating experience. We will use the &lt;code&gt;requests&lt;/code&gt; library to create a little &lt;a href=&#34;https://github.com/httpie/httpie&#34;&gt;HTTPie&lt;/a&gt; clone. HTTP clients are used to test how an API behaves when sending GET and POST requests to it.&lt;/p&gt;
 &lt;h1 id=&#34;1-a-simple-script&#34;&gt;1. A Simple Script&lt;/h1&gt;
@@ -1053,7 +1383,9 @@ $ source ~/.bashrc
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now you can call your script in each new shell session no matter where you are on the filesystem.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ tihttp
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;But there is still a problem: every time our tools sends a GET request to a website we have to change the URL by opening the file, changing the URL, saving and executing it. Would it not be nicer to add the URL as argument to our &lt;code&gt;tihttp&lt;/code&gt; command? Python&amp;rsquo;s &lt;code&gt;sys&lt;/code&gt; module from the standard library comes here to our rescue!&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
+&lt;div&gt;
+&lt;p align=&#34;center&#34;&gt; &lt;a href=&#34;https://the-coding-lab.com/posts/2-sys-module&#34;&gt;section 2 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+&lt;/div&gt;
 </description> 
     </item>
     
