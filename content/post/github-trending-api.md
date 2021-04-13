@@ -41,7 +41,7 @@ So I thought it would be nice to build such a web scraping API to learn more abo
 
 1. [Web Scraping](#1-scraping-repository-data)
 2. [FastAPI](#2-fastapi)
-3. [Deployment](#3-deployment-on-heroku)
+3. [Deployment to Heroku](#3-deployment-to-heroku)
 4. [Conclusion and Future Directions](#4-conclusion-and-future-directions)
 
 <p align="justify">
