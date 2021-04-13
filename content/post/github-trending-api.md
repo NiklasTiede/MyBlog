@@ -43,7 +43,6 @@ So I thought it would be nice to build such a web scraping API to learn more abo
 2. [FastAPI](#2-fastapi)
 3. [Deployment](#3-deployment-on-heroku)
 4. [Conclusion and Future Directions](#4-conclusion-and-future-directions)
-5. [References](#5-references)
 
 <p align="justify">
 Python has great 3rd party packages for web scraping like <a href="https://github.com/scrapy/scrapy" target=”_blank” >Scrapy</a>, <a href="https://pypi.org/project/beautifulsoup4/" target=”_blank” >BeautifulSoup</a> or <a href="https://github.com/psf/requests-html" target=”_blank” >Requests-HTML</a> to name just a few. I will use BeautifulSoup and the <a href="https://github.com/aio-libs/aiohttp" target=”_blank” >aiohttp</a> package to perform asynchronous requests via the HTTP protocol. FastAPI has a nice built-in documentation and makes extensive use of pydantic which makes data parsing and validation pretty intuitive.
