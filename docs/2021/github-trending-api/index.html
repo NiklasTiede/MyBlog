@@ -89,7 +89,7 @@ So I thought it would be nice to build such a web scraping API to learn more abo
 <hr>
 <h1 id="contents">Contents</h1>
 <ol>
-<li><a href="#1-scraping-repository-data">Web Scraping</a></li>
+<li><a href="#1-scraping-repository-data">Scraping Repository Data</a></li>
 <li><a href="#2-fastapi">FastAPI</a></li>
 <li><a href="#3-deployment-to-heroku">Deployment to Heroku</a></li>
 <li><a href="#4-conclusion-and-future-directions">Conclusion and Future Directions</a></li>
@@ -354,7 +354,7 @@ async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">trendin
 <h1 id="4-conclusion-and-future-directions">4. Conclusion and Future Directions</h1>
 <p>Here is the full source code of the project: <a href="https://github.com/NiklasTiede/Github-Trending-API" target=”_blank” >Github Trending API</a></p>
 <p>It took me 3 days to build this API. Another 2 days were needed to learn how to use Pythons <code>async</code>/<code>await</code> syntax. But using asynchronous code increased the performance not as much as I expected it to be. The scraping itself seems to be the bottleneck of the API, it&rsquo;s kinda CPU intensive. I also found out that beautifulsoups performance is not that good. Using the <code>.find</code> method is slower than going down the DOM tree by hand.</p>
-<p>If it turns out that this API would have a higher traffic in the future it could be interesting to implement a caching mechanism. Github updates the rankings of trending repositories only a few times per day so it would be more efficient to cache the most often used ranking in memory until Github updates the ranking to avoid requesting/scraping the same data repetitively. It would be very interesting to implement a Redis database for this job.</p>
+<p>If it turns out that this API would have a higher traffic in the future it could be interesting to implement a caching mechanism. Github updates the rankings of trending repositories only a few times per day so it would be more efficient to cache the most often used rankings in memory until Github updates it. This approach avoids repetitive requests and scraping the same data. It would be very interesting to implement a Redis database for this job.</p>
 <p>Ok guys, I hope you found something interesting, thanks for your attention and have a nice day!</p>
 
             </div>

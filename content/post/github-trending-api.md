@@ -39,7 +39,7 @@ So I thought it would be nice to build such a web scraping API to learn more abo
 
 # Contents
 
-1. [Web Scraping](#1-scraping-repository-data)
+1. [Scraping Repository Data](#1-scraping-repository-data)
 2. [FastAPI](#2-fastapi)
 3. [Deployment to Heroku](#3-deployment-to-heroku)
 4. [Conclusion and Future Directions](#4-conclusion-and-future-directions)
@@ -393,6 +393,6 @@ Here is the full source code of the project: <a href="https://github.com/NiklasT
 
 It took me 3 days to build this API. Another 2 days were needed to learn how to use Pythons `async`/`await` syntax. But using asynchronous code increased the performance not as much as I expected it to be. The scraping itself seems to be the bottleneck of the API, it's kinda CPU intensive. I also found out that beautifulsoups performance is not that good. Using the `.find` method is slower than going down the DOM tree by hand. 
 
-If it turns out that this API would have a higher traffic in the future it could be interesting to implement a caching mechanism. Github updates the rankings of trending repositories only a few times per day so it would be more efficient to cache the most often used ranking in memory until Github updates the ranking to avoid requesting/scraping the same data repetitively. It would be very interesting to implement a Redis database for this job.
+If it turns out that this API would have a higher traffic in the future it could be interesting to implement a caching mechanism. Github updates the rankings of trending repositories only a few times per day so it would be more efficient to cache the most often used rankings in memory until Github updates it. This approach avoids repetitive requests and scraping the same data. It would be very interesting to implement a Redis database for this job.
 
 Ok guys, I hope you found something interesting, thanks for your attention and have a nice day!

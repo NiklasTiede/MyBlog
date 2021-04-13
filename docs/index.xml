@@ -32,7 +32,7 @@ So I thought it would be nice to build such a web scraping API to learn more abo
 &lt;hr&gt;
 &lt;h1 id=&#34;contents&#34;&gt;Contents&lt;/h1&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;a href=&#34;#1-scraping-repository-data&#34;&gt;Web Scraping&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#1-scraping-repository-data&#34;&gt;Scraping Repository Data&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#2-fastapi&#34;&gt;FastAPI&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#3-deployment-to-heroku&#34;&gt;Deployment to Heroku&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#4-conclusion-and-future-directions&#34;&gt;Conclusion and Future Directions&lt;/a&gt;&lt;/li&gt;
@@ -297,7 +297,7 @@ async &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=
 &lt;h1 id=&#34;4-conclusion-and-future-directions&#34;&gt;4. Conclusion and Future Directions&lt;/h1&gt;
 &lt;p&gt;Here is the full source code of the project: &lt;a href=&#34;https://github.com/NiklasTiede/Github-Trending-API&#34; target=”_blank” &gt;Github Trending API&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;It took me 3 days to build this API. Another 2 days were needed to learn how to use Pythons &lt;code&gt;async&lt;/code&gt;/&lt;code&gt;await&lt;/code&gt; syntax. But using asynchronous code increased the performance not as much as I expected it to be. The scraping itself seems to be the bottleneck of the API, it&amp;rsquo;s kinda CPU intensive. I also found out that beautifulsoups performance is not that good. Using the &lt;code&gt;.find&lt;/code&gt; method is slower than going down the DOM tree by hand.&lt;/p&gt;
-&lt;p&gt;If it turns out that this API would have a higher traffic in the future it could be interesting to implement a caching mechanism. Github updates the rankings of trending repositories only a few times per day so it would be more efficient to cache the most often used ranking in memory until Github updates the ranking to avoid requesting/scraping the same data repetitively. It would be very interesting to implement a Redis database for this job.&lt;/p&gt;
+&lt;p&gt;If it turns out that this API would have a higher traffic in the future it could be interesting to implement a caching mechanism. Github updates the rankings of trending repositories only a few times per day so it would be more efficient to cache the most often used rankings in memory until Github updates it. This approach avoids repetitive requests and scraping the same data. It would be very interesting to implement a Redis database for this job.&lt;/p&gt;
 &lt;p&gt;Ok guys, I hope you found something interesting, thanks for your attention and have a nice day!&lt;/p&gt;
 </description> 
     </item>
