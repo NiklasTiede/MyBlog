@@ -6,10 +6,83 @@
     <description>Recent content on The Coding Lab</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 31 Mar 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 25 Apr 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://the-coding-lab.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Managing Environments with Conda and pip</title>
+      <link>https://the-coding-lab.com/2021/conda-and-pip/</link>
+      <pubDate>Sun, 25 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://the-coding-lab.com/2021/conda-and-pip/</guid>
+      <description>&lt;p&gt;Heya fellows,&lt;/p&gt;
+&lt;p&gt;When dealing with dependencies the Python world offers several tools to manage these. It&amp;rsquo;s important to deal with Python as well as non-Python packages, to handle different Python versions and to ensure a good isolation. Tools like &lt;code&gt;pipenv&lt;/code&gt; and &lt;code&gt;poetry&lt;/code&gt; are pretty popular for these purposes but &lt;code&gt;conda&lt;/code&gt; has proven to be the tool of choice within the scientific community over the years. 💪&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://the-coding-lab.com/img/conda.png&#34; alt=&#34;hello&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Conda&lt;/code&gt; im combination with &lt;code&gt;pip&lt;/code&gt; is what I like to use on  a daily basis. Conda handles non-Python code especially well and therefore libraries like &lt;code&gt;RDKit&lt;/code&gt; (cheminformatics library) are only available in the conda ecosystem. It&amp;rsquo;s a great resource for data scientific work.&lt;/p&gt;
+&lt;p&gt;Here I wanna show you some basic commands of &lt;code&gt;conda&lt;/code&gt; and &lt;code&gt;pip&lt;/code&gt; I&amp;rsquo;m using to manage my dependencies.&lt;/p&gt;
+&lt;hr&gt;
+&lt;!-- # Contents
+1. [Creating Environments and Installing Packages](#1-creating-environments-and-installing-packages)
+2. [Adding Channels to Configuration](#2-adding-channels-to-configuration)
+3. [Managing Multiple Environments](#3-managing-multiple-environments)
+4. [Sharing Environments](#4-sharing-environments) --&gt;
+&lt;p&gt;At first you have to install Anaconda on your system if it&amp;rsquo;s not already installed. In the following we will install pandas, matplotlib and jupyter lab so we have a nice environment for data scientific work.&lt;/p&gt;
+&lt;h1 id=&#34;creating-environments-and-installing-packages&#34;&gt;Creating Environments and Installing Packages&lt;/h1&gt;
+&lt;p&gt;At first we create our new environment:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ conda create -n my-new-environment python=3.8
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Here we name the environment &lt;code&gt;my-new-environment&lt;/code&gt; and use Python version 3.8. Conda will collect package metadata and create our new environment. By activating our new environment&amp;hellip;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ conda activate my-new-environment
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&amp;hellip;we leave condas base environment and enter our newly created environment. Then we can install the dependencies we need.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ conda install matplotlib pandas 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Jupyter lab is offered via the &lt;code&gt;conda-forge&lt;/code&gt; channel, a popular, well-maintained channel, not via the &lt;code&gt;default&lt;/code&gt; channel. That&amp;rsquo;s why we have to provide the channels name:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ conda install -c conda-forge jupyterlab
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Or we add the channel right away to condas configuration so that the &lt;code&gt;conda-forge&lt;/code&gt; repo is searched on top of the &lt;code&gt;default&lt;/code&gt; channel when installing packages. Conda-forge is a pretty popular and well-maintained channel and therefore we will add it here permanently.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ conda config --add channels conda-forge
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;You can see that conda-forge was added to your &lt;code&gt;~./condarc&lt;/code&gt; file.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;ssl_verify&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;channels&lt;/span&gt;:
+  - &lt;span style=&#34;color:#ae81ff&#34;&gt;conda-forge&lt;/span&gt;
+  - &lt;span style=&#34;color:#ae81ff&#34;&gt;defaults&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Some of condas commands are similar those of &lt;code&gt;pip&lt;/code&gt;. To list the packages within your current environment we type:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ conda list
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;If you want to search through all anaconda repositories for a package, then use this command:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ anaconda search &amp;lt;package_name&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id=&#34;managing-multiple-environments&#34;&gt;Managing Multiple Environments&lt;/h1&gt;
+&lt;p&gt;But how do we deal with multiple environments? Let&amp;rsquo;s clone the environment we created in the first place:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ conda create --clone my-new-environment --name my-clone
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;When typing &lt;code&gt;conda env list&lt;/code&gt; we see the two environments we created are next to the base environment.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ conda env list
+
+# conda environments:
+#
+base                   /home/niklas/anaconda3
+my-new-environment     /home/niklas/anaconda3/envs/my-new-environment
+my-clone               /home/niklas/anaconda3/envs/my-clone
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We can switch the environment by just activating the new environment.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ conda activate my-clone
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;To check which environment is currently active we can type &lt;code&gt;conda info&lt;/code&gt;. BTW: Frameworks like Oh-My-Zsh show the active environment within the terminal which makes life easier.&lt;/p&gt;
+&lt;p&gt;Ok, now lets clean up things and delete the cloned environment.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ conda deactivate 
+$ conda env remove --name my-clone
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Conda caches all installed packages within the &amp;lsquo;pkgs&amp;rsquo; directory, so from time to time I clean it up to free up space.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ conda clean -h
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id=&#34;sharing-environments&#34;&gt;Sharing Environments&lt;/h1&gt;
+&lt;p&gt;Developers are no one-man armies. We share our work to other developers/engineers and they should be able to reproduce our work. Conda is able to export the environments dependencies as a yaml file and recreate the environment from this file.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ conda env export --name my-new-environment &amp;gt; environment.yaml
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now all dependencies can be found in the &lt;code&gt;environment.yaml&lt;/code&gt; file. This file can be used by someone else to recreate the environment. When no &lt;code&gt;--file&lt;/code&gt; flag value is provided &lt;code&gt;conda&lt;/code&gt; searches for a &lt;code&gt;environment.yaml&lt;/code&gt; file in the current working directory and tries to recreate the environment from this file.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ conda env create              
+$ conda env create --file environment-dev.yaml   
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;But don&amp;rsquo;t feel forced to only use conda packages when managing dependencies with conda! I also use conda when managing projects where I install only dependencies from pypi.org. Just as reminder here are the commands for storing/recreating &lt;code&gt;pip&lt;/code&gt; dependencies.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip freeze &amp;gt; requirements.txt   
+$ pip install -r requirements.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Conda makes switching between different environments so easy and you have always access to conda packages. Unfortunately, condas speed for creating environments and installing conda packages is not outstanding but nonetheless it&amp;rsquo;s good enough that I prefer it over other dependancy manager 🙂. If you want to see how to upload a project to Anaconda, take a look into my article &amp;lsquo;&lt;a href=&#34;https://the-coding-lab.com/2021/9-publishing-at-anaconda/&#34; target=”_blank” &gt;Publishing at Anaconda&lt;/a&gt;&amp;rsquo;.&lt;/p&gt;
+&lt;p&gt;Ok that&amp;rsquo;s it, I hope you I could arouse your curiosity for Anaconda. Thanks for your attention and have a nice day! 🙂&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;All conda commands I&amp;rsquo;m using can be found in my &lt;a href=&#34;https://github.com/NiklasTiede/CheatSheet-Linux#anaconda&#34; target=”_blank” &gt;Linux Cheat Sheet&lt;/a&gt;.&lt;/p&gt;
+</description> 
+    </item>
     
     <item>
       <title>Turning a Website into an API</title>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>The Coding Lab  | Documentation - 7/9</title>
+    <title>The Coding Lab  | Managing Environments with Conda and pip</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
@@ -54,7 +54,7 @@ if (!doNotTrack) {
                 <br>
                 <h1 class="title is-size-1">
                     
-                        Documentation - 7/9
+                        Managing Environments with Conda and pip
                     
                 </h1>
                 
@@ -75,52 +75,69 @@ if (!doNotTrack) {
         <div class="tile is-child box">
             <div class="content">
                 <p>Heya fellows,</p>
-<p>This is part 7 of the multi-part series &ldquo;The Evolution of a Script&rdquo;. The code of this post can be found on Github (see <a href="https://github.com/NiklasTiede/tinyHTTPie/tree/7-Documentation">here</a>).</p>
-<h4 id="contents">Contents</h4>
-<ol>
-<li><a href="/2021/1-the-evolution-of-a-script">A Simple Script</a></li>
-<li><a href="/2021/2-sys-module">Sys Module</a></li>
-<li><a href="/2021/3-argparse-module/">Argparse Module</a></li>
-<li><a href="/2021/4-distribution-via-installation-script">Distribution via Installation Script</a></li>
-<li><a href="/2021/5-distribution-via-setup-file">Distribution via Setup File</a></li>
-<li><a href="/2021/6-testing-and-continous-integration">Testing and Continuous Integration</a></li>
-<li><a href="/2021/7-documentation"><strong>Documentation</strong></a></li>
-<li><a href="/2021/8-publishing-at-pypi">Publishing at PyPI</a></li>
-<li><a href="/2021/9-publishing-at-anaconda">Publishing at Anaconda</a></li>
-</ol>
-<p>Documentation can be supplied in different formats. Command line tools have a usage help (<code>--help</code>). For smaller projects the <code>README.md</code> can be sufficient enough whereas projects like libraries benefit from a more extensive hosted technical documentation (see <a href="https://readthedocs.org/">readthedocs</a>).</p>
-<p>Let&rsquo;s create some documentation! <code>sphinx</code> is a tool that will help us to simplify this process.</p>
-<pre><code>$ pip install sphinx
+<p>When dealing with dependencies the Python world offers several tools to manage these. It&rsquo;s important to deal with Python as well as non-Python packages, to handle different Python versions and to ensure a good isolation. Tools like <code>pipenv</code> and <code>poetry</code> are pretty popular for these purposes but <code>conda</code> has proven to be the tool of choice within the scientific community over the years. 💪</p>
+<p><img src="/img/conda.png" alt="hello"></p>
+<p><code>Conda</code> im combination with <code>pip</code> is what I like to use on  a daily basis. Conda handles non-Python code especially well and therefore libraries like <code>RDKit</code> (cheminformatics library) are only available in the conda ecosystem. It&rsquo;s a great resource for data scientific work.</p>
+<p>Here I wanna show you some basic commands of <code>conda</code> and <code>pip</code> I&rsquo;m using to manage my dependencies.</p>
+<hr>
+<!-- # Contents
+1. [Creating Environments and Installing Packages](#1-creating-environments-and-installing-packages)
+2. [Adding Channels to Configuration](#2-adding-channels-to-configuration)
+3. [Managing Multiple Environments](#3-managing-multiple-environments)
+4. [Sharing Environments](#4-sharing-environments) -->
+<p>At first you have to install Anaconda on your system if it&rsquo;s not already installed. In the following we will install pandas, matplotlib and jupyter lab so we have a nice environment for data scientific work.</p>
+<h1 id="creating-environments-and-installing-packages">Creating Environments and Installing Packages</h1>
+<p>At first we create our new environment:</p>
+<pre><code>$ conda create -n my-new-environment python=3.8
+</code></pre><p>Here we name the environment <code>my-new-environment</code> and use Python version 3.8. Conda will collect package metadata and create our new environment. By activating our new environment&hellip;</p>
+<pre><code>$ conda activate my-new-environment
+</code></pre><p>&hellip;we leave condas base environment and enter our newly created environment. Then we can install the dependencies we need.</p>
+<pre><code>$ conda install matplotlib pandas 
+</code></pre><p>Jupyter lab is offered via the <code>conda-forge</code> channel, a popular, well-maintained channel, not via the <code>default</code> channel. That&rsquo;s why we have to provide the channels name:</p>
+<pre><code>$ conda install -c conda-forge jupyterlab
+</code></pre><p>Or we add the channel right away to condas configuration so that the <code>conda-forge</code> repo is searched on top of the <code>default</code> channel when installing packages. Conda-forge is a pretty popular and well-maintained channel and therefore we will add it here permanently.</p>
+<pre><code>$ conda config --add channels conda-forge
+</code></pre><p>You can see that conda-forge was added to your <code>~./condarc</code> file.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">ssl_verify</span>: <span style="color:#66d9ef">true</span>
+<span style="color:#f92672">channels</span>:
+  - <span style="color:#ae81ff">conda-forge</span>
+  - <span style="color:#ae81ff">defaults</span>
+</code></pre></div><p>Some of condas commands are similar those of <code>pip</code>. To list the packages within your current environment we type:</p>
+<pre><code>$ conda list
+</code></pre><p>If you want to search through all anaconda repositories for a package, then use this command:</p>
+<pre><code>$ anaconda search &lt;package_name&gt;
+</code></pre><h1 id="managing-multiple-environments">Managing Multiple Environments</h1>
+<p>But how do we deal with multiple environments? Let&rsquo;s clone the environment we created in the first place:</p>
+<pre><code>$ conda create --clone my-new-environment --name my-clone
+</code></pre><p>When typing <code>conda env list</code> we see the two environments we created are next to the base environment.</p>
+<pre><code>$ conda env list
 
-$ mkdir docs
-$ cd docs
-</code></pre><p>Sphinx will ask us a couple of questions:</p>
-<pre><code>$ sphinx-quickstart
-
-&gt; Separate source and build directories (y/n) [n]: y
-&gt; Project name: tinyHTTPie
-&gt; Author name(s): Niklas Tiede
-&gt; Project release []: 0.1.0
-&gt; Project language [en]: enter
-</code></pre><p>To create the documentation we have to use the <code>make html</code> command within the <code>docs</code> directory. This creates the HTML of our documentation.</p>
-<pre><code>$ cd ..
-$ make html
-</code></pre><p>If we open the <code>index.html</code> file in the browser we can see how our documentation will look like. But its appearance is pretty puristic. Therefore we use an often used theme to let it look nicer.</p>
-<pre><code>$ pip install sphinx_rtd_theme
-</code></pre><p>Now we have to customize the <code>conf.py</code> file. We add the following lines:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> sphinx_rtd_theme
-
-extensions <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;sphinx_rtd_theme&#34;</span>,]
-pygments_style <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;sphinx&#34;</span>
-version <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;0.1.0&#39;</span>
-html_theme <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;sphinx_rtd_theme&#39;</span>
-</code></pre></div><p>And render again.</p>
-<pre><code>$ make html
-</code></pre><p>Now it looks way better! Ok, next we wanna write some more content. The documentation should be written in the reStructuredText (.rst) syntax. Here&rsquo;s a nice <a href="https://github.com/ralsina/rst-cheatsheet/blob/master/rst-cheatsheet.rst">cheat sheet</a>. A previewer will speed up things. I&rsquo;ve added some documentation about tinyHTTPie, see <a href="https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/index.rst">index.rst</a>, <a href="https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/install.rst">install.rst</a> and <a href="https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/tutorial.rst">tutorial.rst</a>. The last step is to publish our documentation. We have to register at <a href="https://readthedocs.org/">readthedocs.org</a> and let it hook our repository.</p>
-<p>Voilà! A nice <a href="https://tinyhttpie.readthedocs.io/en/latest/">tinyHTTPie documentation</a> was created! I hope you see how easy it is to setup such a good-looking documentation.</p>
-<div>
-    <p align="center"><a href="/posts/6-testing-and-continous-integration"><< section 6</a> | <a href="/posts/8-publishing-at-pypi">section 8 >></a> </p>
-</div>
+# conda environments:
+#
+base                   /home/niklas/anaconda3
+my-new-environment     /home/niklas/anaconda3/envs/my-new-environment
+my-clone               /home/niklas/anaconda3/envs/my-clone
+</code></pre><p>We can switch the environment by just activating the new environment.</p>
+<pre><code>$ conda activate my-clone
+</code></pre><p>To check which environment is currently active we can type <code>conda info</code>. BTW: Frameworks like Oh-My-Zsh show the active environment within the terminal which makes life easier.</p>
+<p>Ok, now lets clean up things and delete the cloned environment.</p>
+<pre><code>$ conda deactivate 
+$ conda env remove --name my-clone
+</code></pre><p>Conda caches all installed packages within the &lsquo;pkgs&rsquo; directory, so from time to time I clean it up to free up space.</p>
+<pre><code>$ conda clean -h
+</code></pre><h1 id="sharing-environments">Sharing Environments</h1>
+<p>Developers are no one-man armies. We share our work to other developers/engineers and they should be able to reproduce our work. Conda is able to export the environments dependencies as a yaml file and recreate the environment from this file.</p>
+<pre><code>$ conda env export --name my-new-environment &gt; environment.yaml
+</code></pre><p>Now all dependencies can be found in the <code>environment.yaml</code> file. This file can be used by someone else to recreate the environment. When no <code>--file</code> flag value is provided <code>conda</code> searches for a <code>environment.yaml</code> file in the current working directory and tries to recreate the environment from this file.</p>
+<pre><code>$ conda env create              
+$ conda env create --file environment-dev.yaml   
+</code></pre><p>But don&rsquo;t feel forced to only use conda packages when managing dependencies with conda! I also use conda when managing projects where I install only dependencies from pypi.org. Just as reminder here are the commands for storing/recreating <code>pip</code> dependencies.</p>
+<pre><code>$ pip freeze &gt; requirements.txt   
+$ pip install -r requirements.txt
+</code></pre><p>Conda makes switching between different environments so easy and you have always access to conda packages. Unfortunately, condas speed for creating environments and installing conda packages is not outstanding but nonetheless it&rsquo;s good enough that I prefer it over other dependancy manager 🙂. If you want to see how to upload a project to Anaconda, take a look into my article &lsquo;<a href="/2021/9-publishing-at-anaconda/" target=”_blank” >Publishing at Anaconda</a>&rsquo;.</p>
+<p>Ok that&rsquo;s it, I hope you I could arouse your curiosity for Anaconda. Thanks for your attention and have a nice day! 🙂</p>
+<hr>
+<p>All conda commands I&rsquo;m using can be found in my <a href="https://github.com/NiklasTiede/CheatSheet-Linux#anaconda" target=”_blank” >Linux Cheat Sheet</a>.</p>
 
             </div>
         </div>
@@ -180,9 +197,6 @@ html_theme <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39
         <h1 class="title is-5">Related posts</h1>
       
       
-            <h1><a href="https://the-coding-lab.com/2021/conda-and-pip/">Managing Environments with Conda and pip</a></h1>
-            <time class="has-text-grey-light is-size-7">25 April 2021</time>
-      
             <h1><a href="https://the-coding-lab.com/2021/github-trending-api/">Turning a Website into an API</a></h1>
             <time class="has-text-grey-light is-size-7">31 March 2021</time>
       
@@ -191,6 +205,9 @@ html_theme <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39
       
             <h1><a href="https://the-coding-lab.com/2021/8-publishing-at-pypi/">Publishing at PyPI - 8/9</a></h1>
             <time class="has-text-grey-light is-size-7">23 February 2021</time>
+      
+            <h1><a href="https://the-coding-lab.com/2021/7-documentation/">Documentation - 7/9</a></h1>
+            <time class="has-text-grey-light is-size-7">19 February 2021</time>
       
             <h1><a href="https://the-coding-lab.com/2021/6-testing-and-continous-integration/">Testing and CI - 6/9</a></h1>
             <time class="has-text-grey-light is-size-7">16 February 2021</time>
