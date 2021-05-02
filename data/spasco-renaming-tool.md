@@ -1,11 +1,11 @@
 +++
-title = "Building a Renaming Tool"
+title = "How to Build a Renaming Tool with Argparse"
 description = "An API scraping/serving data about Githubs trending repositories/developers."
 tags = [
     "python",
     "cli",
 ]
-date = "2021-04-12"
+date = "2021-04-28"
 archives = "2021"
 categories = [
     "Python",

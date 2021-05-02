@@ -169,5 +169,5 @@ fi
 And thats it! Puh, pretty much work and it's still pretty prone to errors (adding the script to the PATH instead of using an alias would make things less error prone). But there's a better solution to distribute packages in a standardized way: writing a `setup.py` file!
 
 <div>
-    <p align="center"><a href="/posts/3-argparse-module/"><< section 3</a> | <a href="/posts/5-distribution-via-setup-file">section 5 >></a> </p>
+    <p align="center"><a href="/2021/3-argparse-module/"><< section 3</a> | <a href="/2021/5-distribution-via-setup-file">section 5 >></a> </p>
 </div>

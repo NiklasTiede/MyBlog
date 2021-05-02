@@ -139,5 +139,5 @@ $ tihttp
 But there is still a problem: every time our tools sends a GET request to a website we have to change the URL by opening the file, changing the URL, saving and executing it. Would it not be nicer to add the URL as argument to our `tihttp` command? Python's `sys` module from the standard library comes here to our rescue!
 
 <div>
-<p align="center"> <a href="/posts/2-sys-module">section 2 >></a> </p>
+<p align="center"> <a href="/2021/2-sys-module">section 2 >></a> </p>
 </div>

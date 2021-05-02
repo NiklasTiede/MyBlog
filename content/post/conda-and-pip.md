@@ -26,12 +26,6 @@ Here I wanna show you some basic commands of `conda` and `pip` I'm using to mana
 
 ---------
 
-<!-- # Contents
-1. [Creating Environments and Installing Packages](#1-creating-environments-and-installing-packages)
-2. [Adding Channels to Configuration](#2-adding-channels-to-configuration)
-3. [Managing Multiple Environments](#3-managing-multiple-environments)
-4. [Sharing Environments](#4-sharing-environments) -->
-
 At first you have to install Anaconda on your system if it's not already installed. In the following we will install pandas, matplotlib and jupyter lab so we have a nice environment for data scientific work.
 
 # Creating Environments and Installing Packages

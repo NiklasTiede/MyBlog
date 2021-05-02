@@ -78,5 +78,5 @@ $ pip install tihttp
 ```
 
 <div>
-    <p align="center"><a href="/posts/7-documentation"><< section 7</a> | <a href="/posts/9-publishing-at-anaconda">section 9 >></a> </p>
+    <p align="center"><a href="/2021/7-documentation"><< section 7</a> | <a href="/2021/9-publishing-at-anaconda">section 9 >></a> </p>
 </div>

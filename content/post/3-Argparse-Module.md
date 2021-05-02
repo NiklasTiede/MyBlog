@@ -243,5 +243,5 @@ optional arguments:
 ```
 
 <div>
-    <p align="center"><a href="/posts/2-sys-module"><< section 2</a> | <a href="/posts/4-distribution-via-installation-script">section 4 >></a> </p>
+    <p align="center"><a href="/2021/2-sys-module"><< section 2</a> | <a href="/2021/4-distribution-via-installation-script">section 4 >></a> </p>
 </div>

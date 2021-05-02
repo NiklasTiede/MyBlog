@@ -151,5 +151,5 @@ echo "Uploading conda packages done!"
 ```
 
 <div>
-    <p align="center"><a href="/posts/8-publishing-at-pypi"><< section 8</a> | </p>
+    <p align="center"><a href="/2021/8-publishing-at-pypi"><< section 8</a> | </p>
 </div>

@@ -23,11 +23,6 @@
 &lt;p&gt;&lt;code&gt;Conda&lt;/code&gt; im combination with &lt;code&gt;pip&lt;/code&gt; is what I like to use on  a daily basis. Conda handles non-Python code especially well and therefore libraries like &lt;code&gt;RDKit&lt;/code&gt; (cheminformatics library) are only available in the conda ecosystem. It&amp;rsquo;s a great resource for data scientific work.&lt;/p&gt;
 &lt;p&gt;Here I wanna show you some basic commands of &lt;code&gt;conda&lt;/code&gt; and &lt;code&gt;pip&lt;/code&gt; I&amp;rsquo;m using to manage my dependencies.&lt;/p&gt;
 &lt;hr&gt;
-&lt;!-- # Contents
-1. [Creating Environments and Installing Packages](#1-creating-environments-and-installing-packages)
-2. [Adding Channels to Configuration](#2-adding-channels-to-configuration)
-3. [Managing Multiple Environments](#3-managing-multiple-environments)
-4. [Sharing Environments](#4-sharing-environments) --&gt;
 &lt;p&gt;At first you have to install Anaconda on your system if it&amp;rsquo;s not already installed. In the following we will install pandas, matplotlib and jupyter lab so we have a nice environment for data scientific work.&lt;/p&gt;
 &lt;h1 id=&#34;creating-environments-and-installing-packages&#34;&gt;Creating Environments and Installing Packages&lt;/h1&gt;
 &lt;p&gt;At first we create our new environment:&lt;/p&gt;
@@ -496,7 +491,7 @@ find $HOME/conda-bld/**/$pkg*.tar.bz2 | &lt;span style=&#34;color:#66d9ef&#34;&g
 &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
 echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Uploading conda packages done!&amp;#34;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div&gt;
-    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/8-publishing-at-pypi&#34;&gt;&lt;&lt; section 8&lt;/a&gt; | &lt;/p&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;&lt;&lt; section 8&lt;/a&gt; | &lt;/p&gt;
 &lt;/div&gt;
 </description> 
     </item>
@@ -544,7 +539,7 @@ $ twine upload --repository testpypi dist/*
 
 $ pip install tihttp
 &lt;/code&gt;&lt;/pre&gt;&lt;div&gt;
-    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/7-documentation&#34;&gt;&lt;&lt; section 7&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/9-publishing-at-anaconda&#34;&gt;section 9 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/7-documentation&#34;&gt;&lt;&lt; section 7&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;section 9 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
 &lt;/div&gt;
 </description> 
     </item>
@@ -600,7 +595,7 @@ html_theme &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span sty
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now it looks way better! Ok, next we wanna write some more content. The documentation should be written in the reStructuredText (.rst) syntax. Here&amp;rsquo;s a nice &lt;a href=&#34;https://github.com/ralsina/rst-cheatsheet/blob/master/rst-cheatsheet.rst&#34;&gt;cheat sheet&lt;/a&gt;. A previewer will speed up things. I&amp;rsquo;ve added some documentation about tinyHTTPie, see &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/index.rst&#34;&gt;index.rst&lt;/a&gt;, &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/install.rst&#34;&gt;install.rst&lt;/a&gt; and &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/tutorial.rst&#34;&gt;tutorial.rst&lt;/a&gt;. The last step is to publish our documentation. We have to register at &lt;a href=&#34;https://readthedocs.org/&#34;&gt;readthedocs.org&lt;/a&gt; and let it hook our repository.&lt;/p&gt;
 &lt;p&gt;Voilà! A nice &lt;a href=&#34;https://tinyhttpie.readthedocs.io/en/latest/&#34;&gt;tinyHTTPie documentation&lt;/a&gt; was created! I hope you see how easy it is to setup such a good-looking documentation.&lt;/p&gt;
 &lt;div&gt;
-    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/6-testing-and-continous-integration&#34;&gt;&lt;&lt; section 6&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/8-publishing-at-pypi&#34;&gt;section 8 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/6-testing-and-continous-integration&#34;&gt;&lt;&lt; section 6&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;section 8 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
 &lt;/div&gt;
 </description> 
     </item>
@@ -718,7 +713,7 @@ $ tox -e py38 -- test/main_test.py   # executes only single test
 &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          &lt;/span&gt;          &lt;span style=&#34;color:#ae81ff&#34;&gt;pytest&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Don&amp;rsquo;t be intimidated by the length of this job. It&amp;rsquo;s just illustrating how powerful continuous integration is.&lt;/p&gt;
 &lt;div&gt;
-    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/5-distribution-via-setup-file&#34;&gt;&lt;&lt; section 5&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/7-documentation&#34;&gt;section 7 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;&lt;&lt; section 5&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/2021/7-documentation&#34;&gt;section 7 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
 &lt;/div&gt;
 </description> 
     </item>
@@ -775,7 +770,7 @@ setuptools&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;setup(
 &lt;p&gt;What do the other keys do?
 platforms restricts&lt;/p&gt;
 &lt;div&gt;
-    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/4-distribution-via-installation-script&#34;&gt;&lt;&lt; section 4&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/6-testing-and-continous-integration&#34;&gt;section 6 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/4-distribution-via-installation-script&#34;&gt;&lt;&lt; section 4&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/2021/6-testing-and-continous-integration&#34;&gt;section 6 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
 &lt;/div&gt;
 </description> 
     </item>
@@ -889,7 +884,7 @@ ALIASFILE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/.bashrc
 &lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And thats it! Puh, pretty much work and it&amp;rsquo;s still pretty prone to errors (adding the script to the PATH instead of using an alias would make things less error prone). But there&amp;rsquo;s a better solution to distribute packages in a standardized way: writing a &lt;code&gt;setup.py&lt;/code&gt; file!&lt;/p&gt;
 &lt;div&gt;
-    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/3-argparse-module/&#34;&gt;&lt;&lt; section 3&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/5-distribution-via-setup-file&#34;&gt;section 5 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;&lt;&lt; section 3&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;section 5 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
 &lt;/div&gt;
 </description> 
     </item>
@@ -1110,7 +1105,7 @@ optional arguments:
   -H, --header-only  Prints only the header of the Response.
   -B, --body-only    Prints only the body of the Response.
 &lt;/code&gt;&lt;/pre&gt;&lt;div&gt;
-    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/2-sys-module&#34;&gt;&lt;&lt; section 2&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/4-distribution-via-installation-script&#34;&gt;section 4 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/2-sys-module&#34;&gt;&lt;&lt; section 2&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/2021/4-distribution-via-installation-script&#34;&gt;section 4 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
 &lt;/div&gt;
 </description> 
     </item>
@@ -1350,7 +1345,7 @@ body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style
 $ tihttp -B https://the-coding-lab.com/
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We see that it can become quite tedious to add more functionality when limiting ourself to the&lt;code&gt; sys&lt;/code&gt; module. It needs alot of boolean logic. But Python has a library only for creating command line interfaces: &lt;code&gt;argparse&lt;/code&gt;!&lt;/p&gt;
 &lt;div&gt;
-    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/1-the-evolution-of-a-script&#34;&gt;&lt;&lt; section 1&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/3-argparse-module/&#34;&gt;section 3 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/1-the-evolution-of-a-script&#34;&gt;&lt;&lt; section 1&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;section 3 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
 &lt;/div&gt;
 </description> 
     </item>
@@ -1434,7 +1429,7 @@ $ source ~/.bashrc
 &lt;pre&gt;&lt;code&gt;$ tihttp
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;But there is still a problem: every time our tools sends a GET request to a website we have to change the URL by opening the file, changing the URL, saving and executing it. Would it not be nicer to add the URL as argument to our &lt;code&gt;tihttp&lt;/code&gt; command? Python&amp;rsquo;s &lt;code&gt;sys&lt;/code&gt; module from the standard library comes here to our rescue!&lt;/p&gt;
 &lt;div&gt;
-&lt;p align=&#34;center&#34;&gt; &lt;a href=&#34;https://the-coding-lab.com/posts/2-sys-module&#34;&gt;section 2 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt; &lt;a href=&#34;https://the-coding-lab.com/2021/2-sys-module&#34;&gt;section 2 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
 &lt;/div&gt;
 </description> 
     </item>

@@ -88,5 +88,5 @@ Now it looks way better! Ok, next we wanna write some more content. The document
 Voilà! A nice [tinyHTTPie documentation](https://tinyhttpie.readthedocs.io/en/latest/) was created! I hope you see how easy it is to setup such a good-looking documentation.
 
 <div>
-    <p align="center"><a href="/posts/6-testing-and-continous-integration"><< section 6</a> | <a href="/posts/8-publishing-at-pypi">section 8 >></a> </p>
+    <p align="center"><a href="/2021/6-testing-and-continous-integration"><< section 6</a> | <a href="/2021/8-publishing-at-pypi">section 8 >></a> </p>
 </div>

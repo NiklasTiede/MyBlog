@@ -232,5 +232,5 @@ $ tihttp -B https://the-coding-lab.com/
 We see that it can become quite tedious to add more functionality when limiting ourself to the` sys` module. It needs alot of boolean logic. But Python has a library only for creating command line interfaces: `argparse`!
 
 <div>
-    <p align="center"><a href="/posts/1-the-evolution-of-a-script"><< section 1</a> | <a href="/posts/3-argparse-module/">section 3 >></a> </p>
+    <p align="center"><a href="/2021/1-the-evolution-of-a-script"><< section 1</a> | <a href="/2021/3-argparse-module/">section 3 >></a> </p>
 </div>

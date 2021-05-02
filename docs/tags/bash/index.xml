@@ -132,7 +132,7 @@ find $HOME/conda-bld/**/$pkg*.tar.bz2 | &lt;span style=&#34;color:#66d9ef&#34;&g
 &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
 echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Uploading conda packages done!&amp;#34;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div&gt;
-    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/8-publishing-at-pypi&#34;&gt;&lt;&lt; section 8&lt;/a&gt; | &lt;/p&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;&lt;&lt; section 8&lt;/a&gt; | &lt;/p&gt;
 &lt;/div&gt;
 </description> 
     </item>
@@ -246,7 +246,7 @@ ALIASFILE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/.bashrc
 &lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And thats it! Puh, pretty much work and it&amp;rsquo;s still pretty prone to errors (adding the script to the PATH instead of using an alias would make things less error prone). But there&amp;rsquo;s a better solution to distribute packages in a standardized way: writing a &lt;code&gt;setup.py&lt;/code&gt; file!&lt;/p&gt;
 &lt;div&gt;
-    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/3-argparse-module/&#34;&gt;&lt;&lt; section 3&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/5-distribution-via-setup-file&#34;&gt;section 5 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;&lt;&lt; section 3&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;section 5 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
 &lt;/div&gt;
 </description> 
     </item>

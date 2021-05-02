@@ -82,5 +82,5 @@ What do the other keys do?
 platforms restricts
 
 <div>
-    <p align="center"><a href="/posts/4-distribution-via-installation-script"><< section 4</a> | <a href="/posts/6-testing-and-continous-integration">section 6 >></a> </p>
+    <p align="center"><a href="/2021/4-distribution-via-installation-script"><< section 4</a> | <a href="/2021/6-testing-and-continous-integration">section 6 >></a> </p>
 </div>

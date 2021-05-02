@@ -169,5 +169,5 @@ jobs:
 Don't be intimidated by the length of this job. It's just illustrating how powerful continuous integration is.
 
 <div>
-    <p align="center"><a href="/posts/5-distribution-via-setup-file"><< section 5</a> | <a href="/posts/7-documentation">section 7 >></a> </p>
+    <p align="center"><a href="/2021/5-distribution-via-setup-file"><< section 5</a> | <a href="/2021/7-documentation">section 7 >></a> </p>
 </div>

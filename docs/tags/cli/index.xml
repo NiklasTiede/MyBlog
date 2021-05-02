@@ -227,7 +227,7 @@ optional arguments:
   -H, --header-only  Prints only the header of the Response.
   -B, --body-only    Prints only the body of the Response.
 &lt;/code&gt;&lt;/pre&gt;&lt;div&gt;
-    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/2-sys-module&#34;&gt;&lt;&lt; section 2&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/4-distribution-via-installation-script&#34;&gt;section 4 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/2-sys-module&#34;&gt;&lt;&lt; section 2&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/2021/4-distribution-via-installation-script&#34;&gt;section 4 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
 &lt;/div&gt;
 </description> 
     </item>
@@ -467,7 +467,7 @@ body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style
 $ tihttp -B https://the-coding-lab.com/
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We see that it can become quite tedious to add more functionality when limiting ourself to the&lt;code&gt; sys&lt;/code&gt; module. It needs alot of boolean logic. But Python has a library only for creating command line interfaces: &lt;code&gt;argparse&lt;/code&gt;!&lt;/p&gt;
 &lt;div&gt;
-    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/posts/1-the-evolution-of-a-script&#34;&gt;&lt;&lt; section 1&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/posts/3-argparse-module/&#34;&gt;section 3 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
+    &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/1-the-evolution-of-a-script&#34;&gt;&lt;&lt; section 1&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;section 3 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
 &lt;/div&gt;
 </description> 
     </item>
