@@ -88,9 +88,8 @@ if (!doNotTrack) {
 <li><a href="/2021/8-publishing-at-pypi">Publishing at PyPI</a></li>
 <li><a href="/2021/9-publishing-at-anaconda">Publishing at Anaconda</a></li>
 </ol>
-<p>When projects grow a good test suite ensures
-that new features added don&rsquo;t cause the application to break. It improves the maintainability of the project. The complexity of small projects is very low and a testing is not necessary yet. But for the sake of this tutorial we will write a small test suite to demonstrate testing and continuous integration. We will use <code>pytest</code>.</p>
-<p>The tests will be stored within a separate folder. Here&rsquo;s the structure of the project.</p>
+<p>When projects grow a good test suite gives you confidence that new code you add don&rsquo;t cause parts of the application to break. It improves the a projects maintainability of the project. The complexity of small projects is low and only necessary when the size of the project increases. But for the sake of this tutorial we will write a small test to demonstrate the usage of <code>pytest</code>, <code>tox</code> and <code>github actions</code>.</p>
+<p>We will store the tests within a separate folder. Here&rsquo;s the current structure of the project.</p>
 <pre><code>├── LICENSE
 ├── README.md
 ├── setup.py
@@ -98,7 +97,7 @@ that new features added don&rsquo;t cause the application to break. It improves 
 ├── tests
 │  ├── __init__.py
 │  └── test_tihttp.py
-</code></pre><p>We place a <code>test_tihttp.py</code> within the <code>tests</code> folder. It contains out test suite.</p>
+</code></pre><p>We place a <code>test_tihttp.py</code> file within the <code>tests</code> folder. It will contains the test suite. The <code>main()</code> function which contains the logic for triggering the flags has to be imported from the <code>tihttp.py</code> file.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> tihttp <span style="color:#f92672">import</span> main
 
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_GET_body</span>(capsys):
@@ -108,21 +107,21 @@ that new features added don&rsquo;t cause the application to break. It improves 
     <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#34;tests/jsonplaceholder.json&#34;</span>, <span style="color:#e6db74">&#34;r&#34;</span>) <span style="color:#66d9ef">as</span> f:
         output <span style="color:#f92672">=</span> f<span style="color:#f92672">.</span>read()
     <span style="color:#66d9ef">assert</span> result <span style="color:#f92672">==</span> output
-</code></pre></div><p>We compare the expected output with a request against an API. The API will return a similar response so it&rsquo;s will give us a feedback if our application is working or if it was broken. We place a .json files into the same folder which is used for comparison. We will let <code>pytest</code> execute the test:</p>
+</code></pre></div><p>We compare the expected output with a request against an API. The API should return the same response so it will give us feedback if our application performs GET requests successfully. We place a <code>jsonplaceholder.json</code> file into the same folder which contained the expected output. We let <code>pytest</code> execute the test. We install it prior use.</p>
 <pre><code>$ pip install pytest
 $ pytest
-</code></pre><p>Our test passes. Next we add pytest to our extra requirements in the <code>setup.py</code> file.</p>
+</code></pre><p>Our test passes. To increase the tests verbosity <code>-v</code> is a useful flag, furthermore I like to use <code>-s</code> to see the captured output. Next we add pytest to our extra requirements in the <code>setup.py</code> file.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">extras_require<span style="color:#f92672">=</span>{
     <span style="color:#e6db74">&#39;dev&#39;</span>: [
         <span style="color:#e6db74">&#39;pytest&#39;</span>, <span style="color:#75715e"># pip install tihttp[dev]</span>
     ],
 },
 </code></pre></div><p>This gives us the possibility to install extra dependencies (testing, linting tools etc.) easily by adding a <code>[dev]</code> to the package name.</p>
-<pre><code>$ pip install .[dev]
-$ pip install tihttp[dev]
-</code></pre><p>We tested all of this with python 3.7.3. But how does our application behave when executed on a different interpreter version? So let&rsquo;s test it against different Python versions! We use tox. It lets us run tests in multiple virtualenvs.</p>
+<pre><code>$ pip install .[dev]            # local install
+$ pip install tihttp[dev]       # remote install, PyPI repo
+</code></pre><p>We tested all of this with python 3.7.3. But how does our application behave when executed on a different interpreter version? So let&rsquo;s test it against different Python versions! We use <code>tox</code>. It let&rsquo;s us run tests in multiple virtual envs.</p>
 <pre><code>$ pip install tox
-</code></pre><p>Tox needs a recipe to know which virtualenv/commands to create/execute. This recipe the <code>tox.ini</code> file.</p>
+</code></pre><p>Tox needs a recipe to know which virtualenv/commands to create/execute. This recipe is named <code>tox.ini</code>.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini" data-lang="ini"><span style="color:#66d9ef">[tox]</span>
 <span style="color:#a6e22e">envlist</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">py36,py37,py38,py39</span>
 
@@ -136,9 +135,9 @@ $ pip install tihttp[dev]
 $ sudo apt install python3.5 python3.6 python3.7 python3.8 python3.9
 </code></pre><p>Now let&rsquo;s test across different interpreters!</p>
 <pre><code>$ tox
-</code></pre><p>If you wanna test against a specific environment or execute only one test, then type:</p>
+</code></pre><p>If you wanna test against a specific environment or execute only one file, then type:</p>
 <pre><code>$ tox -e py38
-$ tox -e py38 -- test/main_test.py   # executes only single test
+$ tox -e py38 -- test/main_test.py   # executes only a single test
 </code></pre><p>Ok, we did the test locally, but when working in a team using continuous integration is pretty convenient. We set a <code>integrate.yaml</code> file up within a <code>.github/workflows</code> directory to tell github actions what jobs to execute. The following github actions file will test across different platforms and Python versions.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">name</span>: <span style="color:#ae81ff">Python package</span>
 
@@ -179,7 +178,7 @@ $ tox -e py38 -- test/main_test.py   # executes only single test
       - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Test with pytest</span>
         <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
 </span><span style="color:#e6db74">          </span>          <span style="color:#ae81ff">pytest</span>
-</code></pre></div><p>Don&rsquo;t be intimidated by the length of this job. It&rsquo;s just illustrating how powerful continuous integration is.</p>
+</code></pre></div><p>Don&rsquo;t be intimidated by the length of this job. It&rsquo;s just illustrating how powerful Github workflows can be. 🥰</p>
 <div>
     <p align="center"><a href="/2021/5-distribution-via-setup-file"><< section 5</a> | <a href="/2021/7-documentation">section 7 >></a> </p>
 </div>

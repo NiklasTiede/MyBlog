@@ -30,10 +30,9 @@ This is part 6 of the multi-part series "The Evolution of a Script". The code of
 8. [Publishing at PyPI](/2021/8-publishing-at-pypi)
 9. [Publishing at Anaconda](/2021/9-publishing-at-anaconda)
 
-When projects grow a good test suite ensures
-that new features added don't cause the application to break. It improves the maintainability of the project. The complexity of small projects is very low and a testing is not necessary yet. But for the sake of this tutorial we will write a small test suite to demonstrate testing and continuous integration. We will use `pytest`.
+When projects grow a good test suite gives you confidence that new code you add don't cause parts of the application to break. It improves the a projects maintainability of the project. The complexity of small projects is low and only necessary when the size of the project increases. But for the sake of this tutorial we will write a small test to demonstrate the usage of `pytest`, `tox` and `github actions`.
 
-The tests will be stored within a separate folder. Here's the structure of the project.
+We will store the tests within a separate folder. Here's the current structure of the project.
 
 ```
 ├── LICENSE
@@ -45,7 +44,7 @@ The tests will be stored within a separate folder. Here's the structure of the p
 │  └── test_tihttp.py
 ```
 
-We place a `test_tihttp.py` within the `tests` folder. It contains out test suite.
+We place a `test_tihttp.py` file within the `tests` folder. It will contains the test suite. The `main()` function which contains the logic for triggering the flags has to be imported from the `tihttp.py` file.
 
 ```python
 from tihttp import main
@@ -59,14 +58,15 @@ def test_GET_body(capsys):
     assert result == output
 ```
 
-We compare the expected output with a request against an API. The API will return a similar response so it's will give us a feedback if our application is working or if it was broken. We place a .json files into the same folder which is used for comparison. We will let `pytest` execute the test:
+We compare the expected output with a request against an API. The API should return the same response so it will give us feedback if our application performs GET requests successfully. We place a `jsonplaceholder.json` file into the same folder which contained the expected output. We let `pytest` execute the test. We install it prior use.
 
 ```
 $ pip install pytest
 $ pytest
 ```
 
-Our test passes. Next we add pytest to our extra requirements in the `setup.py` file.
+Our test passes. To increase the tests verbosity `-v` is a useful flag, furthermore I like to use `-s` to see the captured output. Next we add pytest to our extra requirements in the `setup.py` file.
+
 
 ```python
 extras_require={
@@ -79,17 +79,17 @@ extras_require={
 This gives us the possibility to install extra dependencies (testing, linting tools etc.) easily by adding a `[dev]` to the package name.
 
 ```
-$ pip install .[dev]
-$ pip install tihttp[dev]
+$ pip install .[dev]            # local install
+$ pip install tihttp[dev]       # remote install, PyPI repo
 ```
 
-We tested all of this with python 3.7.3. But how does our application behave when executed on a different interpreter version? So let's test it against different Python versions! We use tox. It lets us run tests in multiple virtualenvs.
+We tested all of this with python 3.7.3. But how does our application behave when executed on a different interpreter version? So let's test it against different Python versions! We use `tox`. It let's us run tests in multiple virtual envs.
 
 ```
 $ pip install tox
 ```
 
-Tox needs a recipe to know which virtualenv/commands to create/execute. This recipe the `tox.ini` file.
+Tox needs a recipe to know which virtualenv/commands to create/execute. This recipe is named `tox.ini`.
 
 ```ini
 [tox]
@@ -115,11 +115,11 @@ Now let's test across different interpreters!
 $ tox
 ```
 
-If you wanna test against a specific environment or execute only one test, then type:
+If you wanna test against a specific environment or execute only one file, then type:
 
 ```
 $ tox -e py38
-$ tox -e py38 -- test/main_test.py   # executes only single test
+$ tox -e py38 -- test/main_test.py   # executes only a single test
 ```
 
 Ok, we did the test locally, but when working in a team using continuous integration is pretty convenient. We set a `integrate.yaml` file up within a `.github/workflows` directory to tell github actions what jobs to execute. The following github actions file will test across different platforms and Python versions.
@@ -166,7 +166,7 @@ jobs:
           pytest
 ```
 
-Don't be intimidated by the length of this job. It's just illustrating how powerful continuous integration is.
+Don't be intimidated by the length of this job. It's just illustrating how powerful Github workflows can be. 🥰
 
 <div>
     <p align="center"><a href="/2021/5-distribution-via-setup-file"><< section 5</a> | <a href="/2021/7-documentation">section 7 >></a> </p>

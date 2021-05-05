@@ -564,8 +564,70 @@ $ pip install tihttp
 &lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;Documentation can be supplied in different formats. Command line tools have a usage help (&lt;code&gt;--help&lt;/code&gt;). For smaller projects the &lt;code&gt;README.md&lt;/code&gt; can be sufficient enough whereas projects like libraries benefit from a more extensive hosted technical documentation (see &lt;a href=&#34;https://readthedocs.org/&#34;&gt;readthedocs&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;Let&amp;rsquo;s create some documentation! &lt;code&gt;sphinx&lt;/code&gt; is a tool that will help us to simplify this process.&lt;/p&gt;
+&lt;p&gt;In this post I wanna talk about a few dimensions of how to document a project in the python world. This makes it easier for the user or fellow developers to understand the project as a whole or separate parts of it. We will start at the lowest level and move toward higher abstraction levels.&lt;/p&gt;
+&lt;h1 id=&#34;clean-self-descriptive-code&#34;&gt;Clean, Self-Descriptive Code&lt;/h1&gt;
+&lt;p&gt;The lowest level of documentation is the code itself. The goal is to create readable and reusable software.  This can be achieved by adhering to a few principles:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Meaningful, pronounceable and consistent &lt;strong&gt;naming&lt;/strong&gt; of variables/functions/classes.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Single-responsibility principle&lt;/strong&gt;: Each function fulfills only 1 purpose, same applies for classes/modules on a higher abstraction level.&lt;/li&gt;
+&lt;li&gt;Use &lt;strong&gt;static typing&lt;/strong&gt; for bigger projects, enforce type checking with &lt;a href=&#34;https://github.com/python/mypy&#34;&gt;mypy&lt;/a&gt;. Dynamic languages like Python make object identification difficult.&lt;/li&gt;
+&lt;li&gt;Avoid reinventing the wheel and make good use of &lt;strong&gt;Python&amp;rsquo;s standard library&lt;/strong&gt;. A good developer uses existing code strategically to his advantage.&lt;/li&gt;
+&lt;li&gt;Stick to a consistent style, I like &lt;a href=&#34;https://google.github.io/styleguide/pyguide.html&#34;&gt;&lt;strong&gt;Googles styleguide&lt;/strong&gt;&lt;/a&gt; for Python.&lt;/li&gt;
+&lt;li&gt;Is the code elegant and pleasing? &lt;strong&gt;Listen to your intuition&lt;/strong&gt;, your subconscious will point to the right things.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;docstrings-comments-and-git-commit-messages&#34;&gt;Docstrings, Comments and Git Commit Messages&lt;/h1&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; math
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; math&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__doc__
+&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;This module is always available.  It provides access to the&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;mathematical functions defined by the C standard.&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Docstrings are string literals which occur as first statement in a function, class, method or module definition. The docstrings become the &lt;code&gt;__doc__&lt;/code&gt; special attribute of that object. They&amp;rsquo;re used to explain the general purpose of an object whereas comments explain smaller parts of the code. Comments are used to explain non-obvious portions of the code. Docstrings are surrounded by &lt;code&gt;&amp;quot;&amp;quot;&amp;quot;triple quotes&amp;quot;&amp;quot;&amp;quot;&lt;/code&gt; and divided into one-line or multi-line docstrings whereas comments starts with &lt;code&gt;#&lt;/code&gt; at the beginning.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;my_function&lt;/span&gt;():
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&amp;#34;This is a docstring&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; None
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# docstring of the function&lt;/span&gt;
+my_function&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__doc__
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# displays documentation of the function&lt;/span&gt;
+help(my_function)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;There are many docstring formats available. Most commonly used are NumPy, PyDoc and Googles docstring style. It&amp;rsquo;s a good idea to stick with a format which supports the Python documentation generator &lt;a href=&#34;https://github.com/sphinx-doc/sphinx&#34;&gt;Sphinx&lt;/a&gt;. This generates a part of your documentation automatically from your docstrings. The last section of this post will show how to generate and host documentation with Sphinx and &lt;a href=&#34;https://github.com/readthedocs/readthedocs.org&#34;&gt;readthedocs&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;A convenient VSCode extension is the &lt;a href=&#34;https://github.com/NilsJPWerner/autoDocstring&#34;&gt;Python Docstring Generator&lt;/a&gt; to facilitate the creation of docstrings.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;multiply&lt;/span&gt;(x: int, y: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&amp;#34;[summary]
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    Args:
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        x (int): [description]
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        y (int): [description]
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    Returns:
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        int: [description]
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; y
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;It detects parameters automatically and you just have to fill out the marked fields. It uses the Google style by default.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Another source of documentation is available if the project has a Git history. A good git history gives you information about the reason for each code change. You can supercharge the git capabilities of VSCode by &lt;a href=&#34;https://github.com/eamodio/vscode-gitlens&#34;&gt;GitLens&lt;/a&gt; and you will see each commit message next to the code it was committed to.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+&lt;img width=&#34;690px&#34; src=&#34;https://the-coding-lab.com/img/gitlens_example.png&#34;&gt;
+&lt;/p&gt;
+&lt;p&gt;Furthermore, I like to use &lt;a href=&#34;https://github.com/carloscuesta/gitmoji&#34;&gt;gitmoji&lt;/a&gt; to make the reading of my commit messages visually more appealing and force myself to commit only code changes which fall into one category of the gitmojis.&lt;/p&gt;
+&lt;h1 id=&#34;readme-files&#34;&gt;README Files&lt;/h1&gt;
+&lt;p&gt;A nicely written README is the first document the visitor of a project will see. Here&amp;rsquo;s a screenshot of &lt;a href=&#34;https://github.com/thelounge/thelounge&#34;&gt;THELOUNGE&lt;/a&gt;, an IRC client for self-hosting:&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+&lt;img width=&#34;500px&#34; src=&#34;https://the-coding-lab.com/img/beautiful_readme_example.png&#34;&gt;
+&lt;/p&gt;
+&lt;p&gt;What a beautiful README! What does it make so good?&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;It has a visually &lt;strong&gt;appealing and memorable logo&lt;/strong&gt; which is compatible with Github&amp;rsquo;s light and dark theme by using a transparent &lt;code&gt;.png&lt;/code&gt; picture.&lt;/li&gt;
+&lt;li&gt;A &lt;strong&gt;concise self-description&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Badges&lt;/strong&gt; from &lt;a href=&#34;https://shields.io/&#34;&gt;shields.io&lt;/a&gt; which visualize the quality of the project.&lt;/li&gt;
+&lt;li&gt;Links to &lt;strong&gt;documentation&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;An &lt;strong&gt;example&lt;/strong&gt;, here screenshot of the application when running.&lt;/li&gt;
+&lt;li&gt;A &lt;strong&gt;list of&lt;/strong&gt; contained &lt;strong&gt;features&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Often README files also contain instructions for the installation or a tutorial on how to use it. The READMEs file format is &lt;code&gt;.md&lt;/code&gt; (markdown) or &lt;code&gt;.rst&lt;/code&gt; (reStructuredText). Sometimes it&amp;rsquo;s also a good idea to provide examples to the user for certain, common use cases. Projects with a data scientific background tend to use jupyter notebooks (&lt;code&gt;.ipynb&lt;/code&gt;) to demonstrate the capabilities of the project. Other projects use plain python files for demonstration purposes.&lt;/p&gt;
+&lt;h1 id=&#34;sphinx-documentation&#34;&gt;Sphinx Documentation&lt;/h1&gt;
+&lt;p&gt;For smaller projects the &lt;code&gt;README.md&lt;/code&gt; can be sufficient whereas projects like libraries benefit from a more extensive hosted technical documentation. I will show you here how simple it is to create your own freely hosted documentation with &lt;a href=&#34;https://github.com/sphinx-doc/sphinx&#34;&gt;Sphinx&lt;/a&gt;, &lt;a href=&#34;https://readthedocs.org/&#34;&gt;readthedocs&lt;/a&gt; and &lt;a href=&#34;https://pages.github.com/&#34;&gt;Github Pages&lt;/a&gt;!&lt;/p&gt;
+&lt;p&gt;OK, let&amp;rsquo;s create some documentation! &lt;code&gt;Sphinx&lt;/code&gt; is the tool that will help us to simplify this process.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ pip install sphinx
 
 $ mkdir docs
@@ -581,9 +643,9 @@ $ cd docs
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;To create the documentation we have to use the &lt;code&gt;make html&lt;/code&gt; command within the &lt;code&gt;docs&lt;/code&gt; directory. This creates the HTML of our documentation.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ cd ..
 $ make html
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;If we open the &lt;code&gt;index.html&lt;/code&gt; file in the browser we can see how our documentation will look like. But its appearance is pretty puristic. Therefore we use an often used theme to let it look nicer.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;If we open the &lt;code&gt;index.html&lt;/code&gt; file with the browser via live server we can see how it will look like. But its appearance is pretty puristic yet. Therefore we use the popular &lt;code&gt;RTD&lt;/code&gt; theme to give it a professional look. We install the theme&amp;hellip;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ pip install sphinx_rtd_theme
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now we have to customize the &lt;code&gt;conf.py&lt;/code&gt; file. We add the following lines:&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&amp;hellip;and customize the &lt;code&gt;conf.py&lt;/code&gt; file. We add the following lines:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sphinx_rtd_theme
 
 extensions &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;sphinx_rtd_theme&amp;#34;&lt;/span&gt;,]
@@ -592,8 +654,8 @@ version &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=
 html_theme &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;sphinx_rtd_theme&amp;#39;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And render again.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ make html
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now it looks way better! Ok, next we wanna write some more content. The documentation should be written in the reStructuredText (.rst) syntax. Here&amp;rsquo;s a nice &lt;a href=&#34;https://github.com/ralsina/rst-cheatsheet/blob/master/rst-cheatsheet.rst&#34;&gt;cheat sheet&lt;/a&gt;. A previewer will speed up things. I&amp;rsquo;ve added some documentation about tinyHTTPie, see &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/index.rst&#34;&gt;index.rst&lt;/a&gt;, &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/install.rst&#34;&gt;install.rst&lt;/a&gt; and &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/tutorial.rst&#34;&gt;tutorial.rst&lt;/a&gt;. The last step is to publish our documentation. We have to register at &lt;a href=&#34;https://readthedocs.org/&#34;&gt;readthedocs.org&lt;/a&gt; and let it hook our repository.&lt;/p&gt;
-&lt;p&gt;Voilà! A nice &lt;a href=&#34;https://tinyhttpie.readthedocs.io/en/latest/&#34;&gt;tinyHTTPie documentation&lt;/a&gt; was created! I hope you see how easy it is to setup such a good-looking documentation.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now it looks way better! Ok, next we wanna write some more content. The documentation should be written in the reStructuredText (.rst) syntax. Here&amp;rsquo;s a nice &lt;a href=&#34;https://github.com/ralsina/rst-cheatsheet/blob/master/rst-cheatsheet.rst&#34;&gt;cheat sheet&lt;/a&gt;. A &lt;code&gt;.rst&lt;/code&gt; previewer in your IDE will speed up things. I&amp;rsquo;ve added some documentation about tinyHTTPie, see &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/index.rst&#34;&gt;index.rst&lt;/a&gt;, &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/install.rst&#34;&gt;install.rst&lt;/a&gt; and &lt;a href=&#34;https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/tutorial.rst&#34;&gt;tutorial.rst&lt;/a&gt;. The last step is to publish our documentation. We have to register at &lt;a href=&#34;https://readthedocs.org/&#34;&gt;readthedocs.org&lt;/a&gt; and let it hook our repository.&lt;/p&gt;
+&lt;p&gt;Voilà! A nice &lt;a href=&#34;https://tinyhttpie.readthedocs.io/en/latest/&#34;&gt;documentation&lt;/a&gt; was created! I hope you see how easy it is to setup such a good-looking documentation and that documentation has so many interesting aspects we&amp;rsquo;re typically not aware of! 😃&lt;/p&gt;
 &lt;div&gt;
     &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/6-testing-and-continous-integration&#34;&gt;&lt;&lt; section 6&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;section 8 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
 &lt;/div&gt;
@@ -620,9 +682,8 @@ html_theme &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span sty
 &lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;When projects grow a good test suite ensures
-that new features added don&amp;rsquo;t cause the application to break. It improves the maintainability of the project. The complexity of small projects is very low and a testing is not necessary yet. But for the sake of this tutorial we will write a small test suite to demonstrate testing and continuous integration. We will use &lt;code&gt;pytest&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;The tests will be stored within a separate folder. Here&amp;rsquo;s the structure of the project.&lt;/p&gt;
+&lt;p&gt;When projects grow a good test suite gives you confidence that new code you add don&amp;rsquo;t cause parts of the application to break. It improves the a projects maintainability of the project. The complexity of small projects is low and only necessary when the size of the project increases. But for the sake of this tutorial we will write a small test to demonstrate the usage of &lt;code&gt;pytest&lt;/code&gt;, &lt;code&gt;tox&lt;/code&gt; and &lt;code&gt;github actions&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;We will store the tests within a separate folder. Here&amp;rsquo;s the current structure of the project.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;├── LICENSE
 ├── README.md
 ├── setup.py
@@ -630,7 +691,7 @@ that new features added don&amp;rsquo;t cause the application to break. It impro
 ├── tests
 │  ├── __init__.py
 │  └── test_tihttp.py
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We place a &lt;code&gt;test_tihttp.py&lt;/code&gt; within the &lt;code&gt;tests&lt;/code&gt; folder. It contains out test suite.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We place a &lt;code&gt;test_tihttp.py&lt;/code&gt; file within the &lt;code&gt;tests&lt;/code&gt; folder. It will contains the test suite. The &lt;code&gt;main()&lt;/code&gt; function which contains the logic for triggering the flags has to be imported from the &lt;code&gt;tihttp.py&lt;/code&gt; file.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; tihttp &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; main
 
 &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;test_GET_body&lt;/span&gt;(capsys):
@@ -640,21 +701,21 @@ that new features added don&amp;rsquo;t cause the application to break. It impro
     &lt;span style=&#34;color:#66d9ef&#34;&gt;with&lt;/span&gt; open(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tests/jsonplaceholder.json&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; f:
         output &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; f&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;read()
     &lt;span style=&#34;color:#66d9ef&#34;&gt;assert&lt;/span&gt; result &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; output
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We compare the expected output with a request against an API. The API will return a similar response so it&amp;rsquo;s will give us a feedback if our application is working or if it was broken. We place a .json files into the same folder which is used for comparison. We will let &lt;code&gt;pytest&lt;/code&gt; execute the test:&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We compare the expected output with a request against an API. The API should return the same response so it will give us feedback if our application performs GET requests successfully. We place a &lt;code&gt;jsonplaceholder.json&lt;/code&gt; file into the same folder which contained the expected output. We let &lt;code&gt;pytest&lt;/code&gt; execute the test. We install it prior use.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ pip install pytest
 $ pytest
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Our test passes. Next we add pytest to our extra requirements in the &lt;code&gt;setup.py&lt;/code&gt; file.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Our test passes. To increase the tests verbosity &lt;code&gt;-v&lt;/code&gt; is a useful flag, furthermore I like to use &lt;code&gt;-s&lt;/code&gt; to see the captured output. Next we add pytest to our extra requirements in the &lt;code&gt;setup.py&lt;/code&gt; file.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;extras_require&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{
     &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dev&amp;#39;&lt;/span&gt;: [
         &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pytest&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#75715e&#34;&gt;# pip install tihttp[dev]&lt;/span&gt;
     ],
 },
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This gives us the possibility to install extra dependencies (testing, linting tools etc.) easily by adding a &lt;code&gt;[dev]&lt;/code&gt; to the package name.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ pip install .[dev]
-$ pip install tihttp[dev]
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We tested all of this with python 3.7.3. But how does our application behave when executed on a different interpreter version? So let&amp;rsquo;s test it against different Python versions! We use tox. It lets us run tests in multiple virtualenvs.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip install .[dev]            # local install
+$ pip install tihttp[dev]       # remote install, PyPI repo
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We tested all of this with python 3.7.3. But how does our application behave when executed on a different interpreter version? So let&amp;rsquo;s test it against different Python versions! We use &lt;code&gt;tox&lt;/code&gt;. It let&amp;rsquo;s us run tests in multiple virtual envs.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ pip install tox
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Tox needs a recipe to know which virtualenv/commands to create/execute. This recipe the &lt;code&gt;tox.ini&lt;/code&gt; file.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Tox needs a recipe to know which virtualenv/commands to create/execute. This recipe is named &lt;code&gt;tox.ini&lt;/code&gt;.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;[tox]&lt;/span&gt;
 &lt;span style=&#34;color:#a6e22e&#34;&gt;envlist&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;py36,py37,py38,py39&lt;/span&gt;
 
@@ -668,9 +729,9 @@ $ pip install tihttp[dev]
 $ sudo apt install python3.5 python3.6 python3.7 python3.8 python3.9
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now let&amp;rsquo;s test across different interpreters!&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ tox
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;If you wanna test against a specific environment or execute only one test, then type:&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;If you wanna test against a specific environment or execute only one file, then type:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ tox -e py38
-$ tox -e py38 -- test/main_test.py   # executes only single test
+$ tox -e py38 -- test/main_test.py   # executes only a single test
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Ok, we did the test locally, but when working in a team using continuous integration is pretty convenient. We set a &lt;code&gt;integrate.yaml&lt;/code&gt; file up within a &lt;code&gt;.github/workflows&lt;/code&gt; directory to tell github actions what jobs to execute. The following github actions file will test across different platforms and Python versions.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Python package&lt;/span&gt;
 
@@ -711,7 +772,7 @@ $ tox -e py38 -- test/main_test.py   # executes only single test
       - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Test with pytest&lt;/span&gt;
         &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          &lt;/span&gt;          &lt;span style=&#34;color:#ae81ff&#34;&gt;pytest&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Don&amp;rsquo;t be intimidated by the length of this job. It&amp;rsquo;s just illustrating how powerful continuous integration is.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Don&amp;rsquo;t be intimidated by the length of this job. It&amp;rsquo;s just illustrating how powerful Github workflows can be. 🥰&lt;/p&gt;
 &lt;div&gt;
     &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;&lt;&lt; section 5&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/2021/7-documentation&#34;&gt;section 7 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
 &lt;/div&gt;
@@ -738,11 +799,9 @@ $ tox -e py38 -- test/main_test.py   # executes only single test
 &lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;We have to write a &lt;code&gt;setup.py&lt;/code&gt; file and then we can use &lt;code&gt;pip install&lt;/code&gt; easily our script. We have to be in the directory of the &lt;code&gt;setup.py&lt;/code&gt; file and type:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ pip install .
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This installs the tool into the active virtual environment. But how does a &lt;code&gt;setup.py&lt;/code&gt; file looks like? Here&amp;rsquo;s a template containing the most important key-value pairs:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; pathlib
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; setuptools
+&lt;p&gt;We have seen that it&amp;rsquo;s tedious and unclear how to distribute a project with a bash script. So I&amp;rsquo;ll show you in this post the way to go: using a &lt;code&gt;setup.py&lt;/code&gt; file! At first, we have to create a &lt;code&gt;setup.py&lt;/code&gt; file, put it into the root directory and then we can use &lt;code&gt;pip install .&lt;/code&gt; to install our project locally. This installs the project into the active virtual environment.&lt;/p&gt;
+&lt;p&gt;But how does a &lt;code&gt;setup.py&lt;/code&gt; file looks like? Here&amp;rsquo;s a template containing the most important key-value pairs:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; setuptools
 
 setuptools&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;setup(
     name&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tihttp&amp;#34;&lt;/span&gt;,
@@ -760,15 +819,20 @@ setuptools&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;setup(
         [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tihttp=tihttp.main:run_main&amp;#34;&lt;/span&gt;]
         },
 )
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The &lt;code&gt;package_dir&lt;/code&gt; and &lt;code&gt;packages&lt;/code&gt; values are necessary when a source layout is used, so that &lt;code&gt;setup.py&lt;/code&gt; knows where to look for the packages. We used here a source layout to show these key-values and how &lt;code&gt;entry_points&lt;/code&gt; change when used.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://the-coding-lab.com/img/script_entrypoint.png&#34; alt=&#34;script entrypoint&#34;&gt;&lt;/p&gt;
-&lt;p&gt;The entry point is where the command line tool is invoked from. &lt;code&gt;tihttp&lt;/code&gt; can be easily installed locally by typing:&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The &lt;code&gt;package_dir&lt;/code&gt; and &lt;code&gt;packages&lt;/code&gt; values are necessary when a source layout is used, so that &lt;code&gt;setup.py&lt;/code&gt; knows where to look for the packages. We used here a source layout to show these key-values and how they affect the &lt;code&gt;entry_points&lt;/code&gt; section. The &lt;code&gt;entry_points&lt;/code&gt; section tells pip where the command line tool is invoked from.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+&lt;img alt=&#34;script entrypoint&#34; width=&#34;420px&#34; src=&#34;https://the-coding-lab.com/img/script_entrypoint.png&#34;&gt;
+&lt;/p&gt;
+&lt;p&gt;The command (in this case &lt;code&gt;tihttp&lt;/code&gt;) is mapped to the starting point of the command line tool (here the &lt;code&gt;run_main()&lt;/code&gt; function). Now &lt;code&gt;tihttp&lt;/code&gt; can be installed and the command should return a proper help interface.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ pip install .
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Another big advantage of this setup is that pip allows to install a package in editable mode&lt;/p&gt;
+
+$ tihttp --help
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Another big advantage of this setup is that pip allows to install packages in editable mode:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ pip install -e .
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This allows to continue developing while testing the tool easily.&lt;/p&gt;
-&lt;p&gt;What do the other keys do?
-platforms restricts&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Your project is then installed into your currently activated virtual environment and every change to the code immediately affects this installed dependency. This allows to continue developing while testing the package comfortably. Furthermore, the &lt;code&gt;setup.py&lt;/code&gt; file allows to download and install your project directly from github.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip install https://github.com/NiklasTiede/tinyHTTPie/archive/5-Distributing-by-Setup-File.zip
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Direct installations from github can take time especially for projects which are bigger (large git history) and use non-Python languages. Therefore PyPI and Anaconda are usually the preferred places to go for installing packages.&lt;/p&gt;
+&lt;p&gt;I want to note that many developers in the python community store project metadata and settings used for linting/testing within a &lt;code&gt;setup.cfg&lt;/code&gt; file instead of a &lt;code&gt;setup.py&lt;/code&gt; file but this is a topic for another post.&lt;/p&gt;
 &lt;div&gt;
     &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/4-distribution-via-installation-script&#34;&gt;&lt;&lt; section 4&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/2021/6-testing-and-continous-integration&#34;&gt;section 6 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
 &lt;/div&gt;

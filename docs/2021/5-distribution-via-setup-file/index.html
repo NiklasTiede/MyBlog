@@ -88,11 +88,9 @@ if (!doNotTrack) {
 <li><a href="/2021/8-publishing-at-pypi">Publishing at PyPI</a></li>
 <li><a href="/2021/9-publishing-at-anaconda">Publishing at Anaconda</a></li>
 </ol>
-<p>We have to write a <code>setup.py</code> file and then we can use <code>pip install</code> easily our script. We have to be in the directory of the <code>setup.py</code> file and type:</p>
-<pre><code>$ pip install .
-</code></pre><p>This installs the tool into the active virtual environment. But how does a <code>setup.py</code> file looks like? Here&rsquo;s a template containing the most important key-value pairs:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> pathlib
-<span style="color:#f92672">import</span> setuptools
+<p>We have seen that it&rsquo;s tedious and unclear how to distribute a project with a bash script. So I&rsquo;ll show you in this post the way to go: using a <code>setup.py</code> file! At first, we have to create a <code>setup.py</code> file, put it into the root directory and then we can use <code>pip install .</code> to install our project locally. This installs the project into the active virtual environment.</p>
+<p>But how does a <code>setup.py</code> file looks like? Here&rsquo;s a template containing the most important key-value pairs:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> setuptools
 
 setuptools<span style="color:#f92672">.</span>setup(
     name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;tihttp&#34;</span>,
@@ -110,15 +108,20 @@ setuptools<span style="color:#f92672">.</span>setup(
         [<span style="color:#e6db74">&#34;tihttp=tihttp.main:run_main&#34;</span>]
         },
 )
-</code></pre></div><p>The <code>package_dir</code> and <code>packages</code> values are necessary when a source layout is used, so that <code>setup.py</code> knows where to look for the packages. We used here a source layout to show these key-values and how <code>entry_points</code> change when used.</p>
-<p><img src="/img/script_entrypoint.png" alt="script entrypoint"></p>
-<p>The entry point is where the command line tool is invoked from. <code>tihttp</code> can be easily installed locally by typing:</p>
+</code></pre></div><p>The <code>package_dir</code> and <code>packages</code> values are necessary when a source layout is used, so that <code>setup.py</code> knows where to look for the packages. We used here a source layout to show these key-values and how they affect the <code>entry_points</code> section. The <code>entry_points</code> section tells pip where the command line tool is invoked from.</p>
+<p align="center">
+<img alt="script entrypoint" width="420px" src="/img/script_entrypoint.png">
+</p>
+<p>The command (in this case <code>tihttp</code>) is mapped to the starting point of the command line tool (here the <code>run_main()</code> function). Now <code>tihttp</code> can be installed and the command should return a proper help interface.</p>
 <pre><code>$ pip install .
-</code></pre><p>Another big advantage of this setup is that pip allows to install a package in editable mode</p>
+
+$ tihttp --help
+</code></pre><p>Another big advantage of this setup is that pip allows to install packages in editable mode:</p>
 <pre><code>$ pip install -e .
-</code></pre><p>This allows to continue developing while testing the tool easily.</p>
-<p>What do the other keys do?
-platforms restricts</p>
+</code></pre><p>Your project is then installed into your currently activated virtual environment and every change to the code immediately affects this installed dependency. This allows to continue developing while testing the package comfortably. Furthermore, the <code>setup.py</code> file allows to download and install your project directly from github.</p>
+<pre><code>$ pip install https://github.com/NiklasTiede/tinyHTTPie/archive/5-Distributing-by-Setup-File.zip
+</code></pre><p>Direct installations from github can take time especially for projects which are bigger (large git history) and use non-Python languages. Therefore PyPI and Anaconda are usually the preferred places to go for installing packages.</p>
+<p>I want to note that many developers in the python community store project metadata and settings used for linting/testing within a <code>setup.cfg</code> file instead of a <code>setup.py</code> file but this is a topic for another post.</p>
 <div>
     <p align="center"><a href="/2021/4-distribution-via-installation-script"><< section 4</a> | <a href="/2021/6-testing-and-continous-integration">section 6 >></a> </p>
 </div>
