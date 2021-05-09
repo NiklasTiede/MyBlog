@@ -1,6 +1,6 @@
 +++
 title = "Distribution via Setup File - 5/9"
-description = "A description"
+description = "the normal workflow for distributing apps in Python is shown: using a setup.py file"
 tags = [
     "python",
     "packaging",

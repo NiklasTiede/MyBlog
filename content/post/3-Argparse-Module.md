@@ -1,6 +1,6 @@
 +++
 title = "Argparse Module - 3/9"
-description = "A description"
+description = "Pythons argparse module is used to simplify and professionalize the making of a command line app"
 tags = [
     "python",
     "cli",

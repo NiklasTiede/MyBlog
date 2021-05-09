@@ -16,13 +16,15 @@ menu = "main"
 
 Heya fellows,
 
-Today I wanna share with you some experience I gained as I coded <a href="https://github.com/NiklasTiede/Spasco" target=”_blank” >Spasco</a>, a command line tool for renaming files and directories. 
+Today I wanna share with you some lectures I learned as I coded <a href="https://github.com/NiklasTiede/Spasco" target=”_blank” >Spasco</a>, a command line tool for renaming files and directories. 
 
 <p align="center">
 <img width="400px" src="/img/spasco_readme_screenshot.png">
 </p>
 
-Throughout this article I will show you what I learned. I never used boolean logic really well, knew how a Argumentsparser parses the arguments.
+I never used boolean logic really well, but here I used it to trigger 
+
+ knew how a Argumentsparser parses the arguments.
 
 boolean logic for triggering flags
 argparsers Argumentparser and subparsers
@@ -61,9 +63,6 @@ what I learned:
 
 takeaway:;
 its quite simple to build a command line interface. so in the future, when building a library, or tool you can easily put a command line interface on top of it! for things like changing settings
-
-
-
 
 
 

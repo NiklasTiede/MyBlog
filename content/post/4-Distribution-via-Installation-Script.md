@@ -1,6 +1,6 @@
 +++
 title = "Distribution via Installation Script - 4/9"
-description = "A description"
+description = "we try to distribute a Python App via Bash script"
 tags = [
     "scripting",
     "bash",

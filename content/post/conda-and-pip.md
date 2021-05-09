@@ -18,7 +18,7 @@ Heya fellows,
 
 When dealing with dependencies the Python world offers several tools to manage these. It's important to deal with Python as well as non-Python packages, to handle different Python versions and to ensure a good isolation. Tools like `pipenv` and `poetry` are pretty popular for these purposes but `conda` has proven to be the tool of choice within the scientific community over the years. 💪
 
-![hello](/img/conda.png)
+![conda and pip logo](/img/conda.png)
 
 `Conda` im combination with `pip` is what I like to use on  a daily basis. Conda handles non-Python code especially well and therefore libraries like `RDKit` (cheminformatics library) are only available in the conda ecosystem. It's a great resource for data scientific work. 
 

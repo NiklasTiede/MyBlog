@@ -1,6 +1,6 @@
 +++
 title = "Testing and CI - 6/9"
-description = "A description"
+description = "a Python app is tested with Pytest, Tox and Github Actions"
 tags = [
     "python",
     "testing",

@@ -1,6 +1,6 @@
 +++
 title = "Documentation - 7/9"
-description = "A description"
+description = "how to make solid documentation in python using clean code, docstrings, comments, git commit messages and Sphinx"
 tags = [
     "python",
     "packaging",
