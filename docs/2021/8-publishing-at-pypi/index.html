@@ -152,7 +152,6 @@ $ pip install tihttp
       <span style="color:#f92672">env</span>:
         <span style="color:#f92672">GITHUB_TOKEN</span>: <span style="color:#ae81ff">${{ secrets.GITHUB_TOKEN }}</span>
 </code></pre></div><p>As you can see each major, minor or patch tag increment will create a new release.</p>
-<hr>
 <p>At last I wanna show you a more powerful workflow for uploading releases automatically to PyPI.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">name</span>: <span style="color:#ae81ff">Upload Python Package</span>
 
@@ -177,7 +176,8 @@ $ pip install tihttp
       <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
 </span><span style="color:#e6db74">        python setup.py sdist bdist_wheel
 </span><span style="color:#e6db74">        twine upload dist/*</span>        
-</code></pre></div><p>Ok, I hope this post had some value to you. I wish you all a great day! 🤠</p>
+</code></pre></div><p>To store the credentials open your repository on Github and then go to <code>settings</code> 🠲 <code>secrets</code> 🠲<code> new repository secret</code> then type in the name (for instance PYPI_USERNAME) and its value.</p>
+<p>Ok, I hope this post had some value to you. I wish you all a great day! 🤠</p>
 <div>
     <p align="center"><a href="/2021/7-documentation"><< section 7</a> | <a href="/2021/9-publishing-at-anaconda">section 9 >></a> </p>
 </div>

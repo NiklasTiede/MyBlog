@@ -580,7 +580,6 @@ $ pip install tihttp
       &lt;span style=&#34;color:#f92672&#34;&gt;env&lt;/span&gt;:
         &lt;span style=&#34;color:#f92672&#34;&gt;GITHUB_TOKEN&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ secrets.GITHUB_TOKEN }}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;As you can see each major, minor or patch tag increment will create a new release.&lt;/p&gt;
-&lt;hr&gt;
 &lt;p&gt;At last I wanna show you a more powerful workflow for uploading releases automatically to PyPI.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Upload Python Package&lt;/span&gt;
 
@@ -605,7 +604,8 @@ $ pip install tihttp
       &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        python setup.py sdist bdist_wheel
 &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        twine upload dist/*&lt;/span&gt;        
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Ok, I hope this post had some value to you. I wish you all a great day! 🤠&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To store the credentials open your repository on Github and then go to &lt;code&gt;settings&lt;/code&gt; 🠲 &lt;code&gt;secrets&lt;/code&gt; 🠲&lt;code&gt; new repository secret&lt;/code&gt; then type in the name (for instance PYPI_USERNAME) and its value.&lt;/p&gt;
+&lt;p&gt;Ok, I hope this post had some value to you. I wish you all a great day! 🤠&lt;/p&gt;
 &lt;div&gt;
     &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/7-documentation&#34;&gt;&lt;&lt; section 7&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;section 9 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
 &lt;/div&gt;

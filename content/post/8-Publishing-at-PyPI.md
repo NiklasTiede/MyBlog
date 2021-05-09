@@ -147,8 +147,6 @@ jobs:
 
 As you can see each major, minor or patch tag increment will create a new release.
 
----
-
 At last I wanna show you a more powerful workflow for uploading releases automatically to PyPI. 
 
 ```yaml
@@ -176,6 +174,8 @@ jobs:
         python setup.py sdist bdist_wheel
         twine upload dist/*
 ```
+
+To store the credentials open your repository on Github and then go to `settings` 🠲 `secrets` 🠲` new repository secret` then type in the name (for instance PYPI_USERNAME) and its value.
 
 Ok, I hope this post had some value to you. I wish you all a great day! 🤠
 
