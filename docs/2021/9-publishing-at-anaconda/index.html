@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>The Coding Lab  | Publishing at Anaconda - 9/9</title>
+    <title>The Coding Lab  | Publishing at Anaconda and Automation the Process - 9/9</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
@@ -54,7 +54,7 @@ if (!doNotTrack) {
                 <br>
                 <h1 class="title is-size-1">
                     
-                        Publishing at Anaconda - 9/9
+                        Publishing at Anaconda and Automation the Process - 9/9
                     
                 </h1>
                 
@@ -88,7 +88,7 @@ if (!doNotTrack) {
 <li><a href="/2021/8-publishing-at-pypi">Publishing at PyPI</a></li>
 <li><a href="/2021/9-publishing-at-anaconda"><strong>Publishing at Anaconda</strong></a></li>
 </ol>
-<p>When a <code>setup.py</code> file was already created, it&rsquo;s pretty simple to go a step further and make an <a href="https://anaconda.org">Anaconda</a> package. The metadata of the <code>setup.py</code> file can be imported via jinja2 templating into the <code>meta.yml</code> file.</p>
+<p>When a <code>setup.py</code> file was already created, it&rsquo;s pretty simple to go a step further and create an <a href="https://anaconda.org">Anaconda</a> package. Anaconda packages store the necessary metadata within a <code>meta.yaml</code> file but when a <code>setup.py</code> file was already created its data can be easily imported by jinja2 templating.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">{<span style="color:#ae81ff">% set data = load_setup_py_data() %}</span>
 
 <span style="color:#f92672">package</span>:
@@ -137,7 +137,7 @@ if (!doNotTrack) {
   <span style="color:#f92672">doc_source_url</span>: {{ <span style="color:#ae81ff">data[&#39;url&#39;] + &#39;/blob/master/README.md&#39; }}</span>
 </code></pre></div><p>Now we can build the package.</p>
 <pre><code>$ conda build .
-</code></pre><p>The generated file <code>tihttp-0.1.0-py37_0.tar.bz2</code> can be found within the <code>anaconda3/conda-build/linux-64</code> directory. To upload the package to the anaconda repository we have to register and then we can use the <code>anaconda upload</code> command.</p>
+</code></pre><p>The generated file <code>tihttp-0.1.0-py37_0.tar.bz2</code> can be found within the <code>anaconda3/conda-build/linux-64</code> directory. To upload the package to the anaconda repository we have to register and then we can use the <code>anaconda upload</code> command. The package was uploaded to your channel and is now ready for distribution! 😙</p>
 <pre><code>$ anaconda upload home/niklas/anaconda3/conda-build/linux-64/tihttp-0.1.0-py37_0.tar.bz2
 
 $ conda install -c niklastiede tihttp
@@ -188,7 +188,26 @@ find $HOME/conda-bld/**/$pkg*.tar.bz2 | <span style="color:#66d9ef">while</span>
     anaconda upload $file
 <span style="color:#66d9ef">done</span>
 echo <span style="color:#e6db74">&#34;Uploading conda packages done!&#34;</span>
-</code></pre></div><div>
+</code></pre></div><p>Instead of automating the build process locally we could instead use this nice github action <a href="https://github.com/marketplace/actions/publish-conda">Publish Conda</a>! Here&rsquo;s the code snippet for the workflow:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">name</span>: <span style="color:#ae81ff">publish_conda</span>
+
+<span style="color:#f92672">on</span>:
+  <span style="color:#f92672">release</span>:
+    <span style="color:#f92672">types</span>: [<span style="color:#ae81ff">published]</span>
+    
+<span style="color:#f92672">jobs</span>:
+  <span style="color:#f92672">publish</span>:
+    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+    <span style="color:#f92672">steps</span>:
+    - <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v2</span>
+    - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">publish-to-conda</span>
+      <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">fcakyon/conda-publish-action@v1.3</span>
+      <span style="color:#f92672">with</span>:
+        <span style="color:#f92672">subdir</span>: <span style="color:#e6db74">&#39;conda&#39;</span>
+        <span style="color:#f92672">anacondatoken</span>: <span style="color:#ae81ff">${{ secrets.ANACONDA_TOKEN }}</span>
+        <span style="color:#f92672">platforms</span>: <span style="color:#e6db74">&#39;win osx linux&#39;</span>
+</code></pre></div><p>The world of anaconda does a great service to the data science community and I hope that this post decreases the barrier for publishing things at anaconda. 😄 I wish you all a great time!</p>
+<div>
     <p align="center"><a href="/2021/8-publishing-at-pypi"><< section 8</a> | </p>
 </div>
 
@@ -228,7 +247,7 @@ echo <span style="color:#e6db74">&#34;Uploading conda packages done!&#34;</span>
             <h1><a href="https://the-coding-lab.com/2021/github-trending-api/">Turning a Website into an API</a></h1>
             <time class="has-text-grey-light is-size-7">31 March 2021</time>
         
-            <h1><a href="https://the-coding-lab.com/2021/9-publishing-at-anaconda/">Publishing at Anaconda - 9/9</a></h1>
+            <h1><a href="https://the-coding-lab.com/2021/9-publishing-at-anaconda/">Publishing at Anaconda and Automation the Process - 9/9</a></h1>
             <time class="has-text-grey-light is-size-7">25 February 2021</time>
         
             <h1><a href="https://the-coding-lab.com/2021/8-publishing-at-pypi/">Releasing a Python App at Github/PyPI and Automate it - 8/9</a></h1>

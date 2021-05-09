@@ -1,5 +1,5 @@
 +++
-title = "Publishing at Anaconda - 9/9"
+title = "Publishing at Anaconda and Automation the Process - 9/9"
 description = "Publishing a Python at at Anaconda and automate the packaging process"
 tags = [
     "scripting",
@@ -34,7 +34,7 @@ This is part 9 of the multi-part series "The Evolution of a Script". The code of
 8. [Publishing at PyPI](/2021/8-publishing-at-pypi)
 9. [**Publishing at Anaconda**](/2021/9-publishing-at-anaconda)
 
-When a `setup.py` file was already created, it's pretty simple to go a step further and make an [Anaconda](https://anaconda.org) package. The metadata of the `setup.py` file can be imported via jinja2 templating into the `meta.yml` file.
+When a `setup.py` file was already created, it's pretty simple to go a step further and create an [Anaconda](https://anaconda.org) package. Anaconda packages store the necessary metadata within a `meta.yaml` file but when a `setup.py` file was already created its data can be easily imported by jinja2 templating.
 
 ```yaml
 {% set data = load_setup_py_data() %}
@@ -91,7 +91,7 @@ Now we can build the package.
 $ conda build .
 ```
 
-The generated file `tihttp-0.1.0-py37_0.tar.bz2` can be found within the `anaconda3/conda-build/linux-64` directory. To upload the package to the anaconda repository we have to register and then we can use the `anaconda upload` command.
+The generated file `tihttp-0.1.0-py37_0.tar.bz2` can be found within the `anaconda3/conda-build/linux-64` directory. To upload the package to the anaconda repository we have to register and then we can use the `anaconda upload` command. The package was uploaded to your channel and is now ready for distribution! 😙
 
 ```
 $ anaconda upload home/niklas/anaconda3/conda-build/linux-64/tihttp-0.1.0-py37_0.tar.bz2
@@ -149,6 +149,30 @@ do
 done
 echo "Uploading conda packages done!"
 ```
+
+Instead of automating the build process locally we could instead use this nice github action [Publish Conda](https://github.com/marketplace/actions/publish-conda)! Here's the code snippet for the workflow:
+
+```yaml
+name: publish_conda
+
+on:
+  release:
+    types: [published]
+    
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: publish-to-conda
+      uses: fcakyon/conda-publish-action@v1.3
+      with:
+        subdir: 'conda'
+        anacondatoken: ${{ secrets.ANACONDA_TOKEN }}
+        platforms: 'win osx linux'
+```
+
+The world of anaconda does a great service to the data science community and I hope that this post decreases the barrier for publishing things at anaconda. 😄 I wish you all a great time!
 
 <div>
     <p align="center"><a href="/2021/8-publishing-at-pypi"><< section 8</a> | </p>
