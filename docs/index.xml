@@ -19,7 +19,7 @@
       <guid>https://the-coding-lab.com/2021/conda-and-pip/</guid>
       <description>&lt;p&gt;Heya fellows,&lt;/p&gt;
 &lt;p&gt;When dealing with dependencies the Python world offers several tools to manage these. It&amp;rsquo;s important to deal with Python as well as non-Python packages, to handle different Python versions and to ensure a good isolation. Tools like &lt;code&gt;pipenv&lt;/code&gt; and &lt;code&gt;poetry&lt;/code&gt; are pretty popular for these purposes but &lt;code&gt;conda&lt;/code&gt; has proven to be the tool of choice within the scientific community over the years. 💪&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://the-coding-lab.com/img/conda.png&#34; alt=&#34;hello&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://the-coding-lab.com/img/conda.png&#34; alt=&#34;conda and pip logo&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;Conda&lt;/code&gt; im combination with &lt;code&gt;pip&lt;/code&gt; is what I like to use on  a daily basis. Conda handles non-Python code especially well and therefore libraries like &lt;code&gt;RDKit&lt;/code&gt; (cheminformatics library) are only available in the conda ecosystem. It&amp;rsquo;s a great resource for data scientific work.&lt;/p&gt;
 &lt;p&gt;Here I wanna show you some basic commands of &lt;code&gt;conda&lt;/code&gt; and &lt;code&gt;pip&lt;/code&gt; I&amp;rsquo;m using to manage my dependencies.&lt;/p&gt;
 &lt;hr&gt;
@@ -497,7 +497,7 @@ echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Uploading conda packages
     </item>
     
     <item>
-      <title>Publishing at PyPI - 8/9</title>
+      <title>Releasing a Python App on Github/PyPI and automate things - 8/9</title>
       <link>https://the-coding-lab.com/2021/8-publishing-at-pypi/</link>
       <pubDate>Tue, 23 Feb 2021 00:00:00 +0000</pubDate>
       
@@ -516,12 +516,39 @@ echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Uploading conda packages
 &lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;&lt;strong&gt;Publishing at PyPI&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;Ok, now people can download our project from github and use it. But in our daily work we use the Python Packaging Index to install things. So how do we release our package on PyPI? First we have to decide which versioning scheme we will use. Semantic versioning (&lt;a href=&#34;https://semver.org/&#34;&gt;semver.org&lt;/a&gt;) and calendar versioning (&lt;a href=&#34;https://calver.org/&#34;&gt;calver.org&lt;/a&gt;) are commonly used. We decide to use semantic versioning in the following. Github allows us to make images of our project (tags). Often the tagging corresponds with the package release on PyPI. So let&amp;rsquo;s first create a tag:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ git add .
-$ git commit -m &amp;quot;v1.0.0&amp;quot;
-$ git tag !$
-$ git push origin &amp;quot;v1.0.0&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Tags are a great opportunity to see a project in reverse at every stage of its development. Next we will generate a source distribution (.tar.gz) and a wheel distribution (.whl).&lt;/p&gt;
+&lt;p&gt;As stated in previous posts our tiny HTTP client can now be downloaded from Github and installed via pip.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip install https://github.com/NiklasTiede/tinyHTTPie/archive/5-Distributing-by-Setup-File.zip
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;But Python packages are usually installed from the Python Packaging Index (PyPI) with a simple name you can remember like&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip install tihttp
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;But how do we release our project so other can download it conveniently from the Python packaging index? We make sure that our main line is in releasable state and then we&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Tag our project and stick thereby to a versioning scheme&lt;/li&gt;
+&lt;li&gt;Release it on Github&lt;/li&gt;
+&lt;li&gt;Release it on PyPI&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;contents-1&#34;&gt;Contents&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#git-tags-and-release-at-github&#34;&gt;Git Tags and Release at Github&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#automated-release-with-github-actions&#34;&gt;Automated Release with Github Actions&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;git-tags-and-release-at-github&#34;&gt;Git Tags and Release at Github&lt;/h1&gt;
+&lt;p&gt;Depending on the kind/size of a project developers use Git branching workflows when working as a team but for smaller projects it&amp;rsquo;s sufficient to work on the main line and create only branches when introducing features that might affect the stability of the project. This way we keep the main line always in a releasable state.&lt;/p&gt;
+&lt;p&gt;Then we can then make a new release as we gathered enough fixes/features. Developers pick either &lt;a href=&#34;https://semver.org/&#34;&gt;semantic versioning&lt;/a&gt; or &lt;a href=&#34;(https://calver.org/)&#34;&gt;calendar versioning&lt;/a&gt; as versioning scheme. We use the former and call our first release &lt;code&gt;v0.1.0&lt;/code&gt;. We point to the commit we want to release by tagging it.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+&lt;img alt=&#34;git tagging scheme&#34; src=&#34;https://the-coding-lab.com/img/gittag_scheme3.png&#34; width=&#34;500&#34;&gt;
+&lt;/p&gt;
+&lt;p&gt;We can use lightweight or annotated tags which contain extra metadata. I like to use lightweight tags. The &lt;code&gt;git tag&lt;/code&gt; command tags by default the last commit. We can also tag older commits when specifying the commit ID (example: &lt;code&gt;git tag v1.1.0 c52e686&lt;/code&gt;). In this case we will tag the last commit and push it into the remote repo.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ git tag v0.1.0                # git tag &amp;lt;tagname&amp;gt;
+$ git tag                       # returns a list of all tags
+$ git push origin v0.1.0
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now we browse our way to the Github repository and create a release. We go to &lt;code&gt;Releases&lt;/code&gt; 🠲 &lt;code&gt;Create a new release&lt;/code&gt;, and type the tag we wanna release. We can add binaries if we release projects which use compiled languages or write release notes. I like to document the changes of the release in a &lt;code&gt;CHANGELOG.md&lt;/code&gt; file.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+&lt;img alt=&#34;github release GUI&#34; src=&#34;https://the-coding-lab.com/img/release_gui.png&#34; width=&#34;800&#34;&gt;
+&lt;/p&gt;
+&lt;p&gt;At last, we publish the release. In the next section we will package our project and publish it at the Python Packaging Index (PyPI).&lt;/p&gt;
+&lt;h1 id=&#34;publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/h1&gt;
+&lt;p&gt;To publish a python project at PyPI we have to package it by generating a source distribution (.tar.gz) and a wheel distribution (.whl).&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ pip install wheel
 
 $ python setup.py sdist bdist_wheel
@@ -538,7 +565,54 @@ $ twine upload --repository testpypi dist/*
 &lt;pre&gt;&lt;code&gt;$ twine upload --repository pypi dist/*
 
 $ pip install tihttp
-&lt;/code&gt;&lt;/pre&gt;&lt;div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Keep in mind that you can upload a specific semantic version just once to PyPI, thats why it&amp;rsquo;s important to test uploading the version when just starting out the deployment process for a new project. Otherwise you have to bump the release version up and repeat the process (in that case the world will not end either).&lt;/p&gt;
+&lt;h1 id=&#34;automated-release-with-github-actions&#34;&gt;Automated Release with Github Actions&lt;/h1&gt;
+&lt;p&gt;Both processes (Github release and publishing at PyPI) can be automated using Github actions. The automation here is not that powerful for a project of this size but still I REALLY like Github actions and wanna let keep you in mind how nice it is! 😀&lt;/p&gt;
+&lt;p&gt;The instructions for the workflows are stored as yaml-file within the &lt;code&gt;.github/workflows/&lt;/code&gt; directory of the project. Tags can be automatically released using the github action &lt;a href=&#34;https://github.com/marketplace/actions/gh-release&#34;&gt;gh-release&lt;/a&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;GH Release&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;on&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;push&lt;/span&gt;:
+    &lt;span style=&#34;color:#f92672&#34;&gt;tags&lt;/span&gt;:
+      - &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;v*.*.*&amp;#39;&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;jobs&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;github-release&lt;/span&gt;:
+    &lt;span style=&#34;color:#f92672&#34;&gt;runs-on&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;ubuntu-latest&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;steps&lt;/span&gt;:
+    - &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;actions/checkout@master&lt;/span&gt;
+    - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Release&lt;/span&gt;
+      &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;softprops/action-gh-release@v1&lt;/span&gt;
+      &lt;span style=&#34;color:#f92672&#34;&gt;env&lt;/span&gt;:
+        &lt;span style=&#34;color:#f92672&#34;&gt;GITHUB_TOKEN&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ secrets.GITHUB_TOKEN }}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;As you can see each major, minor or patch tag increment will create a new release.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;At last I wanna show you a more powerful workflow for uploading releases automatically to PyPI.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Upload Python Package&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;on&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;release&lt;/span&gt;:
+    &lt;span style=&#34;color:#f92672&#34;&gt;types&lt;/span&gt;: [&lt;span style=&#34;color:#ae81ff&#34;&gt;created]&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;jobs&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;pypi-release&lt;/span&gt;:
+    &lt;span style=&#34;color:#f92672&#34;&gt;runs-on&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;ubuntu-latest&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;steps&lt;/span&gt;:
+    - &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;actions/checkout@v2&lt;/span&gt;
+    - &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;actions/setup-python@v2&lt;/span&gt;
+    - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Install dependencies&lt;/span&gt;
+      &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        python -m pip install --upgrade pip
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        pip install setuptools wheel twine&lt;/span&gt;        
+    - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Build and publish&lt;/span&gt;
+      &lt;span style=&#34;color:#f92672&#34;&gt;env&lt;/span&gt;:
+        &lt;span style=&#34;color:#f92672&#34;&gt;TWINE_USERNAME&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ secrets.PYPI_USERNAME }}&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;TWINE_PASSWORD&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ secrets.PYPI_PASSWORD }}&lt;/span&gt;
+      &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        python setup.py sdist bdist_wheel
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        twine upload dist/*&lt;/span&gt;        
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Ok, I hope this post had some value to you. I wish you all a great day! 🤠&lt;/p&gt;
+&lt;div&gt;
     &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/7-documentation&#34;&gt;&lt;&lt; section 7&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;section 9 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
 &lt;/div&gt;
 </description> 

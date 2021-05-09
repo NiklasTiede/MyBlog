@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>The Coding Lab  | Publishing at PyPI - 8/9</title>
+    <title>The Coding Lab  | Releasing a Python App on Github/PyPI and automate things - 8/9</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
@@ -54,7 +54,7 @@ if (!doNotTrack) {
                 <br>
                 <h1 class="title is-size-1">
                     
-                        Publishing at PyPI - 8/9
+                        Releasing a Python App on Github/PyPI and automate things - 8/9
                     
                 </h1>
                 
@@ -88,12 +88,39 @@ if (!doNotTrack) {
 <li><a href="/2021/8-publishing-at-pypi"><strong>Publishing at PyPI</strong></a></li>
 <li><a href="/2021/9-publishing-at-anaconda">Publishing at Anaconda</a></li>
 </ol>
-<p>Ok, now people can download our project from github and use it. But in our daily work we use the Python Packaging Index to install things. So how do we release our package on PyPI? First we have to decide which versioning scheme we will use. Semantic versioning (<a href="https://semver.org/">semver.org</a>) and calendar versioning (<a href="https://calver.org/">calver.org</a>) are commonly used. We decide to use semantic versioning in the following. Github allows us to make images of our project (tags). Often the tagging corresponds with the package release on PyPI. So let&rsquo;s first create a tag:</p>
-<pre><code>$ git add .
-$ git commit -m &quot;v1.0.0&quot;
-$ git tag !$
-$ git push origin &quot;v1.0.0&quot;
-</code></pre><p>Tags are a great opportunity to see a project in reverse at every stage of its development. Next we will generate a source distribution (.tar.gz) and a wheel distribution (.whl).</p>
+<p>As stated in previous posts our tiny HTTP client can now be downloaded from Github and installed via pip.</p>
+<pre><code>$ pip install https://github.com/NiklasTiede/tinyHTTPie/archive/5-Distributing-by-Setup-File.zip
+</code></pre><p>But Python packages are usually installed from the Python Packaging Index (PyPI) with a simple name you can remember like</p>
+<pre><code>$ pip install tihttp
+</code></pre><p>But how do we release our project so other can download it conveniently from the Python packaging index? We make sure that our main line is in releasable state and then we</p>
+<ul>
+<li>Tag our project and stick thereby to a versioning scheme</li>
+<li>Release it on Github</li>
+<li>Release it on PyPI</li>
+</ul>
+<h1 id="contents-1">Contents</h1>
+<ul>
+<li><a href="#git-tags-and-release-at-github">Git Tags and Release at Github</a></li>
+<li><a href="#publishing-at-pypi">Publishing at PyPI</a></li>
+<li><a href="#automated-release-with-github-actions">Automated Release with Github Actions</a></li>
+</ul>
+<h1 id="git-tags-and-release-at-github">Git Tags and Release at Github</h1>
+<p>Depending on the kind/size of a project developers use Git branching workflows when working as a team but for smaller projects it&rsquo;s sufficient to work on the main line and create only branches when introducing features that might affect the stability of the project. This way we keep the main line always in a releasable state.</p>
+<p>Then we can then make a new release as we gathered enough fixes/features. Developers pick either <a href="https://semver.org/">semantic versioning</a> or <a href="(https://calver.org/)">calendar versioning</a> as versioning scheme. We use the former and call our first release <code>v0.1.0</code>. We point to the commit we want to release by tagging it.</p>
+<p align="center">
+<img alt="git tagging scheme" src="/img/gittag_scheme3.png" width="500">
+</p>
+<p>We can use lightweight or annotated tags which contain extra metadata. I like to use lightweight tags. The <code>git tag</code> command tags by default the last commit. We can also tag older commits when specifying the commit ID (example: <code>git tag v1.1.0 c52e686</code>). In this case we will tag the last commit and push it into the remote repo.</p>
+<pre><code>$ git tag v0.1.0                # git tag &lt;tagname&gt;
+$ git tag                       # returns a list of all tags
+$ git push origin v0.1.0
+</code></pre><p>Now we browse our way to the Github repository and create a release. We go to <code>Releases</code> 🠲 <code>Create a new release</code>, and type the tag we wanna release. We can add binaries if we release projects which use compiled languages or write release notes. I like to document the changes of the release in a <code>CHANGELOG.md</code> file.</p>
+<p align="center">
+<img alt="github release GUI" src="/img/release_gui.png" width="800">
+</p>
+<p>At last, we publish the release. In the next section we will package our project and publish it at the Python Packaging Index (PyPI).</p>
+<h1 id="publishing-at-pypi">Publishing at PyPI</h1>
+<p>To publish a python project at PyPI we have to package it by generating a source distribution (.tar.gz) and a wheel distribution (.whl).</p>
 <pre><code>$ pip install wheel
 
 $ python setup.py sdist bdist_wheel
@@ -110,7 +137,54 @@ $ twine upload --repository testpypi dist/*
 <pre><code>$ twine upload --repository pypi dist/*
 
 $ pip install tihttp
-</code></pre><div>
+</code></pre><p>Keep in mind that you can upload a specific semantic version just once to PyPI, thats why it&rsquo;s important to test uploading the version when just starting out the deployment process for a new project. Otherwise you have to bump the release version up and repeat the process (in that case the world will not end either).</p>
+<h1 id="automated-release-with-github-actions">Automated Release with Github Actions</h1>
+<p>Both processes (Github release and publishing at PyPI) can be automated using Github actions. The automation here is not that powerful for a project of this size but still I REALLY like Github actions and wanna let keep you in mind how nice it is! 😀</p>
+<p>The instructions for the workflows are stored as yaml-file within the <code>.github/workflows/</code> directory of the project. Tags can be automatically released using the github action <a href="https://github.com/marketplace/actions/gh-release">gh-release</a>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">name</span>: <span style="color:#ae81ff">GH Release</span>
+
+<span style="color:#f92672">on</span>:
+  <span style="color:#f92672">push</span>:
+    <span style="color:#f92672">tags</span>:
+      - <span style="color:#e6db74">&#39;v*.*.*&#39;</span>
+
+<span style="color:#f92672">jobs</span>:
+  <span style="color:#f92672">github-release</span>:
+    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+    <span style="color:#f92672">steps</span>:
+    - <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@master</span>
+    - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Release</span>
+      <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">softprops/action-gh-release@v1</span>
+      <span style="color:#f92672">env</span>:
+        <span style="color:#f92672">GITHUB_TOKEN</span>: <span style="color:#ae81ff">${{ secrets.GITHUB_TOKEN }}</span>
+</code></pre></div><p>As you can see each major, minor or patch tag increment will create a new release.</p>
+<hr>
+<p>At last I wanna show you a more powerful workflow for uploading releases automatically to PyPI.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">name</span>: <span style="color:#ae81ff">Upload Python Package</span>
+
+<span style="color:#f92672">on</span>:
+  <span style="color:#f92672">release</span>:
+    <span style="color:#f92672">types</span>: [<span style="color:#ae81ff">created]</span>
+
+<span style="color:#f92672">jobs</span>:
+  <span style="color:#f92672">pypi-release</span>:
+    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+    <span style="color:#f92672">steps</span>:
+    - <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v2</span>
+    - <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/setup-python@v2</span>
+    - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Install dependencies</span>
+      <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span><span style="color:#e6db74">        python -m pip install --upgrade pip
+</span><span style="color:#e6db74">        pip install setuptools wheel twine</span>        
+    - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build and publish</span>
+      <span style="color:#f92672">env</span>:
+        <span style="color:#f92672">TWINE_USERNAME</span>: <span style="color:#ae81ff">${{ secrets.PYPI_USERNAME }}</span>
+        <span style="color:#f92672">TWINE_PASSWORD</span>: <span style="color:#ae81ff">${{ secrets.PYPI_PASSWORD }}</span>
+      <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span><span style="color:#e6db74">        python setup.py sdist bdist_wheel
+</span><span style="color:#e6db74">        twine upload dist/*</span>        
+</code></pre></div><p>Ok, I hope this post had some value to you. I wish you all a great day! 🤠</p>
+<div>
     <p align="center"><a href="/2021/7-documentation"><< section 7</a> | <a href="/2021/9-publishing-at-anaconda">section 9 >></a> </p>
 </div>
 
@@ -153,7 +227,7 @@ $ pip install tihttp
             <h1><a href="https://the-coding-lab.com/2021/9-publishing-at-anaconda/">Publishing at Anaconda - 9/9</a></h1>
             <time class="has-text-grey-light is-size-7">25 February 2021</time>
         
-            <h1><a href="https://the-coding-lab.com/2021/8-publishing-at-pypi/">Publishing at PyPI - 8/9</a></h1>
+            <h1><a href="https://the-coding-lab.com/2021/8-publishing-at-pypi/">Releasing a Python App on Github/PyPI and automate things - 8/9</a></h1>
             <time class="has-text-grey-light is-size-7">23 February 2021</time>
         
             <h1><a href="https://the-coding-lab.com/2021/7-documentation/">Documentation - 7/9</a></h1>
