@@ -497,7 +497,7 @@ echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Uploading conda packages
     </item>
     
     <item>
-      <title>Releasing a Python App on Github/PyPI and automate things - 8/9</title>
+      <title>Releasing a Python App at Github/PyPI and Automate it - 8/9</title>
       <link>https://the-coding-lab.com/2021/8-publishing-at-pypi/</link>
       <pubDate>Tue, 23 Feb 2021 00:00:00 +0000</pubDate>
       
@@ -525,12 +525,6 @@ echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Uploading conda packages
 &lt;li&gt;Tag our project and stick thereby to a versioning scheme&lt;/li&gt;
 &lt;li&gt;Release it on Github&lt;/li&gt;
 &lt;li&gt;Release it on PyPI&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;contents-1&#34;&gt;Contents&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#git-tags-and-release-at-github&#34;&gt;Git Tags and Release at Github&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#publishing-at-pypi&#34;&gt;Publishing at PyPI&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#automated-release-with-github-actions&#34;&gt;Automated Release with Github Actions&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;git-tags-and-release-at-github&#34;&gt;Git Tags and Release at Github&lt;/h1&gt;
 &lt;p&gt;Depending on the kind/size of a project developers use Git branching workflows when working as a team but for smaller projects it&amp;rsquo;s sufficient to work on the main line and create only branches when introducing features that might affect the stability of the project. This way we keep the main line always in a releasable state.&lt;/p&gt;

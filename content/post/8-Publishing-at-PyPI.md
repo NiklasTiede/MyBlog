@@ -1,5 +1,5 @@
 +++
-title = "Releasing a Python App on Github/PyPI and automate things - 8/9"
+title = "Releasing a Python App at Github/PyPI and Automate it - 8/9"
 description = "how to release a Python app at Github, the python packaging index and automate this with Github Actions"
 tags = [
     "python",
@@ -49,12 +49,6 @@ But how do we release our project so other can download it conveniently from the
 - Tag our project and stick thereby to a versioning scheme
 - Release it on Github
 - Release it on PyPI
-
-
-# Contents
-- [Git Tags and Release at Github](#git-tags-and-release-at-github)
-- [Publishing at PyPI](#publishing-at-pypi)
-- [Automated Release with Github Actions](#automated-release-with-github-actions)
 
 
 # Git Tags and Release at Github
