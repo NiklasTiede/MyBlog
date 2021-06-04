@@ -1,5 +1,5 @@
 +++
-title = "Publishing at Anaconda and Automation the Process - 9/9"
+title = "Publishing at Anaconda and Automating the Process - 9/9"
 description = "Publishing a Python at at Anaconda and automate the packaging process"
 tags = [
     "scripting",
