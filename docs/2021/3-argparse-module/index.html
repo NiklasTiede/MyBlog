@@ -22,8 +22,7 @@ if (!doNotTrack) {
 	
 	ga('send', 'pageview');
 }
-</script>
- 
+</script> 
     
 <script type="application/javascript">
 var doNotTrack = false;
@@ -89,188 +88,188 @@ if (!doNotTrack) {
 <li><a href="/2021/9-publishing-at-anaconda">Publishing at Anaconda</a></li>
 </ol>
 <p>One of the big benefits of using argparse is that it generates a usage help (a <code>--help</code> flag) automatically. It&rsquo;s common practice to separate the events which are triggered by flags from the creation of the argumentparser. Here&rsquo;s a argparse template I often use.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> argparse
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>(argv<span style="color:#f92672">=</span>None):
-
-    parser <span style="color:#f92672">=</span> build_parser()
-    args <span style="color:#f92672">=</span> parser<span style="color:#f92672">.</span>parse_args(argv)
-
-    <span style="color:#66d9ef">if</span> args<span style="color:#f92672">.</span>arg_name:
-        <span style="color:#66d9ef">pass</span>
-
-    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">build_parser</span>():
-    parser <span style="color:#f92672">=</span> argparse<span style="color:#f92672">.</span>ArgumentParser()
-
-    <span style="color:#75715e"># positional/optional arguments:</span>
-    parser<span style="color:#f92672">.</span>add_argument()
-
-    <span style="color:#66d9ef">return</span> parser
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run_main</span>():
-    <span style="color:#66d9ef">try</span>:
-        sys<span style="color:#f92672">.</span>exit(main())
-    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
-        sys<span style="color:#f92672">.</span>stderr<span style="color:#f92672">.</span>write(e)
-        sys<span style="color:#f92672">.</span>exit(<span style="color:#ae81ff">1</span>)
-
-<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
-    run_main()
-</code></pre></div><p>If you&rsquo;re wondering where the arguments from outside are passed into the script: the default value of the <code>argv</code> identifier is None. Argparse knows then internally that it has to use the arguments from outside.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> argparse
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>(argv<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    parser <span style="color:#f92672">=</span> build_parser()
+</span></span><span style="display:flex;"><span>    args <span style="color:#f92672">=</span> parser<span style="color:#f92672">.</span>parse_args(argv)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> args<span style="color:#f92672">.</span>arg_name:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">build_parser</span>():
+</span></span><span style="display:flex;"><span>    parser <span style="color:#f92672">=</span> argparse<span style="color:#f92672">.</span>ArgumentParser()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># positional/optional arguments:</span>
+</span></span><span style="display:flex;"><span>    parser<span style="color:#f92672">.</span>add_argument()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> parser
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run_main</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        sys<span style="color:#f92672">.</span>exit(main())
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>        sys<span style="color:#f92672">.</span>stderr<span style="color:#f92672">.</span>write(e)
+</span></span><span style="display:flex;"><span>        sys<span style="color:#f92672">.</span>exit(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
+</span></span><span style="display:flex;"><span>    run_main()
+</span></span></code></pre></div><p>If you&rsquo;re wondering where the arguments from outside are passed into the script: the default value of the <code>argv</code> identifier is None. Argparse knows then internally that it has to use the arguments from outside.</p>
 <p>When converting our script into an argparse tool we can throw all the logic away which informs the user about incorrect usage. All this is now done by <code>argparse</code>! We wrap argparse around our script:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/python</span>
-
-<span style="color:#f92672">import</span> argparse
-<span style="color:#f92672">import</span> requests
-<span style="color:#f92672">import</span> collections
-<span style="color:#f92672">import</span> sys
-
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>(argv<span style="color:#f92672">=</span>None):
-    parser <span style="color:#f92672">=</span> build_parser()
-    args <span style="color:#f92672">=</span> parser<span style="color:#f92672">.</span>parse_args(argv)
-
-    url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>
-
-    <span style="color:#66d9ef">if</span> args<span style="color:#f92672">.</span>URL:
-        url <span style="color:#f92672">=</span> args<span style="color:#f92672">.</span>URL
-
-    <span style="color:#66d9ef">if</span> (<span style="color:#e6db74">&#39;http://&#39;</span> <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;https://&#39;</span> <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;http://www.&#39;</span> <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;https://www.&#39;</span>) <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> url:
-        <span style="color:#66d9ef">if</span> url[:<span style="color:#ae81ff">4</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;www.&#39;</span>:
-            url <span style="color:#f92672">=</span> url[<span style="color:#ae81ff">4</span>:]
-        url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://&#39;</span> <span style="color:#f92672">+</span> url
-
-    <span style="color:#66d9ef">try</span>:
-        resp <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url)
-    <span style="color:#66d9ef">except</span> requests<span style="color:#f92672">.</span>exceptions<span style="color:#f92672">.</span>RequestException <span style="color:#66d9ef">as</span> e:
-        <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Response Failed.&#39;</span>)
-        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
-
-    header <span style="color:#f92672">=</span> dict(collections<span style="color:#f92672">.</span>OrderedDict(resp<span style="color:#f92672">.</span>headers))
-    body <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
-
-    <span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
-        <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#34;{section[0]}: {section[1]}&#34;</span>)
-    <span style="color:#66d9ef">print</span>()
-    <span style="color:#66d9ef">print</span>(body)
-    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
-
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">build_parser</span>():
-    parser <span style="color:#f92672">=</span> argparse<span style="color:#f92672">.</span>ArgumentParser(
-        prog<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;tihttp&#39;</span>,
-        description<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;A tiny HTTP client for sending GET requests.&#39;</span>
-    )
-
-    parser<span style="color:#f92672">.</span>add_argument(<span style="color:#e6db74">&#39;URL&#39;</span>,action<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;store&#39;</span>,)
-
-    <span style="color:#66d9ef">return</span> parser
-
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run_main</span>():
-    <span style="color:#66d9ef">try</span>:
-        sys<span style="color:#f92672">.</span>exit(main())
-    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
-        sys<span style="color:#f92672">.</span>stderr<span style="color:#f92672">.</span>write(e)
-        sys<span style="color:#f92672">.</span>exit(<span style="color:#ae81ff">1</span>)
-
-
-<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
-    run_main()
-</code></pre></div><p>Adding the <code>-H</code>, <code>-B</code> flags and the boolean logic returns a more sophisticated version of our script:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/python</span>
-
-<span style="color:#f92672">import</span> argparse
-<span style="color:#f92672">import</span> requests
-<span style="color:#f92672">import</span> collections
-<span style="color:#f92672">import</span> sys
-
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>(argv<span style="color:#f92672">=</span>None):
-    parser <span style="color:#f92672">=</span> build_parser()
-    args <span style="color:#f92672">=</span> parser<span style="color:#f92672">.</span>parse_args(argv)
-
-    url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>
-
-    <span style="color:#66d9ef">if</span> args<span style="color:#f92672">.</span>URL:
-        url <span style="color:#f92672">=</span> args<span style="color:#f92672">.</span>URL
-
-    <span style="color:#66d9ef">if</span> (<span style="color:#e6db74">&#39;http://&#39;</span> <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;https://&#39;</span> <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;http://www.&#39;</span> <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;https://www.&#39;</span>) <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> url:
-        <span style="color:#66d9ef">if</span> url[:<span style="color:#ae81ff">4</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;www.&#39;</span>:
-            url <span style="color:#f92672">=</span> url[<span style="color:#ae81ff">4</span>:]
-        url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://&#39;</span> <span style="color:#f92672">+</span> url
-
-    <span style="color:#66d9ef">try</span>:
-        resp <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url)
-    <span style="color:#66d9ef">except</span> requests<span style="color:#f92672">.</span>exceptions<span style="color:#f92672">.</span>RequestException <span style="color:#66d9ef">as</span> e:
-        <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Response Failed.&#39;</span>)
-        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
-
-    header <span style="color:#f92672">=</span> dict(collections<span style="color:#f92672">.</span>OrderedDict(resp<span style="color:#f92672">.</span>headers))
-    body <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
-
-    <span style="color:#66d9ef">if</span> args<span style="color:#f92672">.</span>body <span style="color:#f92672">and</span> <span style="color:#f92672">not</span> args<span style="color:#f92672">.</span>header:
-        <span style="color:#66d9ef">print</span>(body)
-        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
-
-    <span style="color:#66d9ef">if</span> args<span style="color:#f92672">.</span>header <span style="color:#f92672">and</span> <span style="color:#f92672">not</span> args<span style="color:#f92672">.</span>body:
-        <span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
-            <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#34;{section[0]}: {section[1]}&#34;</span>)
-        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
-
-    <span style="color:#66d9ef">if</span> (args<span style="color:#f92672">.</span>header <span style="color:#f92672">and</span> args<span style="color:#f92672">.</span>body) <span style="color:#f92672">or</span> (<span style="color:#f92672">not</span> args<span style="color:#f92672">.</span>header <span style="color:#f92672">and</span> <span style="color:#f92672">not</span> args<span style="color:#f92672">.</span>body):
-        <span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
-            <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#34;{section[0]}: {section[1]}&#34;</span>)
-        <span style="color:#66d9ef">print</span>()
-        <span style="color:#66d9ef">print</span>(body)
-        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
-
-    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
-
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">build_parser</span>():
-    parser <span style="color:#f92672">=</span> argparse<span style="color:#f92672">.</span>ArgumentParser(
-        prog<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;tihttp&#39;</span>,
-        description<span style="color:#f92672">=</span>f<span style="color:#e6db74">&#39;A tiny HTTP client for sending GET requests.&#39;</span>
-    )
-
-    <span style="color:#75715e"># positional arguments:</span>
-    parser<span style="color:#f92672">.</span>add_argument(
-    <span style="color:#e6db74">&#39;URL&#39;</span>,
-    action<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;store&#39;</span>,
-    )
-
-    <span style="color:#75715e"># optional arguments:</span>
-    parser<span style="color:#f92672">.</span>add_argument(
-    <span style="color:#e6db74">&#39;-H&#39;</span>,
-    <span style="color:#e6db74">&#39;--header-only&#39;</span>,
-    dest<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;header&#39;</span>,
-    action<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;store_true&#39;</span>,
-    help<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Prints only the header of the Response.&#39;</span>)
-
-    parser<span style="color:#f92672">.</span>add_argument(
-    <span style="color:#e6db74">&#39;-B&#39;</span>,
-    <span style="color:#e6db74">&#39;--body-only&#39;</span>,
-    dest<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;body&#39;</span>,
-    action<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;store_true&#39;</span>,
-    help<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Prints only the body of the Response.&#39;</span>)
-    <span style="color:#66d9ef">return</span> parser
-
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run_main</span>():
-    <span style="color:#66d9ef">try</span>:
-        sys<span style="color:#f92672">.</span>exit(main())
-    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
-        sys<span style="color:#f92672">.</span>stderr<span style="color:#f92672">.</span>write(e)
-        sys<span style="color:#f92672">.</span>exit(<span style="color:#ae81ff">1</span>)
-
-
-<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
-    run_main()
-</code></pre></div><p>Adding the help flag returns now a nicely formatted usage help!</p>
-<pre><code>$ tihttp --help
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#!/usr/bin/python</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> argparse
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> collections
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> sys
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>(argv<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>):
+</span></span><span style="display:flex;"><span>    parser <span style="color:#f92672">=</span> build_parser()
+</span></span><span style="display:flex;"><span>    args <span style="color:#f92672">=</span> parser<span style="color:#f92672">.</span>parse_args(argv)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> args<span style="color:#f92672">.</span>URL:
+</span></span><span style="display:flex;"><span>        url <span style="color:#f92672">=</span> args<span style="color:#f92672">.</span>URL
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#e6db74">&#39;http://&#39;</span> <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;https://&#39;</span> <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;http://www.&#39;</span> <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;https://www.&#39;</span>) <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> url:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> url[:<span style="color:#ae81ff">4</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;www.&#39;</span>:
+</span></span><span style="display:flex;"><span>            url <span style="color:#f92672">=</span> url[<span style="color:#ae81ff">4</span>:]
+</span></span><span style="display:flex;"><span>        url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://&#39;</span> <span style="color:#f92672">+</span> url
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        resp <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> requests<span style="color:#f92672">.</span>exceptions<span style="color:#f92672">.</span>RequestException <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Response Failed.&#39;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    header <span style="color:#f92672">=</span> dict(collections<span style="color:#f92672">.</span>OrderedDict(resp<span style="color:#f92672">.</span>headers))
+</span></span><span style="display:flex;"><span>    body <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">0</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">1</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    print()
+</span></span><span style="display:flex;"><span>    print(body)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">build_parser</span>():
+</span></span><span style="display:flex;"><span>    parser <span style="color:#f92672">=</span> argparse<span style="color:#f92672">.</span>ArgumentParser(
+</span></span><span style="display:flex;"><span>        prog<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;tihttp&#39;</span>,
+</span></span><span style="display:flex;"><span>        description<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;A tiny HTTP client for sending GET requests.&#39;</span>
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    parser<span style="color:#f92672">.</span>add_argument(<span style="color:#e6db74">&#39;URL&#39;</span>,action<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;store&#39;</span>,)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> parser
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run_main</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        sys<span style="color:#f92672">.</span>exit(main())
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>        sys<span style="color:#f92672">.</span>stderr<span style="color:#f92672">.</span>write(e)
+</span></span><span style="display:flex;"><span>        sys<span style="color:#f92672">.</span>exit(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
+</span></span><span style="display:flex;"><span>    run_main()
+</span></span></code></pre></div><p>Adding the <code>-H</code>, <code>-B</code> flags and the boolean logic returns a more sophisticated version of our script:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#!/usr/bin/python</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> argparse
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> collections
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> sys
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>(argv<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>):
+</span></span><span style="display:flex;"><span>    parser <span style="color:#f92672">=</span> build_parser()
+</span></span><span style="display:flex;"><span>    args <span style="color:#f92672">=</span> parser<span style="color:#f92672">.</span>parse_args(argv)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> args<span style="color:#f92672">.</span>URL:
+</span></span><span style="display:flex;"><span>        url <span style="color:#f92672">=</span> args<span style="color:#f92672">.</span>URL
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#e6db74">&#39;http://&#39;</span> <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;https://&#39;</span> <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;http://www.&#39;</span> <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;https://www.&#39;</span>) <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> url:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> url[:<span style="color:#ae81ff">4</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;www.&#39;</span>:
+</span></span><span style="display:flex;"><span>            url <span style="color:#f92672">=</span> url[<span style="color:#ae81ff">4</span>:]
+</span></span><span style="display:flex;"><span>        url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://&#39;</span> <span style="color:#f92672">+</span> url
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        resp <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> requests<span style="color:#f92672">.</span>exceptions<span style="color:#f92672">.</span>RequestException <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Response Failed.&#39;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    header <span style="color:#f92672">=</span> dict(collections<span style="color:#f92672">.</span>OrderedDict(resp<span style="color:#f92672">.</span>headers))
+</span></span><span style="display:flex;"><span>    body <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> args<span style="color:#f92672">.</span>body <span style="color:#f92672">and</span> <span style="color:#f92672">not</span> args<span style="color:#f92672">.</span>header:
+</span></span><span style="display:flex;"><span>        print(body)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> args<span style="color:#f92672">.</span>header <span style="color:#f92672">and</span> <span style="color:#f92672">not</span> args<span style="color:#f92672">.</span>body:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">0</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">1</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (args<span style="color:#f92672">.</span>header <span style="color:#f92672">and</span> args<span style="color:#f92672">.</span>body) <span style="color:#f92672">or</span> (<span style="color:#f92672">not</span> args<span style="color:#f92672">.</span>header <span style="color:#f92672">and</span> <span style="color:#f92672">not</span> args<span style="color:#f92672">.</span>body):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">0</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">1</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>        print()
+</span></span><span style="display:flex;"><span>        print(body)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">build_parser</span>():
+</span></span><span style="display:flex;"><span>    parser <span style="color:#f92672">=</span> argparse<span style="color:#f92672">.</span>ArgumentParser(
+</span></span><span style="display:flex;"><span>        prog<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;tihttp&#39;</span>,
+</span></span><span style="display:flex;"><span>        description<span style="color:#f92672">=</span><span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;A tiny HTTP client for sending GET requests.&#39;</span>
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># positional arguments:</span>
+</span></span><span style="display:flex;"><span>    parser<span style="color:#f92672">.</span>add_argument(
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;URL&#39;</span>,
+</span></span><span style="display:flex;"><span>    action<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;store&#39;</span>,
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># optional arguments:</span>
+</span></span><span style="display:flex;"><span>    parser<span style="color:#f92672">.</span>add_argument(
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;-H&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;--header-only&#39;</span>,
+</span></span><span style="display:flex;"><span>    dest<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;header&#39;</span>,
+</span></span><span style="display:flex;"><span>    action<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;store_true&#39;</span>,
+</span></span><span style="display:flex;"><span>    help<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Prints only the header of the Response.&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    parser<span style="color:#f92672">.</span>add_argument(
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;-B&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;--body-only&#39;</span>,
+</span></span><span style="display:flex;"><span>    dest<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;body&#39;</span>,
+</span></span><span style="display:flex;"><span>    action<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;store_true&#39;</span>,
+</span></span><span style="display:flex;"><span>    help<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Prints only the body of the Response.&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> parser
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run_main</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        sys<span style="color:#f92672">.</span>exit(main())
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>        sys<span style="color:#f92672">.</span>stderr<span style="color:#f92672">.</span>write(e)
+</span></span><span style="display:flex;"><span>        sys<span style="color:#f92672">.</span>exit(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
+</span></span><span style="display:flex;"><span>    run_main()
+</span></span></code></pre></div><p>Adding the help flag returns now a nicely formatted usage help!</p>
+<pre tabindex="0"><code>$ tihttp --help
 
 usage: tihttp [-h] [-H] [-B] URL
 
@@ -300,9 +299,17 @@ optional arguments:
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/cli">cli</a></span>
         
+            <span class="tag"><a href="https://the-coding-lab.com/tags/devops">devops</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/imdbclone">imdbclone</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/java">java</a></span>
+        
             <span class="tag"><a href="https://the-coding-lab.com/tags/packaging">packaging</a></span>
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/python">python</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/react">react</a></span>
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/scripting">scripting</a></span>
         
@@ -317,6 +324,9 @@ optional arguments:
     <div class="card-content">
         <h1 class="title is-5">Recent posts</h1>
         
+            <h1><a href="https://the-coding-lab.com/2023/deploy-full-stack-app-on-home-server/">How to Cheaply Host Your Full-Stack Side-Project: Serving it From Home</a></h1>
+            <time class="has-text-grey-light is-size-7">25 May 2023</time>
+        
             <h1><a href="https://the-coding-lab.com/2021/conda-and-pip/">Managing Environments with Conda and pip</a></h1>
             <time class="has-text-grey-light is-size-7">25 April 2021</time>
         
@@ -328,9 +338,6 @@ optional arguments:
         
             <h1><a href="https://the-coding-lab.com/2021/8-publishing-at-pypi/">Releasing a Python App at Github/PyPI and Automate it - 8/9</a></h1>
             <time class="has-text-grey-light is-size-7">23 February 2021</time>
-        
-            <h1><a href="https://the-coding-lab.com/2021/7-documentation/">Documentation - 7/9</a></h1>
-            <time class="has-text-grey-light is-size-7">19 February 2021</time>
         
     </div>
 </div>
@@ -375,6 +382,8 @@ optional arguments:
     <div class="card-content">
         <h1 class="title is-5">Archives</h1>
         
+            <a href="https://the-coding-lab.com/archives/2023">2023</a> (1)<br>
+        
             <a href="https://the-coding-lab.com/archives/2021">2021</a> (11)<br>
         
     </div>
@@ -397,7 +406,7 @@ optional arguments:
             <span class="icon is-large"><a href="https://www.linkedin.com/in/niklas-tiede-3b57451b6/" class="mysocial" rel="me"><i class="fab fa-linkedin fa-3x"></i></a></span>&nbsp;&nbsp;
             <span class="icon is-large"><a href="https://dev.to/niklastiede" class="mysocial" rel="me"><i class="fab fa-dev fa-3x"></i></a></span>&nbsp;&nbsp;
             <br><br>
-            Copyright &copy; The Coding Lab 2021 - Theme by <a href="https://jeffprod.com" class="mysocial">JeffProd.com</a>
+            Copyright &copy; The Coding Lab 2023 - Theme by <a href="https://jeffprod.com" class="mysocial">JeffProd.com</a>
             - <a class="mysocial" href="https://the-coding-lab.com/about">About</a>
         </p>
     </div>

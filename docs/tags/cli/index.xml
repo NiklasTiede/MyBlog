@@ -32,188 +32,188 @@
 &lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;One of the big benefits of using argparse is that it generates a usage help (a &lt;code&gt;--help&lt;/code&gt; flag) automatically. It&amp;rsquo;s common practice to separate the events which are triggered by flags from the creation of the argumentparser. Here&amp;rsquo;s a argparse template I often use.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; argparse
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(argv&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;None):
-
-    parser &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; build_parser()
-    args &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;parse_args(argv)
-
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;arg_name:
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;pass&lt;/span&gt;
-
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;build_parser&lt;/span&gt;():
-    parser &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; argparse&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ArgumentParser()
-
-    &lt;span style=&#34;color:#75715e&#34;&gt;# positional/optional arguments:&lt;/span&gt;
-    parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add_argument()
-
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; parser
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;run_main&lt;/span&gt;():
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
-        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(main())
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Exception&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
-        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stderr&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;write(e)
-        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; __name__ &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;:
-    run_main()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If you&amp;rsquo;re wondering where the arguments from outside are passed into the script: the default value of the &lt;code&gt;argv&lt;/code&gt; identifier is None. Argparse knows then internally that it has to use the arguments from outside.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; argparse
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(argv&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;None&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    parser &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; build_parser()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    args &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;parse_args(argv)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;arg_name:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;pass&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;build_parser&lt;/span&gt;():
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    parser &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; argparse&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ArgumentParser()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# positional/optional arguments:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add_argument()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; parser
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;run_main&lt;/span&gt;():
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(main())
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Exception&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stderr&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;write(e)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; __name__ &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    run_main()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If you&amp;rsquo;re wondering where the arguments from outside are passed into the script: the default value of the &lt;code&gt;argv&lt;/code&gt; identifier is None. Argparse knows then internally that it has to use the arguments from outside.&lt;/p&gt;
 &lt;p&gt;When converting our script into an argparse tool we can throw all the logic away which informs the user about incorrect usage. All this is now done by &lt;code&gt;argparse&lt;/code&gt;! We wrap argparse around our script:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
-
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; argparse
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sys
-
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(argv&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;None):
-    parser &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; build_parser()
-    args &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;parse_args(argv)
-
-    url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
-
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;URL:
-        url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;URL
-
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://www.&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; url:
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; url[:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;www.&amp;#39;&lt;/span&gt;:
-            url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; url[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:]
-        url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; url
-
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
-        resp &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(url)
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exceptions&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;RequestException &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Response Failed.&amp;#39;&lt;/span&gt;)
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
-
-    header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
-    body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
-
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;()
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(body)
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
-
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;build_parser&lt;/span&gt;():
-    parser &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; argparse&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ArgumentParser(
-        prog&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;tihttp&amp;#39;&lt;/span&gt;,
-        description&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;A tiny HTTP client for sending GET requests.&amp;#39;&lt;/span&gt;
-    )
-
-    parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add_argument(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;URL&amp;#39;&lt;/span&gt;,action&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;store&amp;#39;&lt;/span&gt;,)
-
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; parser
-
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;run_main&lt;/span&gt;():
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
-        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(main())
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Exception&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
-        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stderr&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;write(e)
-        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
-
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; __name__ &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;:
-    run_main()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Adding the &lt;code&gt;-H&lt;/code&gt;, &lt;code&gt;-B&lt;/code&gt; flags and the boolean logic returns a more sophisticated version of our script:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
-
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; argparse
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sys
-
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(argv&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;None):
-    parser &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; build_parser()
-    args &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;parse_args(argv)
-
-    url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
-
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;URL:
-        url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;URL
-
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://www.&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; url:
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; url[:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;www.&amp;#39;&lt;/span&gt;:
-            url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; url[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:]
-        url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; url
-
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
-        resp &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(url)
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exceptions&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;RequestException &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Response Failed.&amp;#39;&lt;/span&gt;)
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
-
-    header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
-    body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
-
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;body &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;header:
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(body)
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
-
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;header &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;body:
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
-            &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
-
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;header &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;body) &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;header &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;body):
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
-            &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;()
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(body)
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
-
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
-
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;build_parser&lt;/span&gt;():
-    parser &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; argparse&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ArgumentParser(
-        prog&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;tihttp&amp;#39;&lt;/span&gt;,
-        description&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;A tiny HTTP client for sending GET requests.&amp;#39;&lt;/span&gt;
-    )
-
-    &lt;span style=&#34;color:#75715e&#34;&gt;# positional arguments:&lt;/span&gt;
-    parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add_argument(
-    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;URL&amp;#39;&lt;/span&gt;,
-    action&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;store&amp;#39;&lt;/span&gt;,
-    )
-
-    &lt;span style=&#34;color:#75715e&#34;&gt;# optional arguments:&lt;/span&gt;
-    parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add_argument(
-    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-H&amp;#39;&lt;/span&gt;,
-    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;--header-only&amp;#39;&lt;/span&gt;,
-    dest&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;header&amp;#39;&lt;/span&gt;,
-    action&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;store_true&amp;#39;&lt;/span&gt;,
-    help&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Prints only the header of the Response.&amp;#39;&lt;/span&gt;)
-
-    parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add_argument(
-    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-B&amp;#39;&lt;/span&gt;,
-    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;--body-only&amp;#39;&lt;/span&gt;,
-    dest&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;body&amp;#39;&lt;/span&gt;,
-    action&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;store_true&amp;#39;&lt;/span&gt;,
-    help&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Prints only the body of the Response.&amp;#39;&lt;/span&gt;)
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; parser
-
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;run_main&lt;/span&gt;():
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
-        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(main())
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Exception&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
-        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stderr&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;write(e)
-        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
-
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; __name__ &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;:
-    run_main()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Adding the help flag returns now a nicely formatted usage help!&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ tihttp --help
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; argparse
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sys
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(argv&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;None&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    parser &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; build_parser()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    args &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;parse_args(argv)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;URL:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;URL
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://www.&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; url:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; url[:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;www.&amp;#39;&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; url[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; url
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        resp &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(url)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exceptions&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;RequestException &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Response Failed.&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;section[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;section[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(body)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;build_parser&lt;/span&gt;():
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    parser &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; argparse&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ArgumentParser(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        prog&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;tihttp&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        description&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;A tiny HTTP client for sending GET requests.&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    )
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add_argument(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;URL&amp;#39;&lt;/span&gt;,action&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;store&amp;#39;&lt;/span&gt;,)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; parser
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;run_main&lt;/span&gt;():
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(main())
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Exception&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stderr&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;write(e)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; __name__ &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    run_main()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Adding the &lt;code&gt;-H&lt;/code&gt;, &lt;code&gt;-B&lt;/code&gt; flags and the boolean logic returns a more sophisticated version of our script:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; argparse
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sys
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(argv&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;None&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    parser &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; build_parser()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    args &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;parse_args(argv)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;URL:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;URL
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://www.&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; url:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; url[:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;www.&amp;#39;&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; url[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; url
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        resp &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(url)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exceptions&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;RequestException &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Response Failed.&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;body &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;header:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        print(body)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;header &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;body:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;section[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;section[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;header &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;body) &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;header &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;body):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;section[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;section[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        print()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        print(body)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;build_parser&lt;/span&gt;():
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    parser &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; argparse&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ArgumentParser(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        prog&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;tihttp&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        description&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;A tiny HTTP client for sending GET requests.&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    )
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# positional arguments:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add_argument(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;URL&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;store&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    )
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# optional arguments:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add_argument(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-H&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;--header-only&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dest&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;header&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;store_true&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    help&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Prints only the header of the Response.&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    parser&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add_argument(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-B&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;--body-only&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dest&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;body&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    action&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;store_true&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    help&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Prints only the body of the Response.&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; parser
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;run_main&lt;/span&gt;():
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(main())
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Exception&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stderr&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;write(e)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; __name__ &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    run_main()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Adding the help flag returns now a nicely formatted usage help!&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ tihttp --help
 
 usage: tihttp [-h] [-H] [-B] URL
 
@@ -253,45 +253,45 @@ optional arguments:
 &lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;The sys modules &lt;code&gt;sys.argv&lt;/code&gt; is a list that gives us access to all command line arguments passed to the Python script. This gives us the ability to make our script more flexible. We can now change the URL we would like to request by passing an argument to the script. The first element of sys.argv (&lt;code&gt;sys.argv[0]&lt;/code&gt;) is the scripts name.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
-
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sys
-
-url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;argv[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
-
-r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(url)
-
-header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
-body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To test our changes we type:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ tihttp https://the-coding-lab.com/
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sys
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;argv[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(url)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;section[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;section[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To test our changes we type:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ tihttp https://the-coding-lab.com/
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Success! Our tools feels now way more like a real command line app!&lt;/p&gt;
 &lt;p&gt;Ok, next let&amp;rsquo;s make our tool more user friendly by improving error handling. We&amp;rsquo;re used to enter a URL without schema, but every browser uses the HTTP method as its default scheme. So this is what we would like to implement for our tool.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
-
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
-
-url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;argv[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://www.&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; url:
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; url[:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;www.&amp;#39;&lt;/span&gt;:
-        url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; url[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:]
-    url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; url
-
-resp &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(url)
-
-header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
-body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Ok. But even if the URL was typed correctly several errors when communicating with the server can happen. The status code (3 digit number) returned will give us more information about why the error occurred. The first digit represents the class. The responses are grouped in 5 classes.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;argv[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://www.&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; url:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; url[:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;www.&amp;#39;&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; url[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; url
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;resp &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(url)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;section[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;section[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Ok. But even if the URL was typed correctly several errors when communicating with the server can happen. The status code (3 digit number) returned will give us more information about why the error occurred. The first digit represents the class. The responses are grouped in 5 classes.&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -349,121 +349,121 @@ body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;These errors are handled using Python&amp;rsquo;s exceptions.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
-
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sys
-
-
-input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;argv[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; input_url:
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; input_url[:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;www.&amp;#39;&lt;/span&gt;:
-        input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; input_url[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:]
-    input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; input_url
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
-    r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(url)
-&lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exceptions&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;RequestException &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Response Failed.&amp;#39;&lt;/span&gt;)
-
-header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
-body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;So good, so far. But what if a user of the tool types too many arguments or no URL at all accidentally? We have to advise our script to handle these use cases! Boolean logic solves this.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
-
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sys
-
-arg_array &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;argv[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:]
-input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
-body_bool, header_bool &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; False, False
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; len(arg_array) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Too many arguments.&amp;#39;&lt;/span&gt;)
-    sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; len(arg_array) &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:
-    input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; arg_array[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; input_url:
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;No URL was given.&amp;#39;&lt;/span&gt;)
-    sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; input_url:
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; input_url[:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;www.&amp;#39;&lt;/span&gt;:
-        input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; input_url[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:]
-    input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; input_url
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
-    r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(input_url)
-&lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exceptions&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;RequestException &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Response Failed.&amp;#39;&lt;/span&gt;)
-header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
-body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now let&amp;rsquo;s add some options. It would be nice if the user could decide if we he wants to print only the header or the body of the response. Usually command line tools use flags to give options. We will use a &lt;code&gt;-H&lt;/code&gt; flag to display only the header and &lt;code&gt;-B&lt;/code&gt; flag to display only the body.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
-
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sys
-
-arg_array, input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;argv[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:], &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
-body_bool, header_bool &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; False, False
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-b&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; arg_array:
-    arg_array&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;remove(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-b&amp;#39;&lt;/span&gt;)
-    body_bool &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; True
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-h&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; arg_array:
-    arg_array&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;remove(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-h&amp;#39;&lt;/span&gt;)
-    header_bool &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; True
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; len(arg_array) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Too many arguments&amp;#39;&lt;/span&gt;)
-    sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; len(arg_array) &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:
-    input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; arg_array[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; input_url:
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;No URL was given&amp;#39;&lt;/span&gt;)
-    sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; input_url:
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; input_url[:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;www.&amp;#39;&lt;/span&gt;:
-        input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; input_url[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:]
-    input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; input_url
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
-    r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(input_url)
-&lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exceptions&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;RequestException &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Response Failed.&amp;#39;&lt;/span&gt;)
-header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
-body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; body_bool &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; header_bool:
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(body)
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; header_bool &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; body_bool:
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (body_bool &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; header_bool) &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; body_bool &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; header_bool):
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{section[0]}: {section[1]}&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;()
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(body)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Some testing proves that we can use now two options:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ tihttp -H https://the-coding-lab.com/
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sys
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;argv[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; input_url:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; input_url[:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;www.&amp;#39;&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; input_url[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; input_url
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(url)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exceptions&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;RequestException &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Response Failed.&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;section[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;section[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;So good, so far. But what if a user of the tool types too many arguments or no URL at all accidentally? We have to advise our script to handle these use cases! Boolean logic solves this.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sys
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;arg_array &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;argv[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;body_bool, header_bool &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;False&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;False&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; len(arg_array) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Too many arguments.&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; len(arg_array) &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; arg_array[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; input_url:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;No URL was given.&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; input_url:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; input_url[:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;www.&amp;#39;&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; input_url[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; input_url
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(input_url)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exceptions&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;RequestException &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Response Failed.&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;section[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;section[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now let&amp;rsquo;s add some options. It would be nice if the user could decide if we he wants to print only the header or the body of the response. Usually command line tools use flags to give options. We will use a &lt;code&gt;-H&lt;/code&gt; flag to display only the header and &lt;code&gt;-B&lt;/code&gt; flag to display only the body.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/usr/bin/python&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; requests
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; collections
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sys
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;arg_array, input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;argv[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:], &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;body_bool, header_bool &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;False&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;False&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-b&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; arg_array:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    arg_array&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;remove(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-b&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    body_bool &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-h&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; arg_array:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    arg_array&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;remove(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;-h&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    header_bool &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; len(arg_array) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Too many arguments&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; len(arg_array) &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; arg_array[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; input_url:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;No URL was given&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    sys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exit(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;https://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; input_url:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; input_url[:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;www.&amp;#39;&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; input_url[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    input_url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://www.&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; input_url
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(input_url)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt; requests&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exceptions&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;RequestException &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; e:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Response Failed.&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;header &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dict(collections&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;OrderedDict(resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;headers))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;body &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; resp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; body_bool &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; header_bool:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(body)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; header_bool &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; body_bool:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;section[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;section[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (body_bool &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; header_bool) &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; body_bool &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; header_bool):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; section &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sorted(header&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;section[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;section[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(body)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Some testing proves that we can use now two options:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ tihttp -H https://the-coding-lab.com/
 $ tihttp -B https://the-coding-lab.com/
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We see that it can become quite tedious to add more functionality when limiting ourself to the&lt;code&gt; sys&lt;/code&gt; module. It needs alot of boolean logic. But Python has a library only for creating command line interfaces: &lt;code&gt;argparse&lt;/code&gt;!&lt;/p&gt;
 &lt;div&gt;

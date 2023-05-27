@@ -33,7 +33,7 @@
 &lt;/ol&gt;
 &lt;p&gt;When projects grow a good test suite gives you confidence that new code you add don&amp;rsquo;t cause parts of the application to break. It improves the a projects maintainability of the project. The complexity of small projects is low and only necessary when the size of the project increases. But for the sake of this tutorial we will write a small test to demonstrate the usage of &lt;code&gt;pytest&lt;/code&gt;, &lt;code&gt;tox&lt;/code&gt; and &lt;code&gt;github actions&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;We will store the tests within a separate folder. Here&amp;rsquo;s the current structure of the project.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;├── LICENSE
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;├── LICENSE
 ├── README.md
 ├── setup.py
 ├── tihttp.py
@@ -41,87 +41,87 @@
 │  ├── __init__.py
 │  └── test_tihttp.py
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We place a &lt;code&gt;test_tihttp.py&lt;/code&gt; file within the &lt;code&gt;tests&lt;/code&gt; folder. It will contains the test suite. The &lt;code&gt;main()&lt;/code&gt; function which contains the logic for triggering the flags has to be imported from the &lt;code&gt;tihttp.py&lt;/code&gt; file.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; tihttp &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; main
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;test_GET_body&lt;/span&gt;(capsys):
-    main([&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;-B&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;http://jsonplaceholder.typicode.com/todos?userId=1&amp;#34;&lt;/span&gt;])
-    captured &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; capsys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;readouterr()
-    result &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; captured&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;out
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;with&lt;/span&gt; open(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tests/jsonplaceholder.json&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; f:
-        output &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; f&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;read()
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;assert&lt;/span&gt; result &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; output
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We compare the expected output with a request against an API. The API should return the same response so it will give us feedback if our application performs GET requests successfully. We place a &lt;code&gt;jsonplaceholder.json&lt;/code&gt; file into the same folder which contained the expected output. We let &lt;code&gt;pytest&lt;/code&gt; execute the test. We install it prior use.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ pip install pytest
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; tihttp &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; main
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;test_GET_body&lt;/span&gt;(capsys):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    main([&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;-B&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;http://jsonplaceholder.typicode.com/todos?userId=1&amp;#34;&lt;/span&gt;])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    captured &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; capsys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;readouterr()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    result &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; captured&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;out
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;with&lt;/span&gt; open(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tests/jsonplaceholder.json&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; f:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        output &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; f&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;read()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;assert&lt;/span&gt; result &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; output
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We compare the expected output with a request against an API. The API should return the same response so it will give us feedback if our application performs GET requests successfully. We place a &lt;code&gt;jsonplaceholder.json&lt;/code&gt; file into the same folder which contained the expected output. We let &lt;code&gt;pytest&lt;/code&gt; execute the test. We install it prior use.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ pip install pytest
 $ pytest
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Our test passes. To increase the tests verbosity &lt;code&gt;-v&lt;/code&gt; is a useful flag, furthermore I like to use &lt;code&gt;-s&lt;/code&gt; to see the captured output. Next we add pytest to our extra requirements in the &lt;code&gt;setup.py&lt;/code&gt; file.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;extras_require&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{
-    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dev&amp;#39;&lt;/span&gt;: [
-        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pytest&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#75715e&#34;&gt;# pip install tihttp[dev]&lt;/span&gt;
-    ],
-},
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This gives us the possibility to install extra dependencies (testing, linting tools etc.) easily by adding a &lt;code&gt;[dev]&lt;/code&gt; to the package name.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ pip install .[dev]            # local install
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;extras_require&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dev&amp;#39;&lt;/span&gt;: [
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pytest&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#75715e&#34;&gt;# pip install tihttp[dev]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ],
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;},
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This gives us the possibility to install extra dependencies (testing, linting tools etc.) easily by adding a &lt;code&gt;[dev]&lt;/code&gt; to the package name.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ pip install .[dev]            # local install
 $ pip install tihttp[dev]       # remote install, PyPI repo
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We tested all of this with python 3.7.3. But how does our application behave when executed on a different interpreter version? So let&amp;rsquo;s test it against different Python versions! We use &lt;code&gt;tox&lt;/code&gt;. It let&amp;rsquo;s us run tests in multiple virtual envs.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ pip install tox
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ pip install tox
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Tox needs a recipe to know which virtualenv/commands to create/execute. This recipe is named &lt;code&gt;tox.ini&lt;/code&gt;.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;[tox]&lt;/span&gt;
-&lt;span style=&#34;color:#a6e22e&#34;&gt;envlist&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;py36,py37,py38,py39&lt;/span&gt;
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;[testenv]&lt;/span&gt;
-&lt;span style=&#34;color:#a6e22e&#34;&gt;deps&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;
-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    pytest&lt;/span&gt;
-&lt;span style=&#34;color:#a6e22e&#34;&gt;commands&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;
-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    pytest&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If some of the Python interpreters are missing on your system, install them from the deadsnakes archive:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ sudo add-apt-repository ppa:deadsnakes/ppa
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;[tox]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;envlist&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;py36,py37,py38,py39&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;[testenv]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;deps&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    pytest&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;commands&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    pytest&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If some of the Python interpreters are missing on your system, install them from the deadsnakes archive:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ sudo add-apt-repository ppa:deadsnakes/ppa
 $ sudo apt install python3.5 python3.6 python3.7 python3.8 python3.9
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now let&amp;rsquo;s test across different interpreters!&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ tox
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ tox
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;If you wanna test against a specific environment or execute only one file, then type:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ tox -e py38
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ tox -e py38
 $ tox -e py38 -- test/main_test.py   # executes only a single test
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Ok, we did the test locally, but when working in a team using continuous integration is pretty convenient. We set a &lt;code&gt;integrate.yaml&lt;/code&gt; file up within a &lt;code&gt;.github/workflows&lt;/code&gt; directory to tell github actions what jobs to execute. The following github actions file will test across different platforms and Python versions.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Python package&lt;/span&gt;
-
-&lt;span style=&#34;color:#f92672&#34;&gt;on&lt;/span&gt;: [&lt;span style=&#34;color:#ae81ff&#34;&gt;push]&lt;/span&gt;
-
-&lt;span style=&#34;color:#f92672&#34;&gt;jobs&lt;/span&gt;:
-  &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;:
-    &lt;span style=&#34;color:#f92672&#34;&gt;runs-on&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ matrix.os }}&lt;/span&gt;
-    &lt;span style=&#34;color:#f92672&#34;&gt;strategy&lt;/span&gt;:
-      &lt;span style=&#34;color:#f92672&#34;&gt;matrix&lt;/span&gt;:
-        &lt;span style=&#34;color:#f92672&#34;&gt;python-version&lt;/span&gt;: [&lt;span style=&#34;color:#ae81ff&#34;&gt;3.6&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.7&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.8&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.9&lt;/span&gt;]
-        &lt;span style=&#34;color:#f92672&#34;&gt;os&lt;/span&gt;: [&lt;span style=&#34;color:#ae81ff&#34;&gt;ubuntu-latest, macos-latest, windows-latest]&lt;/span&gt;
-    &lt;span style=&#34;color:#f92672&#34;&gt;steps&lt;/span&gt;:
-      - &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;actions/checkout@v2&lt;/span&gt;
-      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Set up Python ${{ matrix.python-version }}&lt;/span&gt;
-        &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;actions/setup-python@v2&lt;/span&gt;
-        &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
-          &lt;span style=&#34;color:#f92672&#34;&gt;python-version&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ matrix.python-version }}&lt;/span&gt;
-      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Cache pip&lt;/span&gt;
-        &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;actions/cache@v2&lt;/span&gt;
-        &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
-          &lt;span style=&#34;color:#f92672&#34;&gt;path&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;~/.cache/pip&lt;/span&gt;
-          &lt;span style=&#34;color:#f92672&#34;&gt;key&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ runner.os }}-pip-${{ hashFiles(&amp;#39;requirements.txt&amp;#39;) }}&lt;/span&gt;
-          &lt;span style=&#34;color:#f92672&#34;&gt;restore-keys&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;            ${{ runner.os }}-pip-
-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;            ${{ runner.os }}-&lt;/span&gt;            
-      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Install dependencies&lt;/span&gt;
-        &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          python -m pip install --upgrade pip
-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          pip install flake8 pytest pytest-cov
-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          pip install -r requirements.txt&lt;/span&gt;          
-      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Lint with flake8&lt;/span&gt;
-        &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          # stop the build if there are Python syntax errors or undefined names
-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics&lt;/span&gt;          
-      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Test with pytest&lt;/span&gt;
-        &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          &lt;/span&gt;          &lt;span style=&#34;color:#ae81ff&#34;&gt;pytest&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Don&amp;rsquo;t be intimidated by the length of this job. It&amp;rsquo;s just illustrating how powerful Github workflows can be. 🥰&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Python package&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;on&lt;/span&gt;: [&lt;span style=&#34;color:#ae81ff&#34;&gt;push]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;jobs&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;runs-on&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ matrix.os }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;strategy&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#f92672&#34;&gt;matrix&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;python-version&lt;/span&gt;: [&lt;span style=&#34;color:#ae81ff&#34;&gt;3.6&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.7&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.8&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.9&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;os&lt;/span&gt;: [&lt;span style=&#34;color:#ae81ff&#34;&gt;ubuntu-latest, macos-latest, windows-latest]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;steps&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;actions/checkout@v2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Set up Python ${{ matrix.python-version }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;actions/setup-python@v2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;python-version&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ matrix.python-version }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Cache pip&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;actions/cache@v2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;path&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;~/.cache/pip&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;key&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ runner.os }}-pip-${{ hashFiles(&amp;#39;requirements.txt&amp;#39;) }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;restore-keys&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;            ${{ runner.os }}-pip-
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;            ${{ runner.os }}-&lt;/span&gt;            
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Install dependencies&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          python -m pip install --upgrade pip
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          pip install flake8 pytest pytest-cov
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          pip install -r requirements.txt&lt;/span&gt;          
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Lint with flake8&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          # stop the build if there are Python syntax errors or undefined names
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics&lt;/span&gt;          
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Test with pytest&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          pytest&lt;/span&gt;          
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Don&amp;rsquo;t be intimidated by the length of this job. It&amp;rsquo;s just illustrating how powerful Github workflows can be. 🥰&lt;/p&gt;
 &lt;div&gt;
     &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;&lt;&lt; section 5&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/2021/7-documentation&#34;&gt;section 7 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
 &lt;/div&gt;

@@ -32,124 +32,124 @@
 &lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;&lt;strong&gt;Publishing at Anaconda&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;When a &lt;code&gt;setup.py&lt;/code&gt; file was already created, it&amp;rsquo;s pretty simple to go a step further and create an &lt;a href=&#34;https://anaconda.org&#34;&gt;Anaconda&lt;/a&gt; package. Anaconda packages store the necessary metadata within a &lt;code&gt;meta.yaml&lt;/code&gt; file but when a &lt;code&gt;setup.py&lt;/code&gt; file was already created its data can be easily imported by jinja2 templating.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;{&lt;span style=&#34;color:#ae81ff&#34;&gt;% set data = load_setup_py_data() %}&lt;/span&gt;
-
-&lt;span style=&#34;color:#f92672&#34;&gt;package&lt;/span&gt;:
-  &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;tihttp&amp;#39;&lt;/span&gt;
-  &lt;span style=&#34;color:#f92672&#34;&gt;version&lt;/span&gt;: {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;data[&amp;#39;version&amp;#39;] }}&lt;/span&gt;
-
-&lt;span style=&#34;color:#f92672&#34;&gt;source&lt;/span&gt;:
-  &lt;span style=&#34;color:#f92672&#34;&gt;path&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;..&lt;/span&gt;
-
-&lt;span style=&#34;color:#f92672&#34;&gt;build&lt;/span&gt;:
-  &lt;span style=&#34;color:#f92672&#34;&gt;number&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
-  &lt;span style=&#34;color:#f92672&#34;&gt;entry_points&lt;/span&gt;:
-    {&lt;span style=&#34;color:#ae81ff&#34;&gt;% for entry_point in data[&amp;#39;entry_points&amp;#39;][&amp;#39;console_scripts&amp;#39;] %}&lt;/span&gt;
-    - {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;entry_point }}&lt;/span&gt;
-    {&lt;span style=&#34;color:#ae81ff&#34;&gt;% endfor %}&lt;/span&gt;
-  &lt;span style=&#34;color:#f92672&#34;&gt;script&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;python -m pip install --no-deps --ignore-installed .&lt;/span&gt;
-
-&lt;span style=&#34;color:#f92672&#34;&gt;requirements&lt;/span&gt;:
-  &lt;span style=&#34;color:#f92672&#34;&gt;build&lt;/span&gt;:
-    - &lt;span style=&#34;color:#ae81ff&#34;&gt;python&lt;/span&gt;
-    - &lt;span style=&#34;color:#ae81ff&#34;&gt;pip&lt;/span&gt;
-    - &lt;span style=&#34;color:#ae81ff&#34;&gt;setuptools&lt;/span&gt;
-
-  &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;:
-    - &lt;span style=&#34;color:#ae81ff&#34;&gt;python&lt;/span&gt;
-    {&lt;span style=&#34;color:#ae81ff&#34;&gt;% for dep in data[&amp;#39;install_requires&amp;#39;] %}&lt;/span&gt;
-    - {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;dep.lower() }}&lt;/span&gt;
-    {&lt;span style=&#34;color:#ae81ff&#34;&gt;% endfor %}&lt;/span&gt;
-
-&lt;span style=&#34;color:#f92672&#34;&gt;test&lt;/span&gt;:
-  &lt;span style=&#34;color:#f92672&#34;&gt;imports&lt;/span&gt;:
-    - {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;data[&amp;#39;name&amp;#39;] }}&lt;/span&gt;
-  &lt;span style=&#34;color:#f92672&#34;&gt;source_files&lt;/span&gt;:
-    - &lt;span style=&#34;color:#ae81ff&#34;&gt;tests&lt;/span&gt;
-  &lt;span style=&#34;color:#f92672&#34;&gt;requires&lt;/span&gt;:
-    {&lt;span style=&#34;color:#ae81ff&#34;&gt;% for test_dep in data[&amp;#39;extras_require&amp;#39;][&amp;#39;dev&amp;#39;] %}&lt;/span&gt;
-    - {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;test_dep.lower() }}&lt;/span&gt;
-    {&lt;span style=&#34;color:#ae81ff&#34;&gt;% endfor %}&lt;/span&gt;
-  &lt;span style=&#34;color:#f92672&#34;&gt;commands&lt;/span&gt;:
-    - &lt;span style=&#34;color:#ae81ff&#34;&gt;pytest tests&lt;/span&gt;
-
-&lt;span style=&#34;color:#f92672&#34;&gt;about&lt;/span&gt;:
-  &lt;span style=&#34;color:#f92672&#34;&gt;home&lt;/span&gt;: {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;data[&amp;#39;url&amp;#39;] }}&lt;/span&gt;
-  &lt;span style=&#34;color:#f92672&#34;&gt;license&lt;/span&gt;: {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;data[&amp;#39;license&amp;#39;] }}&lt;/span&gt;
-  &lt;span style=&#34;color:#f92672&#34;&gt;summary&lt;/span&gt;: {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;data[&amp;#39;description&amp;#39;] }}&lt;/span&gt;
-  &lt;span style=&#34;color:#f92672&#34;&gt;doc_source_url&lt;/span&gt;: {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;data[&amp;#39;url&amp;#39;] + &amp;#39;/blob/master/README.md&amp;#39; }}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we can build the package.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ conda build .
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{&lt;span style=&#34;color:#ae81ff&#34;&gt;% set data = load_setup_py_data() %}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;package&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;tihttp&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;version&lt;/span&gt;: {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;data[&amp;#39;version&amp;#39;] }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;source&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;path&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;..&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;build&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;number&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;entry_points&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#ae81ff&#34;&gt;% for entry_point in data[&amp;#39;entry_points&amp;#39;][&amp;#39;console_scripts&amp;#39;] %}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    - {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;entry_point }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#ae81ff&#34;&gt;% endfor %}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;script&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;python -m pip install --no-deps --ignore-installed .&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;requirements&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;build&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    - &lt;span style=&#34;color:#ae81ff&#34;&gt;python&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    - &lt;span style=&#34;color:#ae81ff&#34;&gt;pip&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    - &lt;span style=&#34;color:#ae81ff&#34;&gt;setuptools&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    - &lt;span style=&#34;color:#ae81ff&#34;&gt;python&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#ae81ff&#34;&gt;% for dep in data[&amp;#39;install_requires&amp;#39;] %}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    - {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;dep.lower() }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#ae81ff&#34;&gt;% endfor %}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;test&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;imports&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    - {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;data[&amp;#39;name&amp;#39;] }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;source_files&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    - &lt;span style=&#34;color:#ae81ff&#34;&gt;tests&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;requires&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#ae81ff&#34;&gt;% for test_dep in data[&amp;#39;extras_require&amp;#39;][&amp;#39;dev&amp;#39;] %}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    - {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;test_dep.lower() }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#ae81ff&#34;&gt;% endfor %}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;commands&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    - &lt;span style=&#34;color:#ae81ff&#34;&gt;pytest tests&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;about&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;home&lt;/span&gt;: {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;data[&amp;#39;url&amp;#39;] }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;license&lt;/span&gt;: {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;data[&amp;#39;license&amp;#39;] }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;summary&lt;/span&gt;: {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;data[&amp;#39;description&amp;#39;] }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;doc_source_url&lt;/span&gt;: {{ &lt;span style=&#34;color:#ae81ff&#34;&gt;data[&amp;#39;url&amp;#39;] + &amp;#39;/blob/master/README.md&amp;#39; }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we can build the package.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ conda build .
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The generated file &lt;code&gt;tihttp-0.1.0-py37_0.tar.bz2&lt;/code&gt; can be found within the &lt;code&gt;anaconda3/conda-build/linux-64&lt;/code&gt; directory. To upload the package to the anaconda repository we have to register and then we can use the &lt;code&gt;anaconda upload&lt;/code&gt; command. The package was uploaded to your channel and is now ready for distribution! 😙&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ anaconda upload home/niklas/anaconda3/conda-build/linux-64/tihttp-0.1.0-py37_0.tar.bz2
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ anaconda upload home/niklas/anaconda3/conda-build/linux-64/tihttp-0.1.0-py37_0.tar.bz2
 
 $ conda install -c niklastiede tihttp
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;But building and uploading packages for different Python interpreter versions and different operating systems is tedious. This work can be automated by a bash script:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/bin/bash
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;
-export PATH&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/anaconda3/bin:$PATH
-pkg&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;tihttp&amp;#39;&lt;/span&gt;
-array&lt;span style=&#34;color:#f92672&#34;&gt;=(&lt;/span&gt; 3.6 3.7 3.8 3.9 &lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
-
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# delete old built packages&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; -d $HOME/conda-bld/ &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
-    rm -r $HOME/conda-bld/
-&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i in $HOME/anaconda3/conda-bld/linux-64/$pkg*; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
-    echo $i
-    rm $i
-&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
-echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Deleting old conda packages done!&amp;#34;&lt;/span&gt;
-
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# building conda packages&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i in &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;array[@]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
-    echo $i
-	conda build --py $i .
-&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
-echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Building conda packages done!&amp;#34;&lt;/span&gt;
-
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# converting conda packages to other platforms&lt;/span&gt;
-platforms&lt;span style=&#34;color:#f92672&#34;&gt;=(&lt;/span&gt; osx-64 linux-32 linux-64 win-32 win-64 &lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; file in $HOME/anaconda3/conda-bld/linux-64/$pkg*; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
-    echo $file
-    conda convert --platform all $file  -o $HOME/conda-bld/
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; platform in &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;platforms[@]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
-        conda convert --platform $platform $file  -o $HOME/conda-bld/
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
-echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;converting packages to other platforms done!&amp;#34;&lt;/span&gt;
-
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# uploading packages&lt;/span&gt;
-find $HOME/conda-bld/**/$pkg*.tar.bz2 | &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; read file
-&lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
-    anaconda upload $file
-&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
-echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Uploading conda packages done!&amp;#34;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Instead of automating the build process locally we could instead use this nice github action &lt;a href=&#34;https://github.com/marketplace/actions/publish-conda&#34;&gt;Publish Conda&lt;/a&gt;! Here&amp;rsquo;s the code snippet for the workflow:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;publish_conda&lt;/span&gt;
-
-&lt;span style=&#34;color:#f92672&#34;&gt;on&lt;/span&gt;:
-  &lt;span style=&#34;color:#f92672&#34;&gt;release&lt;/span&gt;:
-    &lt;span style=&#34;color:#f92672&#34;&gt;types&lt;/span&gt;: [&lt;span style=&#34;color:#ae81ff&#34;&gt;published]&lt;/span&gt;
-    
-&lt;span style=&#34;color:#f92672&#34;&gt;jobs&lt;/span&gt;:
-  &lt;span style=&#34;color:#f92672&#34;&gt;publish&lt;/span&gt;:
-    &lt;span style=&#34;color:#f92672&#34;&gt;runs-on&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;ubuntu-latest&lt;/span&gt;
-    &lt;span style=&#34;color:#f92672&#34;&gt;steps&lt;/span&gt;:
-    - &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;actions/checkout@v2&lt;/span&gt;
-    - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;publish-to-conda&lt;/span&gt;
-      &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;fcakyon/conda-publish-action@v1.3&lt;/span&gt;
-      &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
-        &lt;span style=&#34;color:#f92672&#34;&gt;subdir&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;conda&amp;#39;&lt;/span&gt;
-        &lt;span style=&#34;color:#f92672&#34;&gt;anacondatoken&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ secrets.ANACONDA_TOKEN }}&lt;/span&gt;
-        &lt;span style=&#34;color:#f92672&#34;&gt;platforms&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;win osx linux&amp;#39;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The world of anaconda does a great service to the data science community and I hope that this post decreases the barrier for publishing things at anaconda. 😄 I wish you all a great time!&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;export PATH&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/anaconda3/bin:$PATH
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pkg&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;tihttp&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;array&lt;span style=&#34;color:#f92672&#34;&gt;=(&lt;/span&gt; 3.6 3.7 3.8 3.9 &lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# delete old built packages&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; -d $HOME/conda-bld/ &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    rm -r $HOME/conda-bld/
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i in $HOME/anaconda3/conda-bld/linux-64/$pkg*; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    echo $i
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    rm $i
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Deleting old conda packages done!&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# building conda packages&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i in &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;array[@]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    echo $i
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	conda build --py $i .
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Building conda packages done!&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# converting conda packages to other platforms&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;platforms&lt;span style=&#34;color:#f92672&#34;&gt;=(&lt;/span&gt; osx-64 linux-32 linux-64 win-32 win-64 &lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; file in $HOME/anaconda3/conda-bld/linux-64/$pkg*; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    echo $file
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    conda convert --platform all $file  -o $HOME/conda-bld/
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; platform in &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;platforms[@]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        conda convert --platform $platform $file  -o $HOME/conda-bld/
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;converting packages to other platforms done!&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# uploading packages&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;find $HOME/conda-bld/**/$pkg*.tar.bz2 | &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; read file
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    anaconda upload $file
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Uploading conda packages done!&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Instead of automating the build process locally we could instead use this nice github action &lt;a href=&#34;https://github.com/marketplace/actions/publish-conda&#34;&gt;Publish Conda&lt;/a&gt;! Here&amp;rsquo;s the code snippet for the workflow:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;publish_conda&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;on&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;release&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;types&lt;/span&gt;: [&lt;span style=&#34;color:#ae81ff&#34;&gt;published]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;jobs&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;publish&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;runs-on&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;ubuntu-latest&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;steps&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    - &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;actions/checkout@v2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;publish-to-conda&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;fcakyon/conda-publish-action@v1.3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;subdir&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;conda&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;anacondatoken&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ secrets.ANACONDA_TOKEN }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;platforms&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;win osx linux&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The world of anaconda does a great service to the data science community and I hope that this post decreases the barrier for publishing things at anaconda. 😄 I wish you all a great time!&lt;/p&gt;
 &lt;div&gt;
     &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/8-publishing-at-pypi&#34;&gt;&lt;&lt; section 8&lt;/a&gt; | &lt;/p&gt;
 &lt;/div&gt;
@@ -177,93 +177,93 @@ echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Uploading conda packages
 &lt;li&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/9-publishing-at-anaconda&#34;&gt;Publishing at Anaconda&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;We created a useful tool, but wouldn&amp;rsquo;t it be nice if we could make it accessible to others? So let&amp;rsquo;s share it! At first, we have to make a snapshot of our virtual environment.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ pip freeze &amp;gt; requirements.txt
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ pip freeze &amp;gt; requirements.txt
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Thereafter we create a new Git repository and push it to Github!&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ echo &amp;quot;# tinyHTTPie&amp;quot; &amp;gt;&amp;gt; README.md
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ echo &amp;#34;# tinyHTTPie&amp;#34; &amp;gt;&amp;gt; README.md
 $ git init
 $ git add .
-$ git commit -m &amp;quot;first commit&amp;quot;
+$ git commit -m &amp;#34;first commit&amp;#34;
 $ git branch -M main
 $ git remote add origin https://github.com/NiklasTiede/tinyHTTPie.git
 $ git push -u origin main
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now others will be able to download our project using the &lt;code&gt;clone&lt;/code&gt; command:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ git clone https://github.com/NiklasTiede/tinyHTTPie.git
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ git clone https://github.com/NiklasTiede/tinyHTTPie.git
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Now they have to rebuild it by recreating the virtual environment, extracting the Python interpreter path, adding a shebang line to the script and an alias to &lt;code&gt;.bashrc&lt;/code&gt;. Quite laborious. A bash script automates this process!&lt;/p&gt;
 &lt;p&gt;I store all my scripts within a &lt;code&gt;MyScripts&lt;/code&gt; folder so the bash script will create it.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; ! -d ~/MyScripts &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
-    mkdir ~/MyScripts
-    folder1&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/MyScripts
-    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;folder1&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; was generated.&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; ! -d ~/MyScripts/tinyHTTPie &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
-    mkdir ~/MyScripts/tinyHTTPie
-    folder2&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/MyScripts/tinyHTTPie
-    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;folder2&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; was generated.&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then the &lt;code&gt;tihttp.p&lt;/code&gt;y and &lt;code&gt;requirements.txt&lt;/code&gt; will be copied.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;PWD&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;pwd&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
-REQUIREMENTS&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$PWD&lt;span style=&#34;color:#e6db74&#34;&gt;/requirements.txt&amp;#34;&lt;/span&gt;
-SCRIPT&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$PWD&lt;span style=&#34;color:#e6db74&#34;&gt;/tihttp.py&amp;#34;&lt;/span&gt;
-TARGET&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/MyScripts/tinyHTTPie
-
-cp &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$REQUIREMENTS&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$TARGET&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
-cp &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$SCRIPT&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$TARGET&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
-cd ~/MyScripts/tinyhttp
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The Python interpreter version is checked.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;PYVER&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;python --version&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
-CURRENT_PY_VERSION&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;PYVER:7:11&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
-testvercomp &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;CURRENT_PY_VERSION&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; 3.0.0 &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;gt;&amp;#39;&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;echo $CURRENT_PY_VERSION | grep &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;2.&amp;#39;&lt;/span&gt;*&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
-    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;first digit is 2, you&amp;#39;re python version is too low&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;echo $CURRENT_PY_VERSION | grep &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;3.&amp;#39;&lt;/span&gt;*&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
-    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;first digit is 3, you&amp;#39;re python versions fulfills the requirements!&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;pipenv&lt;/code&gt; will be installed if it is not yet installed.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; ! &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;pipenv&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
-    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;pipenv not existent, so installing via pip...&amp;#34;&lt;/span&gt;
-    pip install pipenv
-    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;...pipenv was installed?&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The virtual environment will be rebuilt.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;pipenv install -r requirements.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The shebang line is added.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;pybin&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;pipenv --py&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
-echo -e &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#\!&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;pybin&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;\n\n&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;cat tinyhttp.py.py&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &amp;gt; tinyhttp.py
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The shebang is checked.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;EXIS_HEADLINE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;head -n &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; tinyhttp.py&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
-EXP_HEADLINE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#!&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;pybin&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; $EXIS_HEADLINE &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; $EXP_HEADLINE &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;${#&lt;/span&gt;EXIS_HEADLINE&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;${#&lt;/span&gt;EXP_HEADLINE&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
-    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;shebang line was added correctly!&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; $EXIS_HEADLINE !&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $EXP_HEADLINE &lt;span style=&#34;color:#f92672&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;${#&lt;/span&gt;EXIS_HEADLINE&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; !&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;${#&lt;/span&gt;EXP_HEADLINE&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
-    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;shebang was NOT added correctly!&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;File permissions are given.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;chmod +x ~/MyScripts/tiniHTTP/tiny_HTTPie_clone.py
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The script adds the alias to the configuration file.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;SHELL&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;printenv SHELL&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
-MYSHELL&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;SHELL:5:10&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
-ALIASFILE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/.bashrc
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; $MYSHELL  &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;zsh&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
-    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;You&amp;#39;re default shell is ZSH.&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; -e ~/.aliases &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
-        ALIASFILE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/.aliases
-        echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;You&amp;#39;re storing your files within the .aliases file.&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; -e ~/.zshrc &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
-        ALIASFILE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/.zshrc
-        echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;You&amp;#39;re storing your files within the .zshrc file.&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; $MYSHELL  &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;bash&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
-    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;You&amp;#39;re default shell is BASH.&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; -e ~/.aliases &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
-        ALIASFILE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/.aliases
-        echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;You&amp;#39;re storing your files within the .aliases file.&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; -e ~/.bashrc &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
-        ALIASFILE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/.bashrc
-        echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;You&amp;#39;re storing your files within the .bashrc file.&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And thats it! Puh, pretty much work and it&amp;rsquo;s still pretty prone to errors (adding the script to the PATH instead of using an alias would make things less error prone). But there&amp;rsquo;s a better solution to distribute packages in a standardized way: writing a &lt;code&gt;setup.py&lt;/code&gt; file!&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; ! -d ~/MyScripts &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    mkdir ~/MyScripts
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    folder1&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/MyScripts
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;folder1&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; was generated.&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; ! -d ~/MyScripts/tinyHTTPie &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    mkdir ~/MyScripts/tinyHTTPie
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    folder2&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/MyScripts/tinyHTTPie
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;folder2&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; was generated.&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then the &lt;code&gt;tihttp.p&lt;/code&gt;y and &lt;code&gt;requirements.txt&lt;/code&gt; will be copied.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PWD&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;pwd&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;REQUIREMENTS&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$PWD&lt;span style=&#34;color:#e6db74&#34;&gt;/requirements.txt&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;SCRIPT&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$PWD&lt;span style=&#34;color:#e6db74&#34;&gt;/tihttp.py&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;TARGET&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/MyScripts/tinyHTTPie
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cp &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$REQUIREMENTS&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$TARGET&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cp &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$SCRIPT&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$TARGET&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cd ~/MyScripts/tinyhttp
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The Python interpreter version is checked.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PYVER&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;python --version&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CURRENT_PY_VERSION&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;PYVER:7:11&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;testvercomp &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;CURRENT_PY_VERSION&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; 3.0.0 &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;gt;&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;echo $CURRENT_PY_VERSION | grep &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;2.&amp;#39;&lt;/span&gt;*&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;first digit is 2, you&amp;#39;re python version is too low&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;echo $CURRENT_PY_VERSION | grep &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;3.&amp;#39;&lt;/span&gt;*&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;first digit is 3, you&amp;#39;re python versions fulfills the requirements!&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;pipenv&lt;/code&gt; will be installed if it is not yet installed.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; ! &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;pipenv&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;pipenv not existent, so installing via pip...&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    pip install pipenv
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;...pipenv was installed?&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The virtual environment will be rebuilt.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pipenv install -r requirements.txt
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The shebang line is added.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pybin&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;pipenv --py&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo -e &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#\!&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;pybin&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;\n\n&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;cat tinyhttp.py.py&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &amp;gt; tinyhttp.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The shebang is checked.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;EXIS_HEADLINE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;head -n &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; tinyhttp.py&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;EXP_HEADLINE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#!&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;pybin&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; $EXIS_HEADLINE &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; $EXP_HEADLINE &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;${#&lt;/span&gt;EXIS_HEADLINE&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;${#&lt;/span&gt;EXP_HEADLINE&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;shebang line was added correctly!&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; $EXIS_HEADLINE !&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $EXP_HEADLINE &lt;span style=&#34;color:#f92672&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;${#&lt;/span&gt;EXIS_HEADLINE&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; !&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;${#&lt;/span&gt;EXP_HEADLINE&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;shebang was NOT added correctly!&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;File permissions are given.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;chmod +x ~/MyScripts/tiniHTTP/tiny_HTTPie_clone.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The script adds the alias to the configuration file.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;SHELL&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;printenv SHELL&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;MYSHELL&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;SHELL:5:10&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ALIASFILE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/.bashrc
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; $MYSHELL  &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;zsh&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;You&amp;#39;re default shell is ZSH.&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; -e ~/.aliases &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ALIASFILE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/.aliases
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;You&amp;#39;re storing your files within the .aliases file.&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; -e ~/.zshrc &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ALIASFILE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/.zshrc
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;You&amp;#39;re storing your files within the .zshrc file.&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; $MYSHELL  &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;bash&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;You&amp;#39;re default shell is BASH.&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; -e ~/.aliases &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ALIASFILE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/.aliases
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;You&amp;#39;re storing your files within the .aliases file.&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[[&lt;/span&gt; -e ~/.bashrc &lt;span style=&#34;color:#f92672&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ALIASFILE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;~/.bashrc
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;You&amp;#39;re storing your files within the .bashrc file.&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And thats it! Puh, pretty much work and it&amp;rsquo;s still pretty prone to errors (adding the script to the PATH instead of using an alias would make things less error prone). But there&amp;rsquo;s a better solution to distribute packages in a standardized way: writing a &lt;code&gt;setup.py&lt;/code&gt; file!&lt;/p&gt;
 &lt;div&gt;
     &lt;p align=&#34;center&#34;&gt;&lt;a href=&#34;https://the-coding-lab.com/2021/3-argparse-module/&#34;&gt;&lt;&lt; section 3&lt;/a&gt; | &lt;a href=&#34;https://the-coding-lab.com/2021/5-distribution-via-setup-file&#34;&gt;section 5 &gt;&gt;&lt;/a&gt; &lt;/p&gt;
 &lt;/div&gt;

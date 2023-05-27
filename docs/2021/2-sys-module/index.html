@@ -22,8 +22,7 @@ if (!doNotTrack) {
 	
 	ga('send', 'pageview');
 }
-</script>
- 
+</script> 
     
 <script type="application/javascript">
 var doNotTrack = false;
@@ -89,45 +88,45 @@ if (!doNotTrack) {
 <li><a href="/2021/9-publishing-at-anaconda">Publishing at Anaconda</a></li>
 </ol>
 <p>The sys modules <code>sys.argv</code> is a list that gives us access to all command line arguments passed to the Python script. This gives us the ability to make our script more flexible. We can now change the URL we would like to request by passing an argument to the script. The first element of sys.argv (<code>sys.argv[0]</code>) is the scripts name.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/python</span>
-
-<span style="color:#f92672">import</span> requests
-<span style="color:#f92672">import</span> collections
-<span style="color:#f92672">import</span> sys
-
-url <span style="color:#f92672">=</span> sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>]
-
-r <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url)
-
-header <span style="color:#f92672">=</span> dict(collections<span style="color:#f92672">.</span>OrderedDict(resp<span style="color:#f92672">.</span>headers))
-body <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
-
-<span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
-    <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#34;{section[0]}: {section[1]}&#34;</span>)
-</code></pre></div><p>To test our changes we type:</p>
-<pre><code>$ tihttp https://the-coding-lab.com/
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#!/usr/bin/python</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> collections
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> sys
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>url <span style="color:#f92672">=</span> sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>r <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>header <span style="color:#f92672">=</span> dict(collections<span style="color:#f92672">.</span>OrderedDict(resp<span style="color:#f92672">.</span>headers))
+</span></span><span style="display:flex;"><span>body <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">0</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">1</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><p>To test our changes we type:</p>
+<pre tabindex="0"><code>$ tihttp https://the-coding-lab.com/
 </code></pre><p>Success! Our tools feels now way more like a real command line app!</p>
 <p>Ok, next let&rsquo;s make our tool more user friendly by improving error handling. We&rsquo;re used to enter a URL without schema, but every browser uses the HTTP method as its default scheme. So this is what we would like to implement for our tool.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/python</span>
-
-<span style="color:#f92672">import</span> requests
-<span style="color:#f92672">import</span> collections
-
-url <span style="color:#f92672">=</span> sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>]
-
-<span style="color:#66d9ef">if</span> (<span style="color:#e6db74">&#39;http://&#39;</span> <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;https://&#39;</span> <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;http://www.&#39;</span> <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;https://www.&#39;</span>) <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> url:
-    <span style="color:#66d9ef">if</span> url[:<span style="color:#ae81ff">4</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;www.&#39;</span>:
-        url <span style="color:#f92672">=</span> url[<span style="color:#ae81ff">4</span>:]
-    url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://&#39;</span> <span style="color:#f92672">+</span> url
-
-resp <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url)
-
-header <span style="color:#f92672">=</span> dict(collections<span style="color:#f92672">.</span>OrderedDict(resp<span style="color:#f92672">.</span>headers))
-body <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
-
-<span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
-    <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#34;{section[0]}: {section[1]}&#34;</span>)
-</code></pre></div><p>Ok. But even if the URL was typed correctly several errors when communicating with the server can happen. The status code (3 digit number) returned will give us more information about why the error occurred. The first digit represents the class. The responses are grouped in 5 classes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#!/usr/bin/python</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> collections
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>url <span style="color:#f92672">=</span> sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#e6db74">&#39;http://&#39;</span> <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;https://&#39;</span> <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;http://www.&#39;</span> <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;https://www.&#39;</span>) <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> url:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> url[:<span style="color:#ae81ff">4</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;www.&#39;</span>:
+</span></span><span style="display:flex;"><span>        url <span style="color:#f92672">=</span> url[<span style="color:#ae81ff">4</span>:]
+</span></span><span style="display:flex;"><span>    url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://&#39;</span> <span style="color:#f92672">+</span> url
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>resp <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>header <span style="color:#f92672">=</span> dict(collections<span style="color:#f92672">.</span>OrderedDict(resp<span style="color:#f92672">.</span>headers))
+</span></span><span style="display:flex;"><span>body <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">0</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">1</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><p>Ok. But even if the URL was typed correctly several errors when communicating with the server can happen. The status code (3 digit number) returned will give us more information about why the error occurred. The first digit represents the class. The responses are grouped in 5 classes.</p>
 <table>
 <thead>
 <tr>
@@ -185,121 +184,121 @@ body <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</spa
 </tbody>
 </table>
 <p>These errors are handled using Python&rsquo;s exceptions.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/python</span>
-
-<span style="color:#f92672">import</span> requests
-<span style="color:#f92672">import</span> collections
-<span style="color:#f92672">import</span> sys
-
-
-input_url <span style="color:#f92672">=</span> sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>]
-
-<span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;http://www.&#39;</span> <span style="color:#f92672">and</span> <span style="color:#e6db74">&#39;https://www.&#39;</span> <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> input_url:
-    <span style="color:#66d9ef">if</span> input_url[:<span style="color:#ae81ff">4</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;www.&#39;</span>:
-        input_url <span style="color:#f92672">=</span> input_url[<span style="color:#ae81ff">4</span>:]
-    input_url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://www.&#39;</span> <span style="color:#f92672">+</span> input_url
-
-<span style="color:#66d9ef">try</span>:
-    r <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url)
-<span style="color:#66d9ef">except</span> requests<span style="color:#f92672">.</span>exceptions<span style="color:#f92672">.</span>RequestException <span style="color:#66d9ef">as</span> e:
-    <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Response Failed.&#39;</span>)
-
-header <span style="color:#f92672">=</span> dict(collections<span style="color:#f92672">.</span>OrderedDict(resp<span style="color:#f92672">.</span>headers))
-body <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
-
-<span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
-    <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#34;{section[0]}: {section[1]}&#34;</span>)
-</code></pre></div><p>So good, so far. But what if a user of the tool types too many arguments or no URL at all accidentally? We have to advise our script to handle these use cases! Boolean logic solves this.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/python</span>
-
-<span style="color:#f92672">import</span> requests
-<span style="color:#f92672">import</span> collections
-<span style="color:#f92672">import</span> sys
-
-arg_array <span style="color:#f92672">=</span> sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>:]
-input_url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>
-body_bool, header_bool <span style="color:#f92672">=</span> False, False
-
-<span style="color:#66d9ef">if</span> len(arg_array) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>:
-    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Too many arguments.&#39;</span>)
-    sys<span style="color:#f92672">.</span>exit(<span style="color:#ae81ff">0</span>)
-
-<span style="color:#66d9ef">if</span> len(arg_array) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>:
-    input_url <span style="color:#f92672">=</span> arg_array[<span style="color:#ae81ff">0</span>]
-
-<span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> input_url:
-    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;No URL was given.&#39;</span>)
-    sys<span style="color:#f92672">.</span>exit(<span style="color:#ae81ff">0</span>)
-
-<span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;http://www.&#39;</span> <span style="color:#f92672">and</span> <span style="color:#e6db74">&#39;https://www.&#39;</span> <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> input_url:
-    <span style="color:#66d9ef">if</span> input_url[:<span style="color:#ae81ff">4</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;www.&#39;</span>:
-        input_url <span style="color:#f92672">=</span> input_url[<span style="color:#ae81ff">4</span>:]
-    input_url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://www.&#39;</span> <span style="color:#f92672">+</span> input_url
-
-<span style="color:#66d9ef">try</span>:
-    r <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(input_url)
-<span style="color:#66d9ef">except</span> requests<span style="color:#f92672">.</span>exceptions<span style="color:#f92672">.</span>RequestException <span style="color:#66d9ef">as</span> e:
-    <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Response Failed.&#39;</span>)
-header <span style="color:#f92672">=</span> dict(collections<span style="color:#f92672">.</span>OrderedDict(resp<span style="color:#f92672">.</span>headers))
-body <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
-
-<span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
-    <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#34;{section[0]}: {section[1]}&#34;</span>)
-</code></pre></div><p>Now let&rsquo;s add some options. It would be nice if the user could decide if we he wants to print only the header or the body of the response. Usually command line tools use flags to give options. We will use a <code>-H</code> flag to display only the header and <code>-B</code> flag to display only the body.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/python</span>
-
-<span style="color:#f92672">import</span> requests
-<span style="color:#f92672">import</span> collections
-<span style="color:#f92672">import</span> sys
-
-arg_array, input_url <span style="color:#f92672">=</span> sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>:], <span style="color:#e6db74">&#39;&#39;</span>
-body_bool, header_bool <span style="color:#f92672">=</span> False, False
-
-<span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;-b&#39;</span> <span style="color:#f92672">in</span> arg_array:
-    arg_array<span style="color:#f92672">.</span>remove(<span style="color:#e6db74">&#39;-b&#39;</span>)
-    body_bool <span style="color:#f92672">=</span> True
-
-<span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;-h&#39;</span> <span style="color:#f92672">in</span> arg_array:
-    arg_array<span style="color:#f92672">.</span>remove(<span style="color:#e6db74">&#39;-h&#39;</span>)
-    header_bool <span style="color:#f92672">=</span> True
-
-<span style="color:#66d9ef">if</span> len(arg_array) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>:
-    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Too many arguments&#39;</span>)
-    sys<span style="color:#f92672">.</span>exit(<span style="color:#ae81ff">0</span>)
-
-<span style="color:#66d9ef">if</span> len(arg_array) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>:
-    input_url <span style="color:#f92672">=</span> arg_array[<span style="color:#ae81ff">0</span>]
-
-<span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> input_url:
-    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;No URL was given&#39;</span>)
-    sys<span style="color:#f92672">.</span>exit(<span style="color:#ae81ff">0</span>)
-
-<span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;http://www.&#39;</span> <span style="color:#f92672">and</span> <span style="color:#e6db74">&#39;https://www.&#39;</span> <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> input_url:
-    <span style="color:#66d9ef">if</span> input_url[:<span style="color:#ae81ff">4</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;www.&#39;</span>:
-        input_url <span style="color:#f92672">=</span> input_url[<span style="color:#ae81ff">4</span>:]
-    input_url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://www.&#39;</span> <span style="color:#f92672">+</span> input_url
-
-<span style="color:#66d9ef">try</span>:
-    r <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(input_url)
-<span style="color:#66d9ef">except</span> requests<span style="color:#f92672">.</span>exceptions<span style="color:#f92672">.</span>RequestException <span style="color:#66d9ef">as</span> e:
-    <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Response Failed.&#39;</span>)
-header <span style="color:#f92672">=</span> dict(collections<span style="color:#f92672">.</span>OrderedDict(resp<span style="color:#f92672">.</span>headers))
-body <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
-
-<span style="color:#66d9ef">if</span> body_bool <span style="color:#f92672">and</span> <span style="color:#f92672">not</span> header_bool:
-    <span style="color:#66d9ef">print</span>(body)
-
-<span style="color:#66d9ef">if</span> header_bool <span style="color:#f92672">and</span> <span style="color:#f92672">not</span> body_bool:
-    <span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
-        <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#34;{section[0]}: {section[1]}&#34;</span>)
-
-<span style="color:#66d9ef">if</span> (body_bool <span style="color:#f92672">and</span> header_bool) <span style="color:#f92672">or</span> (<span style="color:#f92672">not</span> body_bool <span style="color:#f92672">and</span> <span style="color:#f92672">not</span> header_bool):
-    <span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
-        <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#34;{section[0]}: {section[1]}&#34;</span>)
-    <span style="color:#66d9ef">print</span>()
-    <span style="color:#66d9ef">print</span>(body)
-</code></pre></div><p>Some testing proves that we can use now two options:</p>
-<pre><code>$ tihttp -H https://the-coding-lab.com/
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#!/usr/bin/python</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> collections
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> sys
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>input_url <span style="color:#f92672">=</span> sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;http://www.&#39;</span> <span style="color:#f92672">and</span> <span style="color:#e6db74">&#39;https://www.&#39;</span> <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> input_url:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> input_url[:<span style="color:#ae81ff">4</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;www.&#39;</span>:
+</span></span><span style="display:flex;"><span>        input_url <span style="color:#f92672">=</span> input_url[<span style="color:#ae81ff">4</span>:]
+</span></span><span style="display:flex;"><span>    input_url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://www.&#39;</span> <span style="color:#f92672">+</span> input_url
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>    r <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">except</span> requests<span style="color:#f92672">.</span>exceptions<span style="color:#f92672">.</span>RequestException <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Response Failed.&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>header <span style="color:#f92672">=</span> dict(collections<span style="color:#f92672">.</span>OrderedDict(resp<span style="color:#f92672">.</span>headers))
+</span></span><span style="display:flex;"><span>body <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">0</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">1</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><p>So good, so far. But what if a user of the tool types too many arguments or no URL at all accidentally? We have to advise our script to handle these use cases! Boolean logic solves this.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#!/usr/bin/python</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> collections
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> sys
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>arg_array <span style="color:#f92672">=</span> sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>:]
+</span></span><span style="display:flex;"><span>input_url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>body_bool, header_bool <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>, <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> len(arg_array) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;Too many arguments.&#39;</span>)
+</span></span><span style="display:flex;"><span>    sys<span style="color:#f92672">.</span>exit(<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> len(arg_array) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>:
+</span></span><span style="display:flex;"><span>    input_url <span style="color:#f92672">=</span> arg_array[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> input_url:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;No URL was given.&#39;</span>)
+</span></span><span style="display:flex;"><span>    sys<span style="color:#f92672">.</span>exit(<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;http://www.&#39;</span> <span style="color:#f92672">and</span> <span style="color:#e6db74">&#39;https://www.&#39;</span> <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> input_url:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> input_url[:<span style="color:#ae81ff">4</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;www.&#39;</span>:
+</span></span><span style="display:flex;"><span>        input_url <span style="color:#f92672">=</span> input_url[<span style="color:#ae81ff">4</span>:]
+</span></span><span style="display:flex;"><span>    input_url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://www.&#39;</span> <span style="color:#f92672">+</span> input_url
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>    r <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(input_url)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">except</span> requests<span style="color:#f92672">.</span>exceptions<span style="color:#f92672">.</span>RequestException <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Response Failed.&#39;</span>)
+</span></span><span style="display:flex;"><span>header <span style="color:#f92672">=</span> dict(collections<span style="color:#f92672">.</span>OrderedDict(resp<span style="color:#f92672">.</span>headers))
+</span></span><span style="display:flex;"><span>body <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">0</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">1</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><p>Now let&rsquo;s add some options. It would be nice if the user could decide if we he wants to print only the header or the body of the response. Usually command line tools use flags to give options. We will use a <code>-H</code> flag to display only the header and <code>-B</code> flag to display only the body.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#!/usr/bin/python</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> collections
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> sys
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>arg_array, input_url <span style="color:#f92672">=</span> sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>:], <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>body_bool, header_bool <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>, <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;-b&#39;</span> <span style="color:#f92672">in</span> arg_array:
+</span></span><span style="display:flex;"><span>    arg_array<span style="color:#f92672">.</span>remove(<span style="color:#e6db74">&#39;-b&#39;</span>)
+</span></span><span style="display:flex;"><span>    body_bool <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;-h&#39;</span> <span style="color:#f92672">in</span> arg_array:
+</span></span><span style="display:flex;"><span>    arg_array<span style="color:#f92672">.</span>remove(<span style="color:#e6db74">&#39;-h&#39;</span>)
+</span></span><span style="display:flex;"><span>    header_bool <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> len(arg_array) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;Too many arguments&#39;</span>)
+</span></span><span style="display:flex;"><span>    sys<span style="color:#f92672">.</span>exit(<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> len(arg_array) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>:
+</span></span><span style="display:flex;"><span>    input_url <span style="color:#f92672">=</span> arg_array[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> input_url:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;No URL was given&#39;</span>)
+</span></span><span style="display:flex;"><span>    sys<span style="color:#f92672">.</span>exit(<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;http://www.&#39;</span> <span style="color:#f92672">and</span> <span style="color:#e6db74">&#39;https://www.&#39;</span> <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> input_url:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> input_url[:<span style="color:#ae81ff">4</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;www.&#39;</span>:
+</span></span><span style="display:flex;"><span>        input_url <span style="color:#f92672">=</span> input_url[<span style="color:#ae81ff">4</span>:]
+</span></span><span style="display:flex;"><span>    input_url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://www.&#39;</span> <span style="color:#f92672">+</span> input_url
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>    r <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(input_url)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">except</span> requests<span style="color:#f92672">.</span>exceptions<span style="color:#f92672">.</span>RequestException <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Response Failed.&#39;</span>)
+</span></span><span style="display:flex;"><span>header <span style="color:#f92672">=</span> dict(collections<span style="color:#f92672">.</span>OrderedDict(resp<span style="color:#f92672">.</span>headers))
+</span></span><span style="display:flex;"><span>body <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> body_bool <span style="color:#f92672">and</span> <span style="color:#f92672">not</span> header_bool:
+</span></span><span style="display:flex;"><span>    print(body)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> header_bool <span style="color:#f92672">and</span> <span style="color:#f92672">not</span> body_bool:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">0</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">1</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (body_bool <span style="color:#f92672">and</span> header_bool) <span style="color:#f92672">or</span> (<span style="color:#f92672">not</span> body_bool <span style="color:#f92672">and</span> <span style="color:#f92672">not</span> header_bool):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">0</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">1</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    print()
+</span></span><span style="display:flex;"><span>    print(body)
+</span></span></code></pre></div><p>Some testing proves that we can use now two options:</p>
+<pre tabindex="0"><code>$ tihttp -H https://the-coding-lab.com/
 $ tihttp -B https://the-coding-lab.com/
 </code></pre><p>We see that it can become quite tedious to add more functionality when limiting ourself to the<code> sys</code> module. It needs alot of boolean logic. But Python has a library only for creating command line interfaces: <code>argparse</code>!</p>
 <div>
@@ -319,9 +318,17 @@ $ tihttp -B https://the-coding-lab.com/
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/cli">cli</a></span>
         
+            <span class="tag"><a href="https://the-coding-lab.com/tags/devops">devops</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/imdbclone">imdbclone</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/java">java</a></span>
+        
             <span class="tag"><a href="https://the-coding-lab.com/tags/packaging">packaging</a></span>
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/python">python</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/react">react</a></span>
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/scripting">scripting</a></span>
         
@@ -336,6 +343,9 @@ $ tihttp -B https://the-coding-lab.com/
     <div class="card-content">
         <h1 class="title is-5">Recent posts</h1>
         
+            <h1><a href="https://the-coding-lab.com/2023/deploy-full-stack-app-on-home-server/">How to Cheaply Host Your Full-Stack Side-Project: Serving it From Home</a></h1>
+            <time class="has-text-grey-light is-size-7">25 May 2023</time>
+        
             <h1><a href="https://the-coding-lab.com/2021/conda-and-pip/">Managing Environments with Conda and pip</a></h1>
             <time class="has-text-grey-light is-size-7">25 April 2021</time>
         
@@ -347,9 +357,6 @@ $ tihttp -B https://the-coding-lab.com/
         
             <h1><a href="https://the-coding-lab.com/2021/8-publishing-at-pypi/">Releasing a Python App at Github/PyPI and Automate it - 8/9</a></h1>
             <time class="has-text-grey-light is-size-7">23 February 2021</time>
-        
-            <h1><a href="https://the-coding-lab.com/2021/7-documentation/">Documentation - 7/9</a></h1>
-            <time class="has-text-grey-light is-size-7">19 February 2021</time>
         
     </div>
 </div>
@@ -394,6 +401,8 @@ $ tihttp -B https://the-coding-lab.com/
     <div class="card-content">
         <h1 class="title is-5">Archives</h1>
         
+            <a href="https://the-coding-lab.com/archives/2023">2023</a> (1)<br>
+        
             <a href="https://the-coding-lab.com/archives/2021">2021</a> (11)<br>
         
     </div>
@@ -416,7 +425,7 @@ $ tihttp -B https://the-coding-lab.com/
             <span class="icon is-large"><a href="https://www.linkedin.com/in/niklas-tiede-3b57451b6/" class="mysocial" rel="me"><i class="fab fa-linkedin fa-3x"></i></a></span>&nbsp;&nbsp;
             <span class="icon is-large"><a href="https://dev.to/niklastiede" class="mysocial" rel="me"><i class="fab fa-dev fa-3x"></i></a></span>&nbsp;&nbsp;
             <br><br>
-            Copyright &copy; The Coding Lab 2021 - Theme by <a href="https://jeffprod.com" class="mysocial">JeffProd.com</a>
+            Copyright &copy; The Coding Lab 2023 - Theme by <a href="https://jeffprod.com" class="mysocial">JeffProd.com</a>
             - <a class="mysocial" href="https://the-coding-lab.com/about">About</a>
         </p>
     </div>
