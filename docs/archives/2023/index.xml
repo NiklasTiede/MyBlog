@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2023 on The Coding Lab</title>
+    <link>https://the-coding-lab.com/archives/2023/</link>
+    <description>Recent content in 2023 on The Coding Lab</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 25 May 2023 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://the-coding-lab.com/archives/2023/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>How to Cheaply Host Your Full-Stack Side-Project: Serving it From Home</title>
+      <link>https://the-coding-lab.com/2023/deploy-full-stack-app-on-home-server/</link>
+      <pubDate>Thu, 25 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://the-coding-lab.com/2023/deploy-full-stack-app-on-home-server/</guid>
+      <description>&lt;p&gt;Heya fellows,&lt;/p&gt;
+&lt;p&gt;Frontend projects can be hosted for free. But when you&amp;rsquo;re creating a full-stack app your provider needs to process requests, making database calls etc. No hosting provider offers this for free.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+    &lt;img alt=&#34;diy&#34; src=&#34;https://media4.giphy.com/media/XaAbmtzzz35IgW3Ntn/giphy.gif?cid=ecf05e47fyq4wkqmayqk6xuug7o8c7x9uh9baif795z3oiii&amp;ep=v1_gifs_search&amp;rid=giphy.gif&amp;ct=g&#34; /&gt;
+&lt;/p&gt;
+&lt;p&gt;So when no one offers this for free what else can we do? Build it ourselves!&lt;/p&gt;
+&lt;h2 id=&#34;content&#34;&gt;Content&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;#1-hardware&#34;&gt;Hardware&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#2-docker&#34;&gt;Docker&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#3-dynamic-dns&#34;&gt;Dynamic DNS&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#4-port-forwarding&#34;&gt;Port Forwarding&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#5-my-home-server-setup&#34;&gt;My Home Server Setup&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;1-hardware&#34;&gt;1. Hardware&lt;/h2&gt;
+&lt;p&gt;To start, you&amp;rsquo;ll need a computer that can act as a server. You don&amp;rsquo;t necessarily need a powerful machine for this, especially if your app isn&amp;rsquo;t too resource-intensive. An old desktop or a Raspberry Pi can work great for small-scale projects.&lt;/p&gt;
+&lt;p&gt;Make sure your server has a reliable internet connection. It should ideally be wired directly into your router to maximize uptime and minimize latency. Furthermore, you need a docker compatible OS. You can install it via a bootable USB stick.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+    &lt;img alt=&#34;Building things&#34; src=&#34;https://the-coding-lab.com/img/hardware.png&#34; /&gt;
+&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;2-docker&#34;&gt;2. Docker&lt;/h2&gt;
+&lt;p&gt;Next, we&amp;rsquo;re going to use Docker, an open-source platform that simplifies deploying applications within software containers. Containers package up the code, configs, and dependencies into isolated units, making the app easy to run on any platform that supports Docker.&lt;/p&gt;
+&lt;p&gt;To containerize our application we build a docker image using a &lt;code&gt;Dockerfile&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-Dockerfile&#34; data-lang=&#34;Dockerfile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;FROM&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; openjdk:17-jdk-alpine&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;ARG&lt;/span&gt; JAR_FILE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;target/*.jar&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;COPY&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;JAR_FILE&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt; app.jar&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;ENTRYPOINT&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;java&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;-jar&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/app.jar&amp;#34;&lt;/span&gt;]&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We deploy the container with a &lt;code&gt;docker run&lt;/code&gt; command or using docker-compose.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;3-dynamic-dns&#34;&gt;3. Dynamic DNS&lt;/h2&gt;
+&lt;p&gt;To make your server accessible from the internet, we deal with the public IP address that your ISP assigns, which changes regularly. The solution is Dynamic DNS (DDNS) - a service that keeps a DNS record up-to-date with your changing IP.&lt;/p&gt;
+&lt;p&gt;There are several DDNS providers to choose from. After selection, configure it by installing their software on your server to regularly check your public IP and inform the DDNS service if it has changed.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;4-port-forwarding&#34;&gt;4. Port Forwarding&lt;/h2&gt;
+&lt;p&gt;With a DDNS hostname pointing to your public IP, you&amp;rsquo;d want your app to be accessible via a user-friendly domain name. Purchase a domain, and set up a CNAME record pointing to your DDNS hostname.&lt;/p&gt;
+&lt;p&gt;The next step is port forwarding, a router feature that directs incoming traffic on specific ports to your server. For instance, if your app runs on port 8080, set up port forwarding to direct traffic coming in on this port to your server.&lt;/p&gt;
+&lt;p&gt;You&amp;rsquo;ve now got a home server hosting your full-stack app. Remember, this is a simplified guide - consider security, data safety, and home internet reliability when hosting critical applications at home.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+    &lt;img alt=&#34;hooooray&#34; src=&#34;https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZThjYzIwOTM2YjY3ZTk2NDUyYjc4ZWM4YzU2OGMyN2ZhOTU2ZDAxNyZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/3ohzAu2U1tOafteBa0/giphy.gif&#34; /&gt;
+&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;5-my-home-server-setup&#34;&gt;5. My Home Server Setup&lt;/h2&gt;
+&lt;p&gt;To wrap things up, I want to share a real-life implementation of everything we&amp;rsquo;ve covered in this article. I have set up a home server (UM-560 Mini PC) running Ubuntu Server, and Docker, and deployed my &lt;a href=&#34;https://github.com/NiklasTiede/imdb-clone&#34;&gt;IMDb Clone project&lt;/a&gt; that you can access &lt;a href=&#34;https://imdb-clone.the-coding-lab.com&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Here&amp;rsquo;s a quick overview of the setup:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;UM560 Home Server&lt;/strong&gt;: This is a powerful, compact mini PC, which makes it an excellent choice for a home server. It runs Ubuntu Server, a robust, scalable, and secure platform for deploying applications.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p align=&#34;center&#34;&gt;
+    &lt;img alt=&#34;Building things&#34; src=&#34;https://the-coding-lab.com/img/my-hardware.jpg&#34; /&gt;
+&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;IMDb Clone&lt;/strong&gt;: This is the application that&amp;rsquo;s been hosted on the server. It&amp;rsquo;s a full-fledged web application that gives users access to a vast database of movie information, just like the real IMDb. For more information visit &lt;a href=&#34;https://github.com/niklastiede/imdb-clone&#34;&gt;github.com/niklastiede/imdb-clone&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p align=&#34;center&#34;&gt;
+    &lt;img alt=&#34;Building things&#34; src=&#34;https://the-coding-lab.com/img/imdb-clone.png&#34; /&gt;
+&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Docker&lt;/strong&gt;: I also tried docker-swarm but due to poor compatibility with ElasticSearch I stuck with Docker-Compose&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;DynDNS&lt;/strong&gt;: My domain provider NameCheap provides also dynamic DNS, I use ddclient as a DynDNS client on the server&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Port Forwarding&lt;/strong&gt;: I have a FritzBox Router on which I opened port 443&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;Hosting this app on my home server was a journey full of learning and excitement. It required a fair amount of configuration and tweaking, but the end result was well worth the effort.&lt;/p&gt;
+&lt;p&gt;Remember, this didn&amp;rsquo;t happen overnight. It required a good understanding of the technologies involved, a fair bit of troubleshooting, and a lot of patience. But once everything was up and running, the sense of accomplishment was immense.&lt;/p&gt;
+&lt;p&gt;I hope my story inspires you and reassures you that setting up your own home server for your side projects is entirely doable. Just take it one step at a time, keep learning, and most importantly, enjoy the process. :smiley:&lt;/p&gt;
+</description> 
+    </item>
+    
+  </channel>
+</rss>

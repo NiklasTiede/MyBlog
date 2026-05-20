@@ -22,8 +22,7 @@ if (!doNotTrack) {
 	
 	ga('send', 'pageview');
 }
-</script>
- 
+</script> 
     
 <script type="application/javascript">
 var doNotTrack = false;
@@ -100,201 +99,201 @@ Python has great 3rd party packages for web scraping like <a href="https://githu
 <hr>
 <h1 id="1-scraping-repository-data">1. Scraping Repository Data</h1>
 <p>At first I wrote some Python code to scrape the desired data. I saved a sample of the trending repositories HTML to avoid sending dozens of requests to Github. I use <a href="https://github.com/httpie/httpie" target=”_blank” >HTTPie</a> as HTTP client to perform requests via the terminal.</p>
-<pre><code>$ http -b https://github.com/trending &gt; repositories.html
+<pre tabindex="0"><code>$ http -b https://github.com/trending &gt; repositories.html
 $ wc repositories.html
 </code></pre><p>The HTML file has a size of 695 KB. The wordcount shows that ~710.000 characters are distributed over ~6000 lines. The file contains 25 repositories waiting for me to be scraped 🙂. Each repository is enclosed by an article-tag.</p>
 <p>I opened the file from Python and tried to scrape the HTML document.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> bs4
-
-<span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;repositories.html&#39;</span>, <span style="color:#e6db74">&#39;r&#39;</span>) <span style="color:#66d9ef">as</span> f:
-    articles_html <span style="color:#f92672">=</span> f<span style="color:#f92672">.</span>read()
-
-soup <span style="color:#f92672">=</span> bs4<span style="color:#f92672">.</span>BeautifulSoup(articles_html, <span style="color:#e6db74">&#34;lxml&#34;</span>)
-articles <span style="color:#f92672">=</span>  soup<span style="color:#f92672">.</span>find_all(<span style="color:#e6db74">&#34;article&#34;</span>, class_<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Box-row&#34;</span>)
-
-<span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;number of articles: {len(articles)}&#39;</span>)
-</code></pre></div><p>After trying to scrape different repository data I realized that BeautifulSoup does not find all articles reliably. Some research revealed that others observed this as well. So I wrote a filter function as a workaround. This function filters all HTML out which is enclosed by the article-tags.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">filter_articles</span>(raw_html: str) <span style="color:#f92672">-&gt;</span> str:
-
-    raw_html <span style="color:#f92672">=</span> raw_html<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
-
-    <span style="color:#75715e"># count num of article tags (varies from 0 to 50):</span>
-    article_tags_count <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-    tag <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;article&#34;</span>
-    <span style="color:#66d9ef">for</span> line <span style="color:#f92672">in</span> raw_html:
-        <span style="color:#66d9ef">if</span> tag <span style="color:#f92672">in</span> line:
-            article_tags_count <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
-
-    <span style="color:#75715e"># copy HTML enclosed by first and last article-tag:</span>
-    articles_arrays, is_article <span style="color:#f92672">=</span> [], False
-    <span style="color:#66d9ef">for</span> line <span style="color:#f92672">in</span> raw_html:
-        <span style="color:#66d9ef">if</span> tag <span style="color:#f92672">in</span> line:
-            article_tags_count <span style="color:#f92672">-=</span> <span style="color:#ae81ff">1</span>
-            is_article <span style="color:#f92672">=</span> True
-        <span style="color:#66d9ef">if</span> is_article:
-            articles_arrays<span style="color:#f92672">.</span>append(line)
-        <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> article_tags_count:
-            is_article <span style="color:#f92672">=</span> False
-    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">.</span>join(articles_arrays)
-</code></pre></div><p>The now created &lsquo;bs4.element.ResultSet&rsquo; instances have always the expected length. Next we have to access the data within the soup and store them into a dictionary. The tags containing the desired data can be accessed using soups find-method or by going along the DOM tree via dot-notation. The latter is preferred performance-wise! Each repository is described by 12 properties. The function became quite lengthy, so I&rsquo;ll show only a part of the function (scraping 4 properties).</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">scraping_repositories</span>(
-    matches: bs4<span style="color:#f92672">.</span>element<span style="color:#f92672">.</span>ResultSet, 
-    since: str
-) <span style="color:#f92672">-&gt;</span> typing<span style="color:#f92672">.</span>List[typing<span style="color:#f92672">.</span>Dict]:
-
-    trending_repositories <span style="color:#f92672">=</span> []
-    <span style="color:#66d9ef">for</span> rank, match <span style="color:#f92672">in</span> enumerate(matches):
-
-        <span style="color:#75715e"># relative url</span>
-        rel_url <span style="color:#f92672">=</span> match<span style="color:#f92672">.</span>h1<span style="color:#f92672">.</span>a[<span style="color:#e6db74">&#34;href&#34;</span>]
-
-        <span style="color:#75715e"># name of repo</span>
-        repository_name <span style="color:#f92672">=</span> rel_url<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;/&#34;</span>)[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
-
-        <span style="color:#75715e"># author (username):</span>
-        username <span style="color:#f92672">=</span> rel_url<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;/&#34;</span>)[<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>]
-
-        <span style="color:#75715e"># language and color</span>
-        progr_language <span style="color:#f92672">=</span> match<span style="color:#f92672">.</span>find(<span style="color:#e6db74">&#34;span&#34;</span>, itemprop<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;programmingLanguage&#34;</span>)
-            language <span style="color:#f92672">=</span> progr_language<span style="color:#f92672">.</span>get_text(strip<span style="color:#f92672">=</span>True)
-            lang_color_tag <span style="color:#f92672">=</span> match<span style="color:#f92672">.</span>find(<span style="color:#e6db74">&#34;span&#34;</span>, class_<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;repo-language-color&#34;</span>)
-            lang_color <span style="color:#f92672">=</span> lang_color_tag[<span style="color:#e6db74">&#34;style&#34;</span>]<span style="color:#f92672">.</span>split()[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
-        <span style="color:#66d9ef">else</span>:
-            lang_color, language <span style="color:#f92672">=</span> None, None
-
-        repositories <span style="color:#f92672">=</span> {
-            <span style="color:#e6db74">&#34;rank&#34;</span>: rank <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>,
-            <span style="color:#e6db74">&#34;username&#34;</span>: username,
-            <span style="color:#e6db74">&#34;repositoryName&#34;</span>: repository_name,
-            <span style="color:#e6db74">&#34;language&#34;</span>: language,
-            <span style="color:#e6db74">&#34;languageColor&#34;</span>: lang_color,
-        }
-        trending_repositories<span style="color:#f92672">.</span>append(repositories)
-    <span style="color:#66d9ef">return</span> trending_repositories
-</code></pre></div><p>For data about trending developers I have written a another scraping function. Ok, now that we can scrape the HTML, users have to be able to retrieve the data via a GET request.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> bs4
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;repositories.html&#39;</span>, <span style="color:#e6db74">&#39;r&#39;</span>) <span style="color:#66d9ef">as</span> f:
+</span></span><span style="display:flex;"><span>    articles_html <span style="color:#f92672">=</span> f<span style="color:#f92672">.</span>read()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>soup <span style="color:#f92672">=</span> bs4<span style="color:#f92672">.</span>BeautifulSoup(articles_html, <span style="color:#e6db74">&#34;lxml&#34;</span>)
+</span></span><span style="display:flex;"><span>articles <span style="color:#f92672">=</span>  soup<span style="color:#f92672">.</span>find_all(<span style="color:#e6db74">&#34;article&#34;</span>, class_<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Box-row&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;number of articles: </span><span style="color:#e6db74">{</span>len(articles)<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span></code></pre></div><p>After trying to scrape different repository data I realized that BeautifulSoup does not find all articles reliably. Some research revealed that others observed this as well. So I wrote a filter function as a workaround. This function filters all HTML out which is enclosed by the article-tags.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">filter_articles</span>(raw_html: str) <span style="color:#f92672">-&gt;</span> str:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    raw_html <span style="color:#f92672">=</span> raw_html<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># count num of article tags (varies from 0 to 50):</span>
+</span></span><span style="display:flex;"><span>    article_tags_count <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    tag <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;article&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> line <span style="color:#f92672">in</span> raw_html:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> tag <span style="color:#f92672">in</span> line:
+</span></span><span style="display:flex;"><span>            article_tags_count <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># copy HTML enclosed by first and last article-tag:</span>
+</span></span><span style="display:flex;"><span>    articles_arrays, is_article <span style="color:#f92672">=</span> [], <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> line <span style="color:#f92672">in</span> raw_html:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> tag <span style="color:#f92672">in</span> line:
+</span></span><span style="display:flex;"><span>            article_tags_count <span style="color:#f92672">-=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>            is_article <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> is_article:
+</span></span><span style="display:flex;"><span>            articles_arrays<span style="color:#f92672">.</span>append(line)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> article_tags_count:
+</span></span><span style="display:flex;"><span>            is_article <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">.</span>join(articles_arrays)
+</span></span></code></pre></div><p>The now created &lsquo;bs4.element.ResultSet&rsquo; instances have always the expected length. Next we have to access the data within the soup and store them into a dictionary. The tags containing the desired data can be accessed using soups find-method or by going along the DOM tree via dot-notation. The latter is preferred performance-wise! Each repository is described by 12 properties. The function became quite lengthy, so I&rsquo;ll show only a part of the function (scraping 4 properties).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">scraping_repositories</span>(
+</span></span><span style="display:flex;"><span>    matches: bs4<span style="color:#f92672">.</span>element<span style="color:#f92672">.</span>ResultSet, 
+</span></span><span style="display:flex;"><span>    since: str
+</span></span><span style="display:flex;"><span>) <span style="color:#f92672">-&gt;</span> typing<span style="color:#f92672">.</span>List[typing<span style="color:#f92672">.</span>Dict]:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    trending_repositories <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> rank, <span style="color:#66d9ef">match</span> <span style="color:#f92672">in</span> enumerate(matches):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># relative url</span>
+</span></span><span style="display:flex;"><span>        rel_url <span style="color:#f92672">=</span> <span style="color:#66d9ef">match</span><span style="color:#f92672">.</span>h1<span style="color:#f92672">.</span>a[<span style="color:#e6db74">&#34;href&#34;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># name of repo</span>
+</span></span><span style="display:flex;"><span>        repository_name <span style="color:#f92672">=</span> rel_url<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;/&#34;</span>)[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># author (username):</span>
+</span></span><span style="display:flex;"><span>        username <span style="color:#f92672">=</span> rel_url<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;/&#34;</span>)[<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># language and color</span>
+</span></span><span style="display:flex;"><span>        progr_language <span style="color:#f92672">=</span> <span style="color:#66d9ef">match</span><span style="color:#f92672">.</span>find(<span style="color:#e6db74">&#34;span&#34;</span>, itemprop<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;programmingLanguage&#34;</span>)
+</span></span><span style="display:flex;"><span>            language <span style="color:#f92672">=</span> progr_language<span style="color:#f92672">.</span>get_text(strip<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>            lang_color_tag <span style="color:#f92672">=</span> <span style="color:#66d9ef">match</span><span style="color:#f92672">.</span>find(<span style="color:#e6db74">&#34;span&#34;</span>, class_<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;repo-language-color&#34;</span>)
+</span></span><span style="display:flex;"><span>            lang_color <span style="color:#f92672">=</span> lang_color_tag[<span style="color:#e6db74">&#34;style&#34;</span>]<span style="color:#f92672">.</span>split()[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            lang_color, language <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>, <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        repositories <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;rank&#34;</span>: rank <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;username&#34;</span>: username,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;repositoryName&#34;</span>: repository_name,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;language&#34;</span>: language,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;languageColor&#34;</span>: lang_color,
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        trending_repositories<span style="color:#f92672">.</span>append(repositories)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> trending_repositories
+</span></span></code></pre></div><p>For data about trending developers I have written a another scraping function. Ok, now that we can scrape the HTML, users have to be able to retrieve the data via a GET request.</p>
 <hr>
 <h1 id="2-fastapi">2. FastAPI</h1>
 <p>FastAPI makes building APIs a breeze. Here&rsquo;s an example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> fastapi
-<span style="color:#f92672">import</span> uvicorn
-
-app <span style="color:#f92672">=</span> fastapi<span style="color:#f92672">.</span>FastAPI()
-
-<span style="color:#a6e22e">@app.get</span>(<span style="color:#e6db74">&#34;/&#34;</span>)
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">index</span>(myArg: str <span style="color:#f92672">=</span> None):
-    <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#34;data&#34;</span>: myArg}
-
-<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
-    uvicorn<span style="color:#f92672">.</span>run(app, port<span style="color:#f92672">=</span><span style="color:#ae81ff">8000</span>, host<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0.0.0.0&#34;</span>)
-</code></pre></div><p>The path operation decorator <code>@app.get(&quot;/&quot;)</code> handles requests that go to the <code>&quot;/&quot;</code> route using a GET operation. The path operation function <code>index()</code> let&rsquo;s us handle query parameters. The code snippet contains an optional query parameter.</p>
-<pre><code>$ http -b http://0.0.0.0:8000/?myArg=hello
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> fastapi
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> uvicorn
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>app <span style="color:#f92672">=</span> fastapi<span style="color:#f92672">.</span>FastAPI()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@app.get</span>(<span style="color:#e6db74">&#34;/&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">index</span>(myArg: str <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#34;data&#34;</span>: myArg}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
+</span></span><span style="display:flex;"><span>    uvicorn<span style="color:#f92672">.</span>run(app, port<span style="color:#f92672">=</span><span style="color:#ae81ff">8000</span>, host<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;0.0.0.0&#34;</span>)
+</span></span></code></pre></div><p>The path operation decorator <code>@app.get(&quot;/&quot;)</code> handles requests that go to the <code>&quot;/&quot;</code> route using a GET operation. The path operation function <code>index()</code> let&rsquo;s us handle query parameters. The code snippet contains an optional query parameter.</p>
+<pre tabindex="0"><code>$ http -b http://0.0.0.0:8000/?myArg=hello
 
 {
-    &quot;data&quot;: &quot;hello&quot;
+    &#34;data&#34;: &#34;hello&#34;
 }
 </code></pre><p>We will create endpoints similar to the endpoints on Github. The programming language can be specified by a path parameter whereas the date range and the spoken language can be specified by an optional query parameter. Here&rsquo;s an example:</p>
 <p><code>/c++?since=weekly&amp;spoken_lang=de</code></p>
 <p>FastAPI lets us define a set of allowed data which can be selected by the user. We have to create classes which contain the allowed properties and inherit from the <code>Enum</code> class.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AllowedDateRanges</span>(str, Enum):
-    daily <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;daily&#34;</span>
-    weekly <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;weekly&#34;</span>
-    monthly <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;monthly&#34;</span>
-</code></pre></div><p>When opening FastAPIs documentation we will see that only 3 options for the date range will be available:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AllowedDateRanges</span>(str, Enum):
+</span></span><span style="display:flex;"><span>    daily <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;daily&#34;</span>
+</span></span><span style="display:flex;"><span>    weekly <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;weekly&#34;</span>
+</span></span><span style="display:flex;"><span>    monthly <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;monthly&#34;</span>
+</span></span></code></pre></div><p>When opening FastAPIs documentation we will see that only 3 options for the date range will be available:</p>
 <p><img src="/img/docs_parameters.png" alt="allowed parameters"></p>
 <p>The code for the routing will be written within a <code>main.py</code> file. The path operation function accepts only allowed path parameters (programming languages) and optional query parameters (date ranges and spoken languages).</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#a6e22e">@app.get</span>(<span style="color:#e6db74">&#34;/repositories/{prog_lang}&#34;</span>)
-async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">trending_repositories_by_progr_language</span>(
-    since: AllowedDateRanges <span style="color:#f92672">=</span> None,
-):
-    <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#34;dateRange&#34;</span>: since}
-</code></pre></div><p>Ok, now I know how the endpoints should look like, but before the user can choose between different options at all, I have to make make the web scraping dynamic by requesting the desired HTML from Github instead of just opening a local HTML copy. Pythons well-known <code>requests</code> module does the job. The goal is to let the user select between different parameters. The parameters of the request are redirected as payload to Github to receive the desired HTML.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> requests
-
-payload <span style="color:#f92672">=</span> {
-    <span style="color:#e6db74">&#39;since&#39;</span>: <span style="color:#e6db74">&#39;daily&#39;</span>, 
-    <span style="color:#e6db74">&#39;spoken_language_code&#39;</span>: <span style="color:#e6db74">&#39;en&#39;</span>,
-    }
-
-prog_lang <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;c++&#39;</span>
-
-resp <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(f<span style="color:#e6db74">&#34;https://github.com/trending/{prog_lang}&#34;</span>, params<span style="color:#f92672">=</span>payload)
-raw_html <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
-</code></pre></div><p>Next, I will put the 3 parts together: the user can request data of trending repositories. The shown path operation function gives us the ability to specify the search for trending repositories (by programming language, period of time and spoken language. These arguments are redirected as payload to request the desired HTML which is at last scraped and returned as JSON.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#a6e22e">@app.get</span>(<span style="color:#e6db74">&#34;/repositories/{prog_lang}&#34;</span>)
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">trending_repositories_by_progr_language</span>(
-    prog_lang: AllowedProgrammingLanguages,
-    since: AllowedDateRanges <span style="color:#f92672">=</span> None,
-    spoken_lang: AllowedSpokenLanguages <span style="color:#f92672">=</span> None,
-):
-
-    payload <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;since&#34;</span>: <span style="color:#e6db74">&#34;daily&#34;</span>}
-    <span style="color:#66d9ef">if</span> since:
-        payload[<span style="color:#e6db74">&#34;since&#34;</span>] <span style="color:#f92672">=</span> since<span style="color:#f92672">.</span>_value_
-    <span style="color:#66d9ef">if</span> spoken_lang:
-        payload[<span style="color:#e6db74">&#34;spoken_lang&#34;</span>] <span style="color:#f92672">=</span> spoken_lang<span style="color:#f92672">.</span>_value_
-
-    resp <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(f<span style="color:#e6db74">&#34;https://github.com/trending/{prog_lang}&#34;</span>, params<span style="color:#f92672">=</span>payload)
-    raw_html <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
-
-    articles_html <span style="color:#f92672">=</span> filter_articles(raw_html)
-    soup <span style="color:#f92672">=</span> make_soup(articles_html)
-    <span style="color:#66d9ef">return</span> scraping_repositories(soup, since<span style="color:#f92672">=</span>payload[<span style="color:#e6db74">&#34;since&#34;</span>])
-</code></pre></div><p>But how does the app perform? Professional tools like <a href="https://httpd.apache.org/docs/2.4/programs/ab.html">ApacheBench</a> or <a href="https://github.com/k6io/k6">k6</a> are commonly used to perform load testing, but in this case I wrote a small asynchronous script to bomb the application with requests. Comparing the performance of sync or async web apps without using async requests would be nonsense. I&rsquo;ll call it <code>requests_benchmark.py</code> and place it within the <code>tests/</code> folder. Be aware that this is a rough comparison, I just want to illustrate the difference between synchronous and asynchronous code.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> asyncio
-<span style="color:#f92672">import</span> time
-<span style="color:#f92672">import</span> aiohttp
-
-URL <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://127.0.0.1:8000/repositories/c++?since=weekly&#34;</span>
-url_list <span style="color:#f92672">=</span> list([URL] <span style="color:#f92672">*</span> <span style="color:#ae81ff">50</span>)
-
-async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">fetch</span>(session, url):
-    <span style="color:#e6db74">&#34;&#34;&#34;requesting a url asynchronously&#34;&#34;&#34;</span>
-    async <span style="color:#66d9ef">with</span> session<span style="color:#f92672">.</span>get(url) <span style="color:#66d9ef">as</span> response:
-        <span style="color:#66d9ef">return</span> await response<span style="color:#f92672">.</span>json()
-
-async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">fetch_all</span>(urls, loop):
-    <span style="color:#e6db74">&#34;&#34;&#34;performaning multiple requests asynchronously&#34;&#34;&#34;</span>
-    async <span style="color:#66d9ef">with</span> aiohttp<span style="color:#f92672">.</span>ClientSession(loop<span style="color:#f92672">=</span>loop) <span style="color:#66d9ef">as</span> session:
-        results <span style="color:#f92672">=</span> await asyncio<span style="color:#f92672">.</span>gather(
-            <span style="color:#f92672">*</span>[fetch(session, url) <span style="color:#66d9ef">for</span> url <span style="color:#f92672">in</span> urls],
-            return_exceptions<span style="color:#f92672">=</span>True,
-        )
-        <span style="color:#66d9ef">return</span> results
-
-<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
-    t1_start <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>perf_counter()
-    event_loop <span style="color:#f92672">=</span> asyncio<span style="color:#f92672">.</span>get_event_loop()
-    urls_duplicates <span style="color:#f92672">=</span> url_list
-    htmls <span style="color:#f92672">=</span> event_loop<span style="color:#f92672">.</span>run_until_complete(
-        fetch_all(urls_duplicates, event_loop),
-    )
-    t1_stop <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>perf_counter()
-    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;elapsed:&#34;</span>, t1_stop <span style="color:#f92672">-</span> t1_start)
-</code></pre></div><p>I executed the script 3 times making 20 requests on each execution. Ok now lets replace the synchronous <a href="https://github.com/psf/requests">requests</a> library by the asynchronous <a href="https://github.com/aio-libs/aiohttp">aiohttp</a> library. Furthermore, we add the <code>async</code>/<code>await</code> keywords on the right positions. Our final code will look like this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#a6e22e">@app.get</span>(<span style="color:#e6db74">&#34;/repositories/{prog_lang}&#34;</span>)
-async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">trending_repositories_by_progr_language</span>(
-    prog_lang: AllowedProgrammingLanguages,
-    since: AllowedDateRanges <span style="color:#f92672">=</span> None,
-    spoken_language_code: AllowedSpokenLanguages <span style="color:#f92672">=</span> None,
-):
-
-    payload <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;since&#34;</span>: <span style="color:#e6db74">&#34;daily&#34;</span>}
-    <span style="color:#66d9ef">if</span> since:
-        payload[<span style="color:#e6db74">&#34;since&#34;</span>] <span style="color:#f92672">=</span> since<span style="color:#f92672">.</span>value
-    <span style="color:#66d9ef">if</span> spoken_language_code:
-        payload[<span style="color:#e6db74">&#34;spoken_language_code&#34;</span>] <span style="color:#f92672">=</span> spoken_language_code<span style="color:#f92672">.</span>value
-
-    url <span style="color:#f92672">=</span> f<span style="color:#e6db74">&#34;https://github.com/trending/{prog_lang}&#34;</span>
-    sem <span style="color:#f92672">=</span> asyncio<span style="color:#f92672">.</span>Semaphore()
-    async <span style="color:#66d9ef">with</span> sem:
-        raw_html <span style="color:#f92672">=</span> await get_request(url, compress<span style="color:#f92672">=</span>True, params<span style="color:#f92672">=</span>payload)
-    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> isinstance(raw_html, str):
-        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;Unable to connect to Github&#34;</span>
-
-    articles_html <span style="color:#f92672">=</span> filter_articles(raw_html)
-    soup <span style="color:#f92672">=</span> make_soup(articles_html)
-    <span style="color:#66d9ef">return</span> scraping_repositories(soup, since<span style="color:#f92672">=</span>payload[<span style="color:#e6db74">&#34;since&#34;</span>])
-</code></pre></div><p>Again three measurements were done using the <code>requests_benchmark.py</code> script. The average of the measurements were calculated and the requests per second of synchronous and asynchronous code are compared as a barchart. The asynchronous code performs roughly twice as good.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#a6e22e">@app.get</span>(<span style="color:#e6db74">&#34;/repositories/</span><span style="color:#e6db74">{prog_lang}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">async</span> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">trending_repositories_by_progr_language</span>(
+</span></span><span style="display:flex;"><span>    since: AllowedDateRanges <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>,
+</span></span><span style="display:flex;"><span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#34;dateRange&#34;</span>: since}
+</span></span></code></pre></div><p>Ok, now I know how the endpoints should look like, but before the user can choose between different options at all, I have to make make the web scraping dynamic by requesting the desired HTML from Github instead of just opening a local HTML copy. Pythons well-known <code>requests</code> module does the job. The goal is to let the user select between different parameters. The parameters of the request are redirected as payload to Github to receive the desired HTML.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>payload <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;since&#39;</span>: <span style="color:#e6db74">&#39;daily&#39;</span>, 
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;spoken_language_code&#39;</span>: <span style="color:#e6db74">&#39;en&#39;</span>,
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>prog_lang <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;c++&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>resp <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;https://github.com/trending/</span><span style="color:#e6db74">{</span>prog_lang<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>, params<span style="color:#f92672">=</span>payload)
+</span></span><span style="display:flex;"><span>raw_html <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
+</span></span></code></pre></div><p>Next, I will put the 3 parts together: the user can request data of trending repositories. The shown path operation function gives us the ability to specify the search for trending repositories (by programming language, period of time and spoken language. These arguments are redirected as payload to request the desired HTML which is at last scraped and returned as JSON.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#a6e22e">@app.get</span>(<span style="color:#e6db74">&#34;/repositories/</span><span style="color:#e6db74">{prog_lang}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">trending_repositories_by_progr_language</span>(
+</span></span><span style="display:flex;"><span>    prog_lang: AllowedProgrammingLanguages,
+</span></span><span style="display:flex;"><span>    since: AllowedDateRanges <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>,
+</span></span><span style="display:flex;"><span>    spoken_lang: AllowedSpokenLanguages <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>,
+</span></span><span style="display:flex;"><span>):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    payload <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;since&#34;</span>: <span style="color:#e6db74">&#34;daily&#34;</span>}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> since:
+</span></span><span style="display:flex;"><span>        payload[<span style="color:#e6db74">&#34;since&#34;</span>] <span style="color:#f92672">=</span> since<span style="color:#f92672">.</span>_value_
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> spoken_lang:
+</span></span><span style="display:flex;"><span>        payload[<span style="color:#e6db74">&#34;spoken_lang&#34;</span>] <span style="color:#f92672">=</span> spoken_lang<span style="color:#f92672">.</span>_value_
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    resp <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;https://github.com/trending/</span><span style="color:#e6db74">{</span>prog_lang<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>, params<span style="color:#f92672">=</span>payload)
+</span></span><span style="display:flex;"><span>    raw_html <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    articles_html <span style="color:#f92672">=</span> filter_articles(raw_html)
+</span></span><span style="display:flex;"><span>    soup <span style="color:#f92672">=</span> make_soup(articles_html)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> scraping_repositories(soup, since<span style="color:#f92672">=</span>payload[<span style="color:#e6db74">&#34;since&#34;</span>])
+</span></span></code></pre></div><p>But how does the app perform? Professional tools like <a href="https://httpd.apache.org/docs/2.4/programs/ab.html">ApacheBench</a> or <a href="https://github.com/k6io/k6">k6</a> are commonly used to perform load testing, but in this case I wrote a small asynchronous script to bomb the application with requests. Comparing the performance of sync or async web apps without using async requests would be nonsense. I&rsquo;ll call it <code>requests_benchmark.py</code> and place it within the <code>tests/</code> folder. Be aware that this is a rough comparison, I just want to illustrate the difference between synchronous and asynchronous code.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> asyncio
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> time
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> aiohttp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>URL <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://127.0.0.1:8000/repositories/c++?since=weekly&#34;</span>
+</span></span><span style="display:flex;"><span>url_list <span style="color:#f92672">=</span> list([URL] <span style="color:#f92672">*</span> <span style="color:#ae81ff">50</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">async</span> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">fetch</span>(session, url):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;requesting a url asynchronously&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">async</span> <span style="color:#66d9ef">with</span> session<span style="color:#f92672">.</span>get(url) <span style="color:#66d9ef">as</span> response:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">await</span> response<span style="color:#f92672">.</span>json()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">async</span> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">fetch_all</span>(urls, loop):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;performaning multiple requests asynchronously&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">async</span> <span style="color:#66d9ef">with</span> aiohttp<span style="color:#f92672">.</span>ClientSession(loop<span style="color:#f92672">=</span>loop) <span style="color:#66d9ef">as</span> session:
+</span></span><span style="display:flex;"><span>        results <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> asyncio<span style="color:#f92672">.</span>gather(
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">*</span>[fetch(session, url) <span style="color:#66d9ef">for</span> url <span style="color:#f92672">in</span> urls],
+</span></span><span style="display:flex;"><span>            return_exceptions<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> results
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
+</span></span><span style="display:flex;"><span>    t1_start <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>perf_counter()
+</span></span><span style="display:flex;"><span>    event_loop <span style="color:#f92672">=</span> asyncio<span style="color:#f92672">.</span>get_event_loop()
+</span></span><span style="display:flex;"><span>    urls_duplicates <span style="color:#f92672">=</span> url_list
+</span></span><span style="display:flex;"><span>    htmls <span style="color:#f92672">=</span> event_loop<span style="color:#f92672">.</span>run_until_complete(
+</span></span><span style="display:flex;"><span>        fetch_all(urls_duplicates, event_loop),
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    t1_stop <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>perf_counter()
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;elapsed:&#34;</span>, t1_stop <span style="color:#f92672">-</span> t1_start)
+</span></span></code></pre></div><p>I executed the script 3 times making 20 requests on each execution. Ok now lets replace the synchronous <a href="https://github.com/psf/requests">requests</a> library by the asynchronous <a href="https://github.com/aio-libs/aiohttp">aiohttp</a> library. Furthermore, we add the <code>async</code>/<code>await</code> keywords on the right positions. Our final code will look like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#a6e22e">@app.get</span>(<span style="color:#e6db74">&#34;/repositories/</span><span style="color:#e6db74">{prog_lang}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">async</span> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">trending_repositories_by_progr_language</span>(
+</span></span><span style="display:flex;"><span>    prog_lang: AllowedProgrammingLanguages,
+</span></span><span style="display:flex;"><span>    since: AllowedDateRanges <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>,
+</span></span><span style="display:flex;"><span>    spoken_language_code: AllowedSpokenLanguages <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>,
+</span></span><span style="display:flex;"><span>):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    payload <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;since&#34;</span>: <span style="color:#e6db74">&#34;daily&#34;</span>}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> since:
+</span></span><span style="display:flex;"><span>        payload[<span style="color:#e6db74">&#34;since&#34;</span>] <span style="color:#f92672">=</span> since<span style="color:#f92672">.</span>value
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> spoken_language_code:
+</span></span><span style="display:flex;"><span>        payload[<span style="color:#e6db74">&#34;spoken_language_code&#34;</span>] <span style="color:#f92672">=</span> spoken_language_code<span style="color:#f92672">.</span>value
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    url <span style="color:#f92672">=</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;https://github.com/trending/</span><span style="color:#e6db74">{</span>prog_lang<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    sem <span style="color:#f92672">=</span> asyncio<span style="color:#f92672">.</span>Semaphore()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">async</span> <span style="color:#66d9ef">with</span> sem:
+</span></span><span style="display:flex;"><span>        raw_html <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> get_request(url, compress<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, params<span style="color:#f92672">=</span>payload)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> isinstance(raw_html, str):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;Unable to connect to Github&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    articles_html <span style="color:#f92672">=</span> filter_articles(raw_html)
+</span></span><span style="display:flex;"><span>    soup <span style="color:#f92672">=</span> make_soup(articles_html)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> scraping_repositories(soup, since<span style="color:#f92672">=</span>payload[<span style="color:#e6db74">&#34;since&#34;</span>])
+</span></span></code></pre></div><p>Again three measurements were done using the <code>requests_benchmark.py</code> script. The average of the measurements were calculated and the requests per second of synchronous and asynchronous code are compared as a barchart. The asynchronous code performs roughly twice as good.</p>
 <p align="center">
 <img alt="load test comparison: sync vs. async" src="/img/sync_vs_async_load.svg">
 </p>
@@ -302,53 +301,53 @@ async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">trendin
 <hr>
 <h1 id="3-deployment-to-heroku">3. Deployment to Heroku</h1>
 <p>We&rsquo;ll use Heroku which is an excellent Platform as a service (PaaS) cloud provider. To deploy our API to heroku we need a <code>heroku.yml</code> file&hellip;</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">build</span>:
-  <span style="color:#f92672">docker</span>:
-    <span style="color:#f92672">web</span>: <span style="color:#ae81ff">Dockerfile</span>
-</code></pre></div><p>&hellip;and a Dockerfile. For the docker image we use the lightweight linux-distribution alpine. This results in a 80Mb sized image which is built when executing the <code>docker build -t gh-trending-api .</code> command. The <code>lxml</code> package we use for the webscraping requires <code>libxml</code>, a C-library. Therefore we need to compile C-code and thus building the docker container can take up to several minutes.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> python:3.9.2-alpine3.13</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">LABEL</span> maintainer<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Niklas Tiede &lt;niklastiede2@gmail.com&gt;&#34;</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /github-trending-api</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> ./requirements-prod.txt .<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> apk add --update --no-cache --virtual .build-deps <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    g++ <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    libxml2 <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    libxml2-dev <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    apk add libxslt-dev <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    pip install --no-cache-dir -r requirements-prod.txt <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    apk del .build-deps<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> ./app ./app<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">CMD</span> uvicorn app.main:app --host 0.0.0.0 --port<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>PORT<span style="color:#66d9ef">:-</span>5000<span style="color:#e6db74">}</span><span style="color:#960050;background-color:#1e0010">
-</span></code></pre></div><p>Then we have to publish the port we defined in the <code>CMD</code> instruction of the Dockerfile (port 5000) to the outside world. We have to map the containers port to a port on the docker host when running the container:</p>
-<pre><code>$ docker run -p 5000:5000 gh-trending-api:latest
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">build</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">docker</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">web</span>: <span style="color:#ae81ff">Dockerfile</span>
+</span></span></code></pre></div><p>&hellip;and a Dockerfile. For the docker image we use the lightweight linux-distribution alpine. This results in a 80Mb sized image which is built when executing the <code>docker build -t gh-trending-api .</code> command. The <code>lxml</code> package we use for the webscraping requires <code>libxml</code>, a C-library. Therefore we need to compile C-code and thus building the docker container can take up to several minutes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> python:3.9.2-alpine3.13</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">LABEL</span> maintainer<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Niklas Tiede &lt;niklastiede2@gmail.com&gt;&#34;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /github-trending-api</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> ./requirements-prod.txt .<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> apk add --update --no-cache --virtual .build-deps <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    g++ <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libxml2 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libxml2-dev <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    apk add libxslt-dev <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    pip install --no-cache-dir -r requirements-prod.txt <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    apk del .build-deps<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> ./app ./app<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">CMD</span> uvicorn app.main:app --host 0.0.0.0 --port<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>PORT<span style="color:#66d9ef">:-</span>5000<span style="color:#e6db74">}</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p>Then we have to publish the port we defined in the <code>CMD</code> instruction of the Dockerfile (port 5000) to the outside world. We have to map the containers port to a port on the docker host when running the container:</p>
+<pre tabindex="0"><code>$ docker run -p 5000:5000 gh-trending-api:latest
 </code></pre><p>Next we automate the deployment process using Github Actions. We create a <code>release_and_deploy.yaml</code> file within a <code>.github/workflow/</code> folder and place the following code. It contains the Github action &ldquo;<a href="https://github.com/marketplace/actions/deploy-to-heroku">Deploy to Heroku</a>&rdquo; which will do the deployment for us.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">name</span>: <span style="color:#ae81ff">GH Release, Publishing to Docker and Deployment to Heroku</span>
-
-<span style="color:#f92672">on</span>:
-  <span style="color:#f92672">push</span>:
-    <span style="color:#f92672">tags</span>:
-      - <span style="color:#e6db74">&#39;v*.*.*&#39;</span>
-<span style="color:#f92672">jobs</span>:
-  <span style="color:#f92672">test</span>:
-    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
-    <span style="color:#f92672">steps</span>:
-  <span style="color:#f92672">heroku-deploy</span>:
-    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
-    <span style="color:#f92672">steps</span>:
-    - <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@master</span>
-    - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Deploy on Heroku</span>
-      <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">akhileshns/heroku-deploy@v3.12.12</span>
-      <span style="color:#f92672">with</span>:
-        <span style="color:#f92672">heroku_api_key</span>: <span style="color:#ae81ff">${{secrets.HEROKU_API_KEY}}</span>
-        <span style="color:#f92672">heroku_app_name</span>: <span style="color:#e6db74">&#34;gh-trending-api&#34;</span>
-        <span style="color:#f92672">heroku_email</span>: <span style="color:#e6db74">&#34;niklastiede2@gmail.com&#34;</span>
-</code></pre></div><p>We copy the <code>HEROKU_API_KEY</code> from Heroku&rsquo;s account settings and save this as a secret in our Github repository so our Github action can access it. Now each time we push a tag of our project into the remote repository, this workflow kicks in. It pushes the project to Heroku which will build and run the docker container of our application. The URL of our app can be reached at <a href="https://gh-trending-api.herokuapp.com/">https://gh-trending-api.herokuapp.com/</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">name</span>: <span style="color:#ae81ff">GH Release, Publishing to Docker and Deployment to Heroku</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">on</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">push</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">tags</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#39;v*.*.*&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">jobs</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">test</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">heroku-deploy</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@master</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Deploy on Heroku</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">akhileshns/heroku-deploy@v3.12.12</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">heroku_api_key</span>: <span style="color:#ae81ff">${{secrets.HEROKU_API_KEY}}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">heroku_app_name</span>: <span style="color:#e6db74">&#34;gh-trending-api&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">heroku_email</span>: <span style="color:#e6db74">&#34;niklastiede2@gmail.com&#34;</span>
+</span></span></code></pre></div><p>We copy the <code>HEROKU_API_KEY</code> from Heroku&rsquo;s account settings and save this as a secret in our Github repository so our Github action can access it. Now each time we push a tag of our project into the remote repository, this workflow kicks in. It pushes the project to Heroku which will build and run the docker container of our application. The URL of our app can be reached at <a href="https://gh-trending-api.herokuapp.com/">https://gh-trending-api.herokuapp.com/</a></p>
 <p>Aaaand, thats it! We deployed a nice-looking API 😙</p>
 <hr>
 <h1 id="4-conclusion-and-future-directions">4. Conclusion and Future Directions</h1>
@@ -370,9 +369,17 @@ async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">trendin
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/cli">cli</a></span>
         
+            <span class="tag"><a href="https://the-coding-lab.com/tags/devops">devops</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/imdbclone">imdbclone</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/java">java</a></span>
+        
             <span class="tag"><a href="https://the-coding-lab.com/tags/packaging">packaging</a></span>
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/python">python</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/react">react</a></span>
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/scripting">scripting</a></span>
         
@@ -387,6 +394,9 @@ async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">trendin
     <div class="card-content">
         <h1 class="title is-5">Recent posts</h1>
         
+            <h1><a href="https://the-coding-lab.com/2023/deploy-full-stack-app-on-home-server/">How to Cheaply Host Your Full-Stack Side-Project: Serving it From Home</a></h1>
+            <time class="has-text-grey-light is-size-7">25 May 2023</time>
+        
             <h1><a href="https://the-coding-lab.com/2021/conda-and-pip/">Managing Environments with Conda and pip</a></h1>
             <time class="has-text-grey-light is-size-7">25 April 2021</time>
         
@@ -398,9 +408,6 @@ async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">trendin
         
             <h1><a href="https://the-coding-lab.com/2021/8-publishing-at-pypi/">Releasing a Python App at Github/PyPI and Automate it - 8/9</a></h1>
             <time class="has-text-grey-light is-size-7">23 February 2021</time>
-        
-            <h1><a href="https://the-coding-lab.com/2021/7-documentation/">Documentation - 7/9</a></h1>
-            <time class="has-text-grey-light is-size-7">19 February 2021</time>
         
     </div>
 </div>
@@ -414,6 +421,9 @@ async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">trendin
     <div class="card-content">
         <h1 class="title is-5">Related posts</h1>
       
+      
+            <h1><a href="https://the-coding-lab.com/2023/deploy-full-stack-app-on-home-server/">How to Cheaply Host Your Full-Stack Side-Project: Serving it From Home</a></h1>
+            <time class="has-text-grey-light is-size-7">25 May 2023</time>
       
             <h1><a href="https://the-coding-lab.com/2021/conda-and-pip/">Managing Environments with Conda and pip</a></h1>
             <time class="has-text-grey-light is-size-7">25 April 2021</time>
@@ -433,9 +443,6 @@ async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">trendin
             <h1><a href="https://the-coding-lab.com/2021/5-distribution-via-setup-file/">Distribution via Setup File - 5/9</a></h1>
             <time class="has-text-grey-light is-size-7">11 February 2021</time>
       
-            <h1><a href="https://the-coding-lab.com/2021/3-argparse-module/">Argparse Module - 3/9</a></h1>
-            <time class="has-text-grey-light is-size-7">1 February 2021</time>
-      
     </div>
 </div>
 
@@ -444,6 +451,8 @@ async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">trendin
         <div class="card">
     <div class="card-content">
         <h1 class="title is-5">Archives</h1>
+        
+            <a href="https://the-coding-lab.com/archives/2023">2023</a> (1)<br>
         
             <a href="https://the-coding-lab.com/archives/2021">2021</a> (11)<br>
         
@@ -467,7 +476,7 @@ async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">trendin
             <span class="icon is-large"><a href="https://www.linkedin.com/in/niklas-tiede-3b57451b6/" class="mysocial" rel="me"><i class="fab fa-linkedin fa-3x"></i></a></span>&nbsp;&nbsp;
             <span class="icon is-large"><a href="https://dev.to/niklastiede" class="mysocial" rel="me"><i class="fab fa-dev fa-3x"></i></a></span>&nbsp;&nbsp;
             <br><br>
-            Copyright &copy; The Coding Lab 2021 - Theme by <a href="https://jeffprod.com" class="mysocial">JeffProd.com</a>
+            Copyright &copy; The Coding Lab 2023 - Theme by <a href="https://jeffprod.com" class="mysocial">JeffProd.com</a>
             - <a class="mysocial" href="https://the-coding-lab.com/about">About</a>
         </p>
     </div>

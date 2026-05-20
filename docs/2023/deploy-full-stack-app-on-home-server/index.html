@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>The Coding Lab  | How to Cheaply Host Your Full-Stack Side-Project: Serving it From Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
+    <link rel="stylesheet" href="https://the-coding-lab.com/css/blog.css" />
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-192987769-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script> 
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-192987769-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+ 
+</head>
+<body>
+
+    
+    <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="https://the-coding-lab.com/">Home</a>
+        </div>
+    </nav>
+    
+
+    
+    <section class="hero is-info is-medium">
+        <div class="hero-body" style="background-image: url(https://the-coding-lab.com/img/bg-blog.jpg);">
+            <div class="container has-text-centered">
+                <br>
+                <h1 class="title is-size-1">
+                    
+                        How to Cheaply Host Your Full-Stack Side-Project: Serving it From Home
+                    
+                </h1>
+                
+            </div>
+        </div>
+    </section>
+</body>
+</html>
+
+
+
+<div class="container">
+    <div class="section">
+    
+
+<div class="columns">
+    <div class="column is-9">
+        <div class="tile is-child box">
+            <div class="content">
+                <p>Heya fellows,</p>
+<p>Frontend projects can be hosted for free. But when you&rsquo;re creating a full-stack app your provider needs to process requests, making database calls etc. No hosting provider offers this for free.</p>
+<p align="center">
+    <img alt="diy" src="https://media4.giphy.com/media/XaAbmtzzz35IgW3Ntn/giphy.gif?cid=ecf05e47fyq4wkqmayqk6xuug7o8c7x9uh9baif795z3oiii&ep=v1_gifs_search&rid=giphy.gif&ct=g" />
+</p>
+<p>So when no one offers this for free what else can we do? Build it ourselves!</p>
+<h2 id="content">Content</h2>
+<ol>
+<li><a href="#1-hardware">Hardware</a></li>
+<li><a href="#2-docker">Docker</a></li>
+<li><a href="#3-dynamic-dns">Dynamic DNS</a></li>
+<li><a href="#4-port-forwarding">Port Forwarding</a></li>
+<li><a href="#5-my-home-server-setup">My Home Server Setup</a></li>
+</ol>
+<hr>
+<h2 id="1-hardware">1. Hardware</h2>
+<p>To start, you&rsquo;ll need a computer that can act as a server. You don&rsquo;t necessarily need a powerful machine for this, especially if your app isn&rsquo;t too resource-intensive. An old desktop or a Raspberry Pi can work great for small-scale projects.</p>
+<p>Make sure your server has a reliable internet connection. It should ideally be wired directly into your router to maximize uptime and minimize latency. Furthermore, you need a docker compatible OS. You can install it via a bootable USB stick.</p>
+<p align="center">
+    <img alt="Building things" src="/img/hardware.png" />
+</p>
+<hr>
+<h2 id="2-docker">2. Docker</h2>
+<p>Next, we&rsquo;re going to use Docker, an open-source platform that simplifies deploying applications within software containers. Containers package up the code, configs, and dependencies into isolated units, making the app easy to run on any platform that supports Docker.</p>
+<p>To containerize our application we build a docker image using a <code>Dockerfile</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> openjdk:17-jdk-alpine</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ARG</span> JAR_FILE<span style="color:#f92672">=</span>target/*.jar<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> <span style="color:#e6db74">${</span>JAR_FILE<span style="color:#e6db74">}</span> app.jar<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENTRYPOINT</span> [<span style="color:#e6db74">&#34;java&#34;</span>,<span style="color:#e6db74">&#34;-jar&#34;</span>,<span style="color:#e6db74">&#34;/app.jar&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p>We deploy the container with a <code>docker run</code> command or using docker-compose.</p>
+<hr>
+<h2 id="3-dynamic-dns">3. Dynamic DNS</h2>
+<p>To make your server accessible from the internet, we deal with the public IP address that your ISP assigns, which changes regularly. The solution is Dynamic DNS (DDNS) - a service that keeps a DNS record up-to-date with your changing IP.</p>
+<p>There are several DDNS providers to choose from. After selection, configure it by installing their software on your server to regularly check your public IP and inform the DDNS service if it has changed.</p>
+<hr>
+<h2 id="4-port-forwarding">4. Port Forwarding</h2>
+<p>With a DDNS hostname pointing to your public IP, you&rsquo;d want your app to be accessible via a user-friendly domain name. Purchase a domain, and set up a CNAME record pointing to your DDNS hostname.</p>
+<p>The next step is port forwarding, a router feature that directs incoming traffic on specific ports to your server. For instance, if your app runs on port 8080, set up port forwarding to direct traffic coming in on this port to your server.</p>
+<p>You&rsquo;ve now got a home server hosting your full-stack app. Remember, this is a simplified guide - consider security, data safety, and home internet reliability when hosting critical applications at home.</p>
+<p align="center">
+    <img alt="hooooray" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZThjYzIwOTM2YjY3ZTk2NDUyYjc4ZWM4YzU2OGMyN2ZhOTU2ZDAxNyZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/3ohzAu2U1tOafteBa0/giphy.gif" />
+</p>
+<hr>
+<h2 id="5-my-home-server-setup">5. My Home Server Setup</h2>
+<p>To wrap things up, I want to share a real-life implementation of everything we&rsquo;ve covered in this article. I have set up a home server (UM-560 Mini PC) running Ubuntu Server, and Docker, and deployed my <a href="https://github.com/NiklasTiede/imdb-clone">IMDb Clone project</a> that you can access <a href="https://imdb-clone.the-coding-lab.com">here</a>.</p>
+<p>Here&rsquo;s a quick overview of the setup:</p>
+<ul>
+<li><strong>UM560 Home Server</strong>: This is a powerful, compact mini PC, which makes it an excellent choice for a home server. It runs Ubuntu Server, a robust, scalable, and secure platform for deploying applications.</li>
+</ul>
+<p align="center">
+    <img alt="Building things" src="/img/my-hardware.jpg" />
+</p>
+<ul>
+<li><strong>IMDb Clone</strong>: This is the application that&rsquo;s been hosted on the server. It&rsquo;s a full-fledged web application that gives users access to a vast database of movie information, just like the real IMDb. For more information visit <a href="https://github.com/niklastiede/imdb-clone">github.com/niklastiede/imdb-clone</a></li>
+</ul>
+<p align="center">
+    <img alt="Building things" src="/img/imdb-clone.png" />
+</p>
+<ul>
+<li><strong>Docker</strong>: I also tried docker-swarm but due to poor compatibility with ElasticSearch I stuck with Docker-Compose</li>
+<li><strong>DynDNS</strong>: My domain provider NameCheap provides also dynamic DNS, I use ddclient as a DynDNS client on the server</li>
+<li><strong>Port Forwarding</strong>: I have a FritzBox Router on which I opened port 443</li>
+</ul>
+<hr>
+<p>Hosting this app on my home server was a journey full of learning and excitement. It required a fair amount of configuration and tweaking, but the end result was well worth the effort.</p>
+<p>Remember, this didn&rsquo;t happen overnight. It required a good understanding of the technologies involved, a fair bit of troubleshooting, and a lot of patience. But once everything was up and running, the sense of accomplishment was immense.</p>
+<p>I hope my story inspires you and reassures you that setting up your own home server for your side projects is entirely doable. Just take it one step at a time, keep learning, and most importantly, enjoy the process. :smiley:</p>
+
+            </div>
+        </div>
+    </div>
+    <div class="column is-3">
+        <div class="card">
+    <div class="card-content">
+        <h1 class="title is-5">Tags</h1>
+        <div class="tags">
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/bash">bash</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/cli">cli</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/devops">devops</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/imdbclone">imdbclone</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/java">java</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/packaging">packaging</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/python">python</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/react">react</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/scripting">scripting</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/testing">testing</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/webdev">webdev</a></span>
+        
+        </div>          
+    </div>
+</div><br>
+        <div class="card">
+    <div class="card-content">
+        <h1 class="title is-5">Recent posts</h1>
+        
+            <h1><a href="https://the-coding-lab.com/2023/deploy-full-stack-app-on-home-server/">How to Cheaply Host Your Full-Stack Side-Project: Serving it From Home</a></h1>
+            <time class="has-text-grey-light is-size-7">25 May 2023</time>
+        
+            <h1><a href="https://the-coding-lab.com/2021/conda-and-pip/">Managing Environments with Conda and pip</a></h1>
+            <time class="has-text-grey-light is-size-7">25 April 2021</time>
+        
+            <h1><a href="https://the-coding-lab.com/2021/github-trending-api/">Turning a Website into an API</a></h1>
+            <time class="has-text-grey-light is-size-7">31 March 2021</time>
+        
+            <h1><a href="https://the-coding-lab.com/2021/9-publishing-at-anaconda/">Publishing at Anaconda and Automating the Process - 9/9</a></h1>
+            <time class="has-text-grey-light is-size-7">25 February 2021</time>
+        
+            <h1><a href="https://the-coding-lab.com/2021/8-publishing-at-pypi/">Releasing a Python App at Github/PyPI and Automate it - 8/9</a></h1>
+            <time class="has-text-grey-light is-size-7">23 February 2021</time>
+        
+    </div>
+</div>
+    <br>
+                
+  
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h1 class="title is-5">Related posts</h1>
+      
+      
+            <h1><a href="https://the-coding-lab.com/2021/github-trending-api/">Turning a Website into an API</a></h1>
+            <time class="has-text-grey-light is-size-7">31 March 2021</time>
+      
+    </div>
+</div>
+
+    
+<br>
+        <div class="card">
+    <div class="card-content">
+        <h1 class="title is-5">Archives</h1>
+        
+            <a href="https://the-coding-lab.com/archives/2023">2023</a> (1)<br>
+        
+            <a href="https://the-coding-lab.com/archives/2021">2021</a> (11)<br>
+        
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+    </div>
+</div>
+
+
+<footer class="footer has-background-grey-darker has-text-white">
+    <div class="content has-text-centered">
+        <p>
+            <span class="icon is-large"><a href="/index.xml" class="mysocial" rel="me"><i class="fas fa-rss fa-3x"></i></a></span>&nbsp;&nbsp;
+            <span class="icon is-large"><a href="https://github.com/NiklasTiede" class="mysocial" rel="me"><i class="fab fa-github fa-3x"></i></a></span>&nbsp;&nbsp;
+            <span class="icon is-large"><a href="mailto:niklastiede2@gmail.com" class="mysocial" rel="me"><i class="fas fa-envelope fa-3x"></i></a></span>&nbsp;&nbsp;
+            <span class="icon is-large"><a href="https://www.linkedin.com/in/niklas-tiede-3b57451b6/" class="mysocial" rel="me"><i class="fab fa-linkedin fa-3x"></i></a></span>&nbsp;&nbsp;
+            <span class="icon is-large"><a href="https://dev.to/niklastiede" class="mysocial" rel="me"><i class="fab fa-dev fa-3x"></i></a></span>&nbsp;&nbsp;
+            <br><br>
+            Copyright &copy; The Coding Lab 2023 - Theme by <a href="https://jeffprod.com" class="mysocial">JeffProd.com</a>
+            - <a class="mysocial" href="https://the-coding-lab.com/about">About</a>
+        </p>
+    </div>
+</footer>
+
+<script defer src="https://use.fontawesome.com/releases/v5.4.0/js/all.js"></script>
+</body>
+</html>

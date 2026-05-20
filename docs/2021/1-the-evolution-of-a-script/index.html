@@ -22,8 +22,7 @@ if (!doNotTrack) {
 	
 	ga('send', 'pageview');
 }
-</script>
- 
+</script> 
     
 <script type="application/javascript">
 var doNotTrack = false;
@@ -94,57 +93,57 @@ if (!doNotTrack) {
 <p>Exploring the web through the command line is a fascinating experience. We will use the <code>requests</code> library to create a little <a href="https://github.com/httpie/httpie">HTTPie</a> clone. HTTP clients are used to test how an API behaves when sending GET and POST requests to it.</p>
 <h1 id="1-a-simple-script">1. A Simple Script</h1>
 <p>First we will create a simple script which can perform GET requests. I keep all my scripts within a <code>MyScripts</code> folder. Then I create a project folder, and a virtual environment using <code>pipenv</code>.</p>
-<pre><code>$ cd ~/MyScripts
+<pre tabindex="0"><code>$ cd ~/MyScripts
 $ mkdir tinyHTTPie
 $ cd tinyHTTPie
 
 $ pipenv --python 3.7
 $ pipenv shell
 </code></pre><p>Then we have to create our project file and install dependencies:</p>
-<pre><code>$ touch tihttp.py
+<pre tabindex="0"><code>$ touch tihttp.py
 $ pip install requests
 </code></pre><p>Lets write our script. We want to print the header of the response. I used the <code>OrderedDict</code> object imported from the <code>collections</code> library to sort the keys of the dictionary.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> requests
-<span style="color:#f92672">import</span> collections
-
-resp <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;https://the-coding-lab.com/&#39;</span>)
-
-header <span style="color:#f92672">=</span> dict(collections<span style="color:#f92672">.</span>OrderedDict(resp<span style="color:#f92672">.</span>headers))
-body <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
-
-<span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
-    <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#34;{section[0]}: {section[1]}&#34;</span>)
-</code></pre></div><p>When we execute the script&hellip;</p>
-<pre><code>$ python tihttp.py
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> collections
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>resp <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;https://the-coding-lab.com/&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>header <span style="color:#f92672">=</span> dict(collections<span style="color:#f92672">.</span>OrderedDict(resp<span style="color:#f92672">.</span>headers))
+</span></span><span style="display:flex;"><span>body <span style="color:#f92672">=</span> resp<span style="color:#f92672">.</span>text
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> section <span style="color:#f92672">in</span> sorted(header<span style="color:#f92672">.</span>items()):
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">0</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">: </span><span style="color:#e6db74">{</span>section[<span style="color:#ae81ff">1</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><p>When we execute the script&hellip;</p>
+<pre tabindex="0"><code>$ python tihttp.py
 </code></pre><p>&hellip;the metadata of the request are returned successfully.</p>
-<pre><code class="language-console" data-lang="console">Accept-Ranges: bytes
-Access-Control-Allow-Origin: *
-Age: 124
-Cache-Control: max-age=600
-Connection: keep-alive
-Content-Encoding: gzip
-Content-Length: 5764
-Content-Type: text/html; charset=utf-8
-Date: Tue, 16 Feb 2021 14:39:59 GMT
-...
-</code></pre><p>But when you realize that a script of yours is pretty useful, you might think &ldquo;How could I turn this script into an easy-to-use command?&rdquo;. At first, you have to add a shebang line to stick the scripts virtual environment to it permanently. The <code>which python</code> command or <code>pipenv --py</code> will return the path to the Python interpreter of the virtual environment. It will look like:</p>
-<pre><code>/home/niklas/.local/share/virtualenvs/tinyHTTPie-iqhOkNUA/bin/python ~/tinyHTTPie/tihttp.py
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>Accept-Ranges: bytes
+</span></span><span style="display:flex;"><span>Access-Control-Allow-Origin: *
+</span></span><span style="display:flex;"><span>Age: 124
+</span></span><span style="display:flex;"><span>Cache-Control: max-age=600
+</span></span><span style="display:flex;"><span>Connection: keep-alive
+</span></span><span style="display:flex;"><span>Content-Encoding: gzip
+</span></span><span style="display:flex;"><span>Content-Length: 5764
+</span></span><span style="display:flex;"><span>Content-Type: text/html; charset=utf-8
+</span></span><span style="display:flex;"><span>Date: Tue, 16 Feb 2021 14:39:59 GMT
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>But when you realize that a script of yours is pretty useful, you might think &ldquo;How could I turn this script into an easy-to-use command?&rdquo;. At first, you have to add a shebang line to stick the scripts virtual environment to it permanently. The <code>which python</code> command or <code>pipenv --py</code> will return the path to the Python interpreter of the virtual environment. It will look like:</p>
+<pre tabindex="0"><code>/home/niklas/.local/share/virtualenvs/tinyHTTPie-iqhOkNUA/bin/python ~/tinyHTTPie/tihttp.py
 </code></pre><p>Now this path has to be added to the head of the script as a shebang line. We can do this from the command line.</p>
-<pre><code>$ pybin=$(pipenv --py)
-$ echo -e &quot;#\!${pybin}\n\n$(cat tihttp.py)&quot; &gt; tihttp.py
+<pre tabindex="0"><code>$ pybin=$(pipenv --py)
+$ echo -e &#34;#\!${pybin}\n\n$(cat tihttp.py)&#34; &gt; tihttp.py
 </code></pre><p>The head of the file should look like this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/home/niklas/.local/share/virtualenvs/tiny-HTTPie-clone-iqhOkNUA/bin/python</span>
-
-<span style="color:#f92672">import</span> requests
-<span style="color:#f92672">...</span>
-</code></pre></div><p>To make the script executable we have to give permissions. Then we can just type the path to the script and it will be interpreted by the specified Python interpreter.</p>
-<pre><code>$ chmod +x tiny_HTTPie_clone.py
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#!/home/niklas/.local/share/virtualenvs/tiny-HTTPie-clone-iqhOkNUA/bin/python</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>
+</span></span></code></pre></div><p>To make the script executable we have to give permissions. Then we can just type the path to the script and it will be interpreted by the specified Python interpreter.</p>
+<pre tabindex="0"><code>$ chmod +x tiny_HTTPie_clone.py
 $ ./tihttp.py
 </code></pre><p>Giving the path an alias will make it easier for us to remember/use our tool. To allow us to use the alias in every new shell session, we add it to the <code>.bashrc</code> file (or wherever you&rsquo;re storing your aliases).</p>
-<pre><code>$ echo &quot;\nalias tihttp='~/MyScripts/tiny_HTTPie_clone.py'&quot; &gt;&gt; ~/.bashrc
+<pre tabindex="0"><code>$ echo &#34;\nalias tihttp=&#39;~/MyScripts/tiny_HTTPie_clone.py&#39;&#34; &gt;&gt; ~/.bashrc
 $ source ~/.bashrc
 </code></pre><p>Now you can call your script in each new shell session no matter where you are on the filesystem.</p>
-<pre><code>$ tihttp
+<pre tabindex="0"><code>$ tihttp
 </code></pre><p>But there is still a problem: every time our tools sends a GET request to a website we have to change the URL by opening the file, changing the URL, saving and executing it. Would it not be nicer to add the URL as argument to our <code>tihttp</code> command? Python&rsquo;s <code>sys</code> module from the standard library comes here to our rescue!</p>
 <div>
 <p align="center"> <a href="/2021/2-sys-module">section 2 >></a> </p>
@@ -163,9 +162,17 @@ $ source ~/.bashrc
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/cli">cli</a></span>
         
+            <span class="tag"><a href="https://the-coding-lab.com/tags/devops">devops</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/imdbclone">imdbclone</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/java">java</a></span>
+        
             <span class="tag"><a href="https://the-coding-lab.com/tags/packaging">packaging</a></span>
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/python">python</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/react">react</a></span>
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/scripting">scripting</a></span>
         
@@ -180,6 +187,9 @@ $ source ~/.bashrc
     <div class="card-content">
         <h1 class="title is-5">Recent posts</h1>
         
+            <h1><a href="https://the-coding-lab.com/2023/deploy-full-stack-app-on-home-server/">How to Cheaply Host Your Full-Stack Side-Project: Serving it From Home</a></h1>
+            <time class="has-text-grey-light is-size-7">25 May 2023</time>
+        
             <h1><a href="https://the-coding-lab.com/2021/conda-and-pip/">Managing Environments with Conda and pip</a></h1>
             <time class="has-text-grey-light is-size-7">25 April 2021</time>
         
@@ -191,9 +201,6 @@ $ source ~/.bashrc
         
             <h1><a href="https://the-coding-lab.com/2021/8-publishing-at-pypi/">Releasing a Python App at Github/PyPI and Automate it - 8/9</a></h1>
             <time class="has-text-grey-light is-size-7">23 February 2021</time>
-        
-            <h1><a href="https://the-coding-lab.com/2021/7-documentation/">Documentation - 7/9</a></h1>
-            <time class="has-text-grey-light is-size-7">19 February 2021</time>
         
     </div>
 </div>
@@ -238,6 +245,8 @@ $ source ~/.bashrc
     <div class="card-content">
         <h1 class="title is-5">Archives</h1>
         
+            <a href="https://the-coding-lab.com/archives/2023">2023</a> (1)<br>
+        
             <a href="https://the-coding-lab.com/archives/2021">2021</a> (11)<br>
         
     </div>
@@ -260,7 +269,7 @@ $ source ~/.bashrc
             <span class="icon is-large"><a href="https://www.linkedin.com/in/niklas-tiede-3b57451b6/" class="mysocial" rel="me"><i class="fab fa-linkedin fa-3x"></i></a></span>&nbsp;&nbsp;
             <span class="icon is-large"><a href="https://dev.to/niklastiede" class="mysocial" rel="me"><i class="fab fa-dev fa-3x"></i></a></span>&nbsp;&nbsp;
             <br><br>
-            Copyright &copy; The Coding Lab 2021 - Theme by <a href="https://jeffprod.com" class="mysocial">JeffProd.com</a>
+            Copyright &copy; The Coding Lab 2023 - Theme by <a href="https://jeffprod.com" class="mysocial">JeffProd.com</a>
             - <a class="mysocial" href="https://the-coding-lab.com/about">About</a>
         </p>
     </div>

@@ -22,8 +22,7 @@ if (!doNotTrack) {
 	
 	ga('send', 'pageview');
 }
-</script>
- 
+</script> 
     
 <script type="application/javascript">
 var doNotTrack = false;
@@ -100,34 +99,34 @@ if (!doNotTrack) {
 <li>Is the code elegant and pleasing? <strong>Listen to your intuition</strong>, your subconscious will point to the right things.</li>
 </ul>
 <h1 id="docstrings-comments-and-git-commit-messages">Docstrings, Comments and Git Commit Messages</h1>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#f92672">import</span> math
-<span style="color:#f92672">&gt;&gt;&gt;</span> math<span style="color:#f92672">.</span>__doc__
-<span style="color:#e6db74">&#39;This module is always available.  It provides access to the&#39;</span>
-<span style="color:#e6db74">&#39;mathematical functions defined by the C standard.&#39;</span>
-</code></pre></div><p>Docstrings are string literals which occur as first statement in a function, class, method or module definition. The docstrings become the <code>__doc__</code> special attribute of that object. They&rsquo;re used to explain the general purpose of an object whereas comments explain smaller parts of the code. Comments are used to explain non-obvious portions of the code. Docstrings are surrounded by <code>&quot;&quot;&quot;triple quotes&quot;&quot;&quot;</code> and divided into one-line or multi-line docstrings whereas comments starts with <code>#</code> at the beginning.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">my_function</span>():
-    <span style="color:#e6db74">&#34;&#34;&#34;This is a docstring&#34;&#34;&#34;</span>
-    <span style="color:#66d9ef">return</span> None
-
-<span style="color:#75715e"># docstring of the function</span>
-my_function<span style="color:#f92672">.</span>__doc__
-
-<span style="color:#75715e"># displays documentation of the function</span>
-help(my_function)
-</code></pre></div><p>There are many docstring formats available. Most commonly used are NumPy, PyDoc and Googles docstring style. It&rsquo;s a good idea to stick with a format which supports the Python documentation generator <a href="https://github.com/sphinx-doc/sphinx">Sphinx</a>. This generates a part of your documentation automatically from your docstrings. The last section of this post will show how to generate and host documentation with Sphinx and <a href="https://github.com/readthedocs/readthedocs.org">readthedocs</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#f92672">import</span> math
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> math<span style="color:#f92672">.</span>__doc__
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;This module is always available.  It provides access to the&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;mathematical functions defined by the C standard.&#39;</span>
+</span></span></code></pre></div><p>Docstrings are string literals which occur as first statement in a function, class, method or module definition. The docstrings become the <code>__doc__</code> special attribute of that object. They&rsquo;re used to explain the general purpose of an object whereas comments explain smaller parts of the code. Comments are used to explain non-obvious portions of the code. Docstrings are surrounded by <code>&quot;&quot;&quot;triple quotes&quot;&quot;&quot;</code> and divided into one-line or multi-line docstrings whereas comments starts with <code>#</code> at the beginning.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">my_function</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;This is a docstring&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># docstring of the function</span>
+</span></span><span style="display:flex;"><span>my_function<span style="color:#f92672">.</span>__doc__
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># displays documentation of the function</span>
+</span></span><span style="display:flex;"><span>help(my_function)
+</span></span></code></pre></div><p>There are many docstring formats available. Most commonly used are NumPy, PyDoc and Googles docstring style. It&rsquo;s a good idea to stick with a format which supports the Python documentation generator <a href="https://github.com/sphinx-doc/sphinx">Sphinx</a>. This generates a part of your documentation automatically from your docstrings. The last section of this post will show how to generate and host documentation with Sphinx and <a href="https://github.com/readthedocs/readthedocs.org">readthedocs</a>.</p>
 <p>A convenient VSCode extension is the <a href="https://github.com/NilsJPWerner/autoDocstring">Python Docstring Generator</a> to facilitate the creation of docstrings.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">multiply</span>(x: int, y: int) <span style="color:#f92672">-&gt;</span> int:
-    <span style="color:#e6db74">&#34;&#34;&#34;[summary]
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">    Args:
-</span><span style="color:#e6db74">        x (int): [description]
-</span><span style="color:#e6db74">        y (int): [description]
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">    Returns:
-</span><span style="color:#e6db74">        int: [description]
-</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
-    <span style="color:#66d9ef">return</span> x <span style="color:#f92672">*</span> y
-</code></pre></div><p>It detects parameters automatically and you just have to fill out the marked fields. It uses the Google style by default.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">multiply</span>(x: int, y: int) <span style="color:#f92672">-&gt;</span> int:
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;[summary]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Args:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        x (int): [description]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        y (int): [description]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Returns:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        int: [description]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> x <span style="color:#f92672">*</span> y
+</span></span></code></pre></div><p>It detects parameters automatically and you just have to fill out the marked fields. It uses the Google style by default.</p>
 <hr>
 <p>Another source of documentation is available if the project has a Git history. A good git history gives you information about the reason for each code change. You can supercharge the git capabilities of VSCode by <a href="https://github.com/eamodio/vscode-gitlens">GitLens</a> and you will see each commit message next to the code it was committed to.</p>
 <p align="center">
@@ -152,12 +151,12 @@ help(my_function)
 <h1 id="sphinx-documentation">Sphinx Documentation</h1>
 <p>For smaller projects the <code>README.md</code> can be sufficient whereas projects like libraries benefit from a more extensive hosted technical documentation. I will show you here how simple it is to create your own freely hosted documentation with <a href="https://github.com/sphinx-doc/sphinx">Sphinx</a>, <a href="https://readthedocs.org/">readthedocs</a> and <a href="https://pages.github.com/">Github Pages</a>!</p>
 <p>OK, let&rsquo;s create some documentation! <code>Sphinx</code> is the tool that will help us to simplify this process.</p>
-<pre><code>$ pip install sphinx
+<pre tabindex="0"><code>$ pip install sphinx
 
 $ mkdir docs
 $ cd docs
 </code></pre><p>Sphinx will ask us a couple of questions:</p>
-<pre><code>$ sphinx-quickstart
+<pre tabindex="0"><code>$ sphinx-quickstart
 
 &gt; Separate source and build directories (y/n) [n]: y
 &gt; Project name: tinyHTTPie
@@ -165,19 +164,19 @@ $ cd docs
 &gt; Project release []: 0.1.0
 &gt; Project language [en]: enter
 </code></pre><p>To create the documentation we have to use the <code>make html</code> command within the <code>docs</code> directory. This creates the HTML of our documentation.</p>
-<pre><code>$ cd ..
+<pre tabindex="0"><code>$ cd ..
 $ make html
 </code></pre><p>If we open the <code>index.html</code> file with the browser via live server we can see how it will look like. But its appearance is pretty puristic yet. Therefore we use the popular <code>RTD</code> theme to give it a professional look. We install the theme&hellip;</p>
-<pre><code>$ pip install sphinx_rtd_theme
+<pre tabindex="0"><code>$ pip install sphinx_rtd_theme
 </code></pre><p>&hellip;and customize the <code>conf.py</code> file. We add the following lines:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> sphinx_rtd_theme
-
-extensions <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;sphinx_rtd_theme&#34;</span>,]
-pygments_style <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;sphinx&#34;</span>
-version <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;0.1.0&#39;</span>
-html_theme <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;sphinx_rtd_theme&#39;</span>
-</code></pre></div><p>And render again.</p>
-<pre><code>$ make html
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> sphinx_rtd_theme
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>extensions <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;sphinx_rtd_theme&#34;</span>,]
+</span></span><span style="display:flex;"><span>pygments_style <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;sphinx&#34;</span>
+</span></span><span style="display:flex;"><span>version <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;0.1.0&#39;</span>
+</span></span><span style="display:flex;"><span>html_theme <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;sphinx_rtd_theme&#39;</span>
+</span></span></code></pre></div><p>And render again.</p>
+<pre tabindex="0"><code>$ make html
 </code></pre><p>Now it looks way better! Ok, next we wanna write some more content. The documentation should be written in the reStructuredText (.rst) syntax. Here&rsquo;s a nice <a href="https://github.com/ralsina/rst-cheatsheet/blob/master/rst-cheatsheet.rst">cheat sheet</a>. A <code>.rst</code> previewer in your IDE will speed up things. I&rsquo;ve added some documentation about tinyHTTPie, see <a href="https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/index.rst">index.rst</a>, <a href="https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/install.rst">install.rst</a> and <a href="https://github.com/NiklasTiede/tinyHTTPie/blob/7-Documentation/docs/source/tutorial.rst">tutorial.rst</a>. The last step is to publish our documentation. We have to register at <a href="https://readthedocs.org/">readthedocs.org</a> and let it hook our repository.</p>
 <p>Voilà! A nice <a href="https://tinyhttpie.readthedocs.io/en/latest/">documentation</a> was created! I hope you see how easy it is to setup such a good-looking documentation and that documentation has so many interesting aspects we&rsquo;re typically not aware of! 😃</p>
 <div>
@@ -197,9 +196,17 @@ html_theme <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/cli">cli</a></span>
         
+            <span class="tag"><a href="https://the-coding-lab.com/tags/devops">devops</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/imdbclone">imdbclone</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/java">java</a></span>
+        
             <span class="tag"><a href="https://the-coding-lab.com/tags/packaging">packaging</a></span>
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/python">python</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/react">react</a></span>
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/scripting">scripting</a></span>
         
@@ -214,6 +221,9 @@ html_theme <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39
     <div class="card-content">
         <h1 class="title is-5">Recent posts</h1>
         
+            <h1><a href="https://the-coding-lab.com/2023/deploy-full-stack-app-on-home-server/">How to Cheaply Host Your Full-Stack Side-Project: Serving it From Home</a></h1>
+            <time class="has-text-grey-light is-size-7">25 May 2023</time>
+        
             <h1><a href="https://the-coding-lab.com/2021/conda-and-pip/">Managing Environments with Conda and pip</a></h1>
             <time class="has-text-grey-light is-size-7">25 April 2021</time>
         
@@ -225,9 +235,6 @@ html_theme <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39
         
             <h1><a href="https://the-coding-lab.com/2021/8-publishing-at-pypi/">Releasing a Python App at Github/PyPI and Automate it - 8/9</a></h1>
             <time class="has-text-grey-light is-size-7">23 February 2021</time>
-        
-            <h1><a href="https://the-coding-lab.com/2021/7-documentation/">Documentation - 7/9</a></h1>
-            <time class="has-text-grey-light is-size-7">19 February 2021</time>
         
     </div>
 </div>
@@ -272,6 +279,8 @@ html_theme <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39
     <div class="card-content">
         <h1 class="title is-5">Archives</h1>
         
+            <a href="https://the-coding-lab.com/archives/2023">2023</a> (1)<br>
+        
             <a href="https://the-coding-lab.com/archives/2021">2021</a> (11)<br>
         
     </div>
@@ -294,7 +303,7 @@ html_theme <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39
             <span class="icon is-large"><a href="https://www.linkedin.com/in/niklas-tiede-3b57451b6/" class="mysocial" rel="me"><i class="fab fa-linkedin fa-3x"></i></a></span>&nbsp;&nbsp;
             <span class="icon is-large"><a href="https://dev.to/niklastiede" class="mysocial" rel="me"><i class="fab fa-dev fa-3x"></i></a></span>&nbsp;&nbsp;
             <br><br>
-            Copyright &copy; The Coding Lab 2021 - Theme by <a href="https://jeffprod.com" class="mysocial">JeffProd.com</a>
+            Copyright &copy; The Coding Lab 2023 - Theme by <a href="https://jeffprod.com" class="mysocial">JeffProd.com</a>
             - <a class="mysocial" href="https://the-coding-lab.com/about">About</a>
         </p>
     </div>

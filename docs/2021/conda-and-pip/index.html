@@ -22,8 +22,7 @@ if (!doNotTrack) {
 	
 	ga('send', 'pageview');
 }
-</script>
- 
+</script> 
     
 <script type="application/javascript">
 var doNotTrack = false;
@@ -83,29 +82,29 @@ if (!doNotTrack) {
 <p>At first you have to install Anaconda on your system if it&rsquo;s not already installed. In the following we will install pandas, matplotlib and jupyter lab so we have a nice environment for data scientific work.</p>
 <h1 id="creating-environments-and-installing-packages">Creating Environments and Installing Packages</h1>
 <p>At first we create our new environment:</p>
-<pre><code>$ conda create -n my-new-environment python=3.8
+<pre tabindex="0"><code>$ conda create -n my-new-environment python=3.8
 </code></pre><p>Here we name the environment <code>my-new-environment</code> and use Python version 3.8. Conda will collect package metadata and create our new environment. By activating our new environment&hellip;</p>
-<pre><code>$ conda activate my-new-environment
+<pre tabindex="0"><code>$ conda activate my-new-environment
 </code></pre><p>&hellip;we leave condas base environment and enter our newly created environment. Then we can install the dependencies we need.</p>
-<pre><code>$ conda install matplotlib pandas 
+<pre tabindex="0"><code>$ conda install matplotlib pandas 
 </code></pre><p>Jupyter lab is offered via the <code>conda-forge</code> channel, a popular, well-maintained channel, not via the <code>default</code> channel. That&rsquo;s why we have to provide the channels name:</p>
-<pre><code>$ conda install -c conda-forge jupyterlab
+<pre tabindex="0"><code>$ conda install -c conda-forge jupyterlab
 </code></pre><p>Or we add the channel right away to condas configuration so that the <code>conda-forge</code> repo is searched on top of the <code>default</code> channel when installing packages. Conda-forge is a pretty popular and well-maintained channel and therefore we will add it here permanently.</p>
-<pre><code>$ conda config --add channels conda-forge
+<pre tabindex="0"><code>$ conda config --add channels conda-forge
 </code></pre><p>You can see that conda-forge was added to your <code>~./condarc</code> file.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">ssl_verify</span>: <span style="color:#66d9ef">true</span>
-<span style="color:#f92672">channels</span>:
-  - <span style="color:#ae81ff">conda-forge</span>
-  - <span style="color:#ae81ff">defaults</span>
-</code></pre></div><p>Some of condas commands are similar those of <code>pip</code>. To list the packages within your current environment we type:</p>
-<pre><code>$ conda list
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">ssl_verify</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">channels</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">conda-forge</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">defaults</span>
+</span></span></code></pre></div><p>Some of condas commands are similar those of <code>pip</code>. To list the packages within your current environment we type:</p>
+<pre tabindex="0"><code>$ conda list
 </code></pre><p>If you want to search through all anaconda repositories for a package, then use this command:</p>
-<pre><code>$ anaconda search &lt;package_name&gt;
+<pre tabindex="0"><code>$ anaconda search &lt;package_name&gt;
 </code></pre><h1 id="managing-multiple-environments">Managing Multiple Environments</h1>
 <p>But how do we deal with multiple environments? Let&rsquo;s clone the environment we created in the first place:</p>
-<pre><code>$ conda create --clone my-new-environment --name my-clone
+<pre tabindex="0"><code>$ conda create --clone my-new-environment --name my-clone
 </code></pre><p>When typing <code>conda env list</code> we see the two environments we created are next to the base environment.</p>
-<pre><code>$ conda env list
+<pre tabindex="0"><code>$ conda env list
 
 # conda environments:
 #
@@ -113,21 +112,21 @@ base                   /home/niklas/anaconda3
 my-new-environment     /home/niklas/anaconda3/envs/my-new-environment
 my-clone               /home/niklas/anaconda3/envs/my-clone
 </code></pre><p>We can switch the environment by just activating the new environment.</p>
-<pre><code>$ conda activate my-clone
+<pre tabindex="0"><code>$ conda activate my-clone
 </code></pre><p>To check which environment is currently active we can type <code>conda info</code>. BTW: Frameworks like Oh-My-Zsh show the active environment within the terminal which makes life easier.</p>
 <p>Ok, now lets clean up things and delete the cloned environment.</p>
-<pre><code>$ conda deactivate 
+<pre tabindex="0"><code>$ conda deactivate 
 $ conda env remove --name my-clone
 </code></pre><p>Conda caches all installed packages within the &lsquo;pkgs&rsquo; directory, so from time to time I clean it up to free up space.</p>
-<pre><code>$ conda clean -h
+<pre tabindex="0"><code>$ conda clean -h
 </code></pre><h1 id="sharing-environments">Sharing Environments</h1>
 <p>Developers are no one-man armies. We share our work to other developers/engineers and they should be able to reproduce our work. Conda is able to export the environments dependencies as a yaml file and recreate the environment from this file.</p>
-<pre><code>$ conda env export --name my-new-environment &gt; environment.yaml
+<pre tabindex="0"><code>$ conda env export --name my-new-environment &gt; environment.yaml
 </code></pre><p>Now all dependencies can be found in the <code>environment.yaml</code> file. This file can be used by someone else to recreate the environment. When no <code>--file</code> flag value is provided <code>conda</code> searches for a <code>environment.yaml</code> file in the current working directory and tries to recreate the environment from this file.</p>
-<pre><code>$ conda env create              
+<pre tabindex="0"><code>$ conda env create              
 $ conda env create --file environment-dev.yaml   
 </code></pre><p>But don&rsquo;t feel forced to only use conda packages when managing dependencies with conda! I also use conda when managing projects where I install only dependencies from pypi.org. Just as reminder here are the commands for storing/recreating <code>pip</code> dependencies.</p>
-<pre><code>$ pip freeze &gt; requirements.txt   
+<pre tabindex="0"><code>$ pip freeze &gt; requirements.txt   
 $ pip install -r requirements.txt
 </code></pre><p>Conda makes switching between different environments so easy and you have always access to conda packages. Unfortunately, condas speed for creating environments and installing conda packages is not outstanding but nonetheless it&rsquo;s good enough that I prefer it over other dependancy manager 🙂. If you want to see how to upload a project to Anaconda, take a look into my article &lsquo;<a href="/2021/9-publishing-at-anaconda/" target=”_blank” >Publishing at Anaconda</a>&rsquo;.</p>
 <p>Ok that&rsquo;s it, I hope you I could arouse your curiosity for Anaconda. Thanks for your attention and have a nice day! 🙂</p>
@@ -147,9 +146,17 @@ $ pip install -r requirements.txt
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/cli">cli</a></span>
         
+            <span class="tag"><a href="https://the-coding-lab.com/tags/devops">devops</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/imdbclone">imdbclone</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/java">java</a></span>
+        
             <span class="tag"><a href="https://the-coding-lab.com/tags/packaging">packaging</a></span>
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/python">python</a></span>
+        
+            <span class="tag"><a href="https://the-coding-lab.com/tags/react">react</a></span>
         
             <span class="tag"><a href="https://the-coding-lab.com/tags/scripting">scripting</a></span>
         
@@ -164,6 +171,9 @@ $ pip install -r requirements.txt
     <div class="card-content">
         <h1 class="title is-5">Recent posts</h1>
         
+            <h1><a href="https://the-coding-lab.com/2023/deploy-full-stack-app-on-home-server/">How to Cheaply Host Your Full-Stack Side-Project: Serving it From Home</a></h1>
+            <time class="has-text-grey-light is-size-7">25 May 2023</time>
+        
             <h1><a href="https://the-coding-lab.com/2021/conda-and-pip/">Managing Environments with Conda and pip</a></h1>
             <time class="has-text-grey-light is-size-7">25 April 2021</time>
         
@@ -175,9 +185,6 @@ $ pip install -r requirements.txt
         
             <h1><a href="https://the-coding-lab.com/2021/8-publishing-at-pypi/">Releasing a Python App at Github/PyPI and Automate it - 8/9</a></h1>
             <time class="has-text-grey-light is-size-7">23 February 2021</time>
-        
-            <h1><a href="https://the-coding-lab.com/2021/7-documentation/">Documentation - 7/9</a></h1>
-            <time class="has-text-grey-light is-size-7">19 February 2021</time>
         
     </div>
 </div>
@@ -222,6 +229,8 @@ $ pip install -r requirements.txt
     <div class="card-content">
         <h1 class="title is-5">Archives</h1>
         
+            <a href="https://the-coding-lab.com/archives/2023">2023</a> (1)<br>
+        
             <a href="https://the-coding-lab.com/archives/2021">2021</a> (11)<br>
         
     </div>
@@ -244,7 +253,7 @@ $ pip install -r requirements.txt
             <span class="icon is-large"><a href="https://www.linkedin.com/in/niklas-tiede-3b57451b6/" class="mysocial" rel="me"><i class="fab fa-linkedin fa-3x"></i></a></span>&nbsp;&nbsp;
             <span class="icon is-large"><a href="https://dev.to/niklastiede" class="mysocial" rel="me"><i class="fab fa-dev fa-3x"></i></a></span>&nbsp;&nbsp;
             <br><br>
-            Copyright &copy; The Coding Lab 2021 - Theme by <a href="https://jeffprod.com" class="mysocial">JeffProd.com</a>
+            Copyright &copy; The Coding Lab 2023 - Theme by <a href="https://jeffprod.com" class="mysocial">JeffProd.com</a>
             - <a class="mysocial" href="https://the-coding-lab.com/about">About</a>
         </p>
     </div>
