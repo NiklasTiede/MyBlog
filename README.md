@@ -1,30 +1,55 @@
+# The Coding Lab
 
+Personal blog built with Astro. Posts are Markdown files, old publication dates are preserved, and legacy URLs such as `/2021/conda-and-pip/` are still generated.
 
-<h2 align="center">
-    My Blog: The Coding Lab :rocket:
-</h2>
+## Local Development
 
-<p id="website" align="center">
-  <a href="https://the-coding-lab.com" alt="My-Blog" >
-    <img src="https://img.shields.io/website?label=the-coding-lab.com&style=for-the-badge&url=https%3A%2F%2Fcodestackr.com" height=25px/>
-  </a>
-</p>
+Install dependencies:
 
-<p align="justify">
+```sh
+npm install
+```
 
-This blog is all about Cheminformatics, Linux, Python and everything I'm interested in. I wrote some tutorials, did some interesting data analysis and other stuff I wanna share with you. My aim is to add knowledge to the web, which bothered me didn't exist before. I hope you can find something you like :smiley:
+Start the dev server:
 
-</p>
+```sh
+npm run dev
+```
 
----
+Build the static site:
 
-<p id="Icons" align="center">
-    <a href="https://github.com/gohugoio/hugo" alt="hugo">
-        <img src="https://img.shields.io/badge/Hugo-informational?style=flat&logo=hugo&logoColor=white&color=ff08a0" />
-    </a>
-    <a href="https://github.com/Tazeg/hugo-blog-jeffprod" alt="theme">
-        <img src="https://img.shields.io/badge/theme-jeffprod-informational?style=flat&logo=hugo2&logoColor=white&color=344fba" />
-    </a>
-</p>
+```sh
+npm run build
+```
 
-This blog was generated using the static website generator [Hugo](https://github.com/gohugoio/hugo) and a modified version [jeffprod's hugo blog theme](https://github.com/Tazeg/hugo-blog-jeffprod).
+Preview the production build:
+
+```sh
+npm run preview
+```
+
+## Content
+
+Blog posts live in `src/content/blog/`. Existing Hugo posts were migrated with their original publication dates and legacy slugs, so the old Hugo post:
+
+```text
+content/post/1-The-Evolution-of-a-Script.md
+```
+
+is available at:
+
+```text
+/2021/1-the-evolution-of-a-script/
+```
+
+Images live in `public/img/`, preserving old Markdown paths like `/img/conda.png`.
+
+## Deployment
+
+GitHub Pages deployment is handled by `.github/workflows/deploy.yml`.
+
+The custom domain is configured by `public/CNAME`:
+
+```text
+the-coding-lab.com
+```

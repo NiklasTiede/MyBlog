@@ -1,0 +1,63 @@
+---
+import ThemeToggle from "./ThemeToggle.astro";
+import { SITE } from "../consts";
+
+const path = Astro.url.pathname;
+const isActive = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
+---
+
+<header>
+  <div class="wrap bar">
+    <a href="/" class="brand">{SITE.title}</a>
+    <nav aria-label="Primary navigation">
+      <a href="/" class:list={["link", { active: isActive("/") }]}>Posts</a>
+      <a href="/about/" class:list={["link", { active: isActive("/about") }]}>About</a>
+      <ThemeToggle />
+    </nav>
+  </div>
+</header>
+
+<style>
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    backdrop-filter: saturate(160%) blur(10px);
+  }
+
+  .bar {
+    display: flex;
+    height: 62px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .brand {
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+  }
+
+  .link {
+    color: var(--text-muted);
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .link:hover,
+  .link.active {
+    color: var(--text);
+  }
+</style>

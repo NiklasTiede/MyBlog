@@ -1,0 +1,104 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { categoryFor, formatDate, postHref, toneFor } from "../consts";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDatetime } = post.data;
+const category = categoryFor(post);
+const tone = toneFor(category);
+---
+
+<a href={postHref(post)} class="featured reveal">
+  <div class:list={["cover", `cover-${tone}`]}>
+    <span class="grid-overlay" aria-hidden="true"></span>
+    <span class={`pill tone-${tone}`}>Featured · {category}</span>
+  </div>
+  <div class="body">
+    <h2>{title}</h2>
+    <p class="desc">{description}</p>
+    <div class="meta">
+      <time datetime={pubDatetime.toISOString()}>{formatDate(pubDatetime)}</time>
+      <span class="arrow">Read post -&gt;</span>
+    </div>
+  </div>
+</a>
+
+<style>
+  .featured {
+    display: block;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-elevated);
+    text-decoration: none;
+    transition:
+      transform 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .featured:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-3px);
+  }
+
+  .cover {
+    position: relative;
+    display: flex;
+    height: 150px;
+    align-items: flex-end;
+    padding: 16px;
+  }
+
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-size: 26px 26px;
+    mask-image: radial-gradient(80% 80% at 70% 30%, #000 0%, transparent 75%);
+  }
+
+  .cover .pill {
+    position: relative;
+    background: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    backdrop-filter: blur(4px);
+  }
+
+  .body {
+    padding: 20px 22px 22px;
+  }
+
+  .body h2 {
+    margin-bottom: 8px;
+    font-size: 27px;
+  }
+
+  .featured:hover .body h2 {
+    color: var(--accent-teal);
+  }
+
+  .desc {
+    margin-bottom: 16px;
+    color: var(--text-muted);
+    font-size: 16px;
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .arrow {
+    color: var(--accent-indigo);
+  }
+</style>

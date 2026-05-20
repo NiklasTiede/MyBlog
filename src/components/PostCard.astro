@@ -1,0 +1,69 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { categoryFor, formatDate, postHref, toneFor } from "../consts";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+  index?: number;
+}
+
+const { post, index = 0 } = Astro.props;
+const { title, description, pubDatetime } = post.data;
+const category = categoryFor(post);
+const tone = toneFor(category);
+const delay = `${Math.min(index, 6) * 60}ms`;
+---
+
+<a href={postHref(post)} class="card reveal" style={`animation-delay:${delay}`}>
+  <span class={`pill tone-${tone}`}>{category}</span>
+  <h3>{title}</h3>
+  <p class="desc">{description}</p>
+  <time datetime={pubDatetime.toISOString()}>{formatDate(pubDatetime)}</time>
+</a>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    background: var(--bg-elevated);
+    text-decoration: none;
+    transition:
+      transform 0.18s ease,
+      border-color 0.18s ease;
+  }
+
+  .card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-3px);
+  }
+
+  .pill {
+    align-self: flex-start;
+  }
+
+  .card h3 {
+    margin-top: 2px;
+    font-size: 18px;
+  }
+
+  .card:hover h3 {
+    color: var(--accent-teal);
+  }
+
+  .desc {
+    flex: 1;
+    color: var(--text-muted);
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+
+  time {
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+  }
+</style>

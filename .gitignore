@@ -6,3 +6,6 @@ themes/
 note_to_myself.txt
 .vscode/
 .idea/
+node_modules/
+dist/
+.astro/

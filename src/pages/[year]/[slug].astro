@@ -1,0 +1,188 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { categoryFor, formatDate, toneFor } from "../../consts";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+  return posts.map((post) => ({
+    params: {
+      year: String(post.data.pubDatetime.getFullYear()),
+      slug: post.data.slug,
+    },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const category = categoryFor(post);
+const tone = toneFor(category);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article class="article reveal">
+    <header class="post-head">
+      <a href="/" class="back">&lt;- All posts</a>
+      <div class="post-meta">
+        <span class={`pill tone-${tone}`}>{category}</span>
+        <time datetime={post.data.pubDatetime.toISOString()}>
+          {formatDate(post.data.pubDatetime)}
+        </time>
+      </div>
+      <h1>{post.data.title}</h1>
+      <p class="desc">{post.data.description}</p>
+    </header>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    {
+      post.data.tags.length > 0 && (
+        <footer class="tags">
+          {post.data.tags.map((tag) => (
+            <span class="tag">#{tag}</span>
+          ))}
+        </footer>
+      )
+    }
+  </article>
+</BaseLayout>
+
+<style>
+  .article {
+    padding-top: 24px;
+  }
+
+  .back {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    text-decoration: none;
+  }
+
+  .back:hover {
+    color: var(--accent-teal);
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 22px 0 12px;
+  }
+
+  .post-meta time {
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .post-head h1 {
+    font-size: clamp(30px, 5.5vw, 42px);
+  }
+
+  .post-head .desc {
+    margin-top: 12px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 26px;
+    color: var(--text-muted);
+    font-size: 18px;
+  }
+
+  .prose {
+    margin-top: 30px;
+  }
+
+  .prose :global(h2) {
+    margin: 2em 0 0.6em;
+    font-size: 24px;
+  }
+
+  .prose :global(h3) {
+    margin: 1.6em 0 0.5em;
+    font-size: 19px;
+  }
+
+  .prose :global(p) {
+    margin: 1em 0;
+  }
+
+  .prose :global(a) {
+    color: var(--accent-teal);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 1em 0;
+    padding-left: 1.3em;
+  }
+
+  .prose :global(li) {
+    margin: 0.4em 0;
+  }
+
+  .prose :global(blockquote) {
+    margin: 1.4em 0;
+    border-left: 3px solid var(--accent-indigo);
+    padding-left: 16px;
+    color: var(--text-muted);
+  }
+
+  .prose :global(code) {
+    border-radius: 5px;
+    padding: 2px 6px;
+    background: var(--bg-elevated-2);
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+  }
+
+  .prose :global(pre) {
+    overflow-x: auto;
+    margin: 1.4em 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    background: var(--bg-elevated);
+  }
+
+  .prose :global(pre code) {
+    padding: 0;
+    background: none;
+    font-size: 13.5px;
+  }
+
+  .prose :global(img) {
+    margin: 1.4em 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .prose :global(hr) {
+    margin: 2em 0;
+    border: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 40px;
+    border-top: 1px solid var(--border);
+    padding-top: 22px;
+  }
+
+  .tag {
+    border-radius: 6px;
+    padding: 3px 9px;
+    background: var(--bg-elevated-2);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+</style>

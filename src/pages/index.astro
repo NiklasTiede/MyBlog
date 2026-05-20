@@ -1,0 +1,100 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FeaturedCard from "../components/FeaturedCard.astro";
+import PostCard from "../components/PostCard.astro";
+import { SITE } from "../consts";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf(),
+);
+
+const featured = posts.find((post) => post.data.featured) ?? posts[0];
+const rest = posts.filter((post) => post.id !== featured?.id);
+
+const postsByYear = new Map<number, typeof rest>();
+for (const post of rest) {
+  const year = post.data.pubDatetime.getFullYear();
+  postsByYear.set(year, [...(postsByYear.get(year) ?? []), post]);
+}
+
+const years = [...postsByYear.keys()].sort((a, b) => b - a);
+---
+
+<BaseLayout>
+  <section class="hero reveal">
+    <p class="eyebrow">{SITE.tagline}</p>
+    <h1>
+      Things I build,
+      <span class="grad-text">and what I learned.</span>
+    </h1>
+    <p class="lede">{SITE.description}</p>
+  </section>
+
+  {featured && <FeaturedCard post={featured} />}
+
+  {
+    years.map((year) => (
+      <section class="year-group" aria-labelledby={`year-${year}`}>
+        <div class="year-head">
+          <h2 id={`year-${year}`} class="year">
+            {year}
+          </h2>
+          <span class="rule" aria-hidden="true" />
+        </div>
+        <div class="grid">
+          {postsByYear.get(year)!.map((post, index) => (
+            <PostCard post={post} index={index} />
+          ))}
+        </div>
+      </section>
+    ))
+  }
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: 40px 30px;
+  }
+
+  .hero h1 {
+    margin-block: 12px 16px;
+    font-size: clamp(38px, 7vw, 54px);
+  }
+
+  .lede {
+    max-width: 56ch;
+    color: var(--text-muted);
+    font-size: 17px;
+  }
+
+  .year-group {
+    margin-top: 36px;
+  }
+
+  .year-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .year {
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0;
+  }
+
+  .rule {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+</style>

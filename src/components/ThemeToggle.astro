@@ -1,0 +1,48 @@
+<button id="theme-toggle" type="button" aria-label="Toggle color theme">
+  <span class="track"><span class="knob"></span></span>
+</button>
+
+<style>
+  #theme-toggle {
+    display: inline-flex;
+    border: 0;
+    padding: 4px;
+    background: none;
+    cursor: pointer;
+  }
+
+  .track {
+    display: flex;
+    width: 38px;
+    height: 22px;
+    align-items: center;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    padding: 0 2px;
+    background: var(--bg-elevated-2);
+  }
+
+  .knob {
+    width: 16px;
+    height: 16px;
+    margin-left: auto;
+    border-radius: 50%;
+    background: var(--accent-grad);
+    transition: margin 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  :root[data-theme="light"] .knob {
+    margin-right: auto;
+    margin-left: 0;
+  }
+</style>
+
+<script>
+  const button = document.getElementById("theme-toggle");
+  button?.addEventListener("click", () => {
+    const root = document.documentElement;
+    const next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+    root.setAttribute("data-theme", next);
+    localStorage.setItem("theme", next);
+  });
+</script>

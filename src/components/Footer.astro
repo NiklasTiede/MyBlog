@@ -1,0 +1,33 @@
+---
+import { SITE } from "../consts";
+const year = new Date().getFullYear();
+---
+
+<footer>
+  <div class="wrap inner">
+    <span>© {year} {SITE.title}</span>
+    <span class="dot" aria-hidden="true">·</span>
+    <span>Old posts keep their original publication dates.</span>
+  </div>
+</footer>
+
+<style>
+  footer {
+    margin-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-block: 28px;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .dot {
+    color: var(--border-strong);
+  }
+</style>
