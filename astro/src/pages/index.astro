@@ -1,0 +1,65 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf(),
+);
+
+const postsByYear = posts.reduce(
+  (groups, post) => {
+    const year = String(post.data.pubDatetime.getFullYear());
+    const yearPosts = groups.get(year) ?? [];
+    yearPosts.push(post);
+    groups.set(year, yearPosts);
+    return groups;
+  },
+  new Map<string, typeof posts>(),
+);
+
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat("en", {
+    month: "long",
+    day: "numeric",
+  }).format(date);
+---
+
+<BaseLayout>
+  <section class="intro" aria-labelledby="intro-title">
+    <p class="eyebrow">Personal notes on software, tools, and projects</p>
+    <h1 id="intro-title">The Coding Lab</h1>
+    <p>
+      Programming notes, project writeups, and small technical guides. Old posts are
+      preserved with their original publication dates.
+    </p>
+  </section>
+
+  <section class="post-index" aria-labelledby="posts-title">
+    <h2 id="posts-title">Posts</h2>
+    <div class="year-list">
+      {
+        Array.from(postsByYear.entries()).map(([year, yearPosts]) => (
+          <section class="year-group" aria-labelledby={`year-${year}`}>
+            <h3 id={`year-${year}`}>{year}</h3>
+            <ol class="post-list">
+              {yearPosts.map((post) => {
+                const href = `/${year}/${post.data.slug}/`;
+                return (
+                  <li>
+                    <a href={href}>
+                      <span>{post.data.title}</span>
+                      <time datetime={post.data.pubDatetime.toISOString()}>
+                        {formatDate(post.data.pubDatetime)}
+                      </time>
+                    </a>
+                    <p>{post.data.description}</p>
+                  </li>
+                );
+              })}
+            </ol>
+          </section>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
