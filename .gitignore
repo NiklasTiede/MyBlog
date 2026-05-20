@@ -9,3 +9,4 @@ note_to_myself.txt
 node_modules/
 dist/
 .astro/
+.superpowers/

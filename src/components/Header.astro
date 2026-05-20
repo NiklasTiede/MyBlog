@@ -11,6 +11,7 @@ const isActive = (href: string) => (href === "/" ? path === "/" : path.startsWit
     <a href="/" class="brand">{SITE.title}</a>
     <nav aria-label="Primary navigation">
       <a href="/" class:list={["link", { active: isActive("/") }]}>Posts</a>
+      <a href="/projects/" class:list={["link", { active: isActive("/projects") }]}>Projects</a>
       <a href="/about/" class:list={["link", { active: isActive("/about") }]}>About</a>
       <span class="profile-links">
         <a href={SITE.social.github} class="icon-link" rel="me" aria-label="GitHub profile">
