@@ -1,0 +1,49 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Page not found" description="The requested page could not be found.">
+  <section class="not-found reveal" aria-labelledby="not-found-title">
+    <p class="eyebrow">404</p>
+    <h1 id="not-found-title">
+      This page drifted
+      <span class="grad-text">out of the lab.</span>
+    </h1>
+    <p class="lede">
+      The link may be outdated, or the post may have moved during the migration.
+    </p>
+    <a href="/" class="home-link">Back to posts -&gt;</a>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 54vh;
+    padding-block: 72px 40px;
+  }
+
+  .not-found h1 {
+    max-width: 10ch;
+    margin-block: 12px 18px;
+    font-size: clamp(42px, 8vw, 64px);
+  }
+
+  .lede {
+    max-width: 42ch;
+    color: var(--text-muted);
+    font-size: 17px;
+  }
+
+  .home-link {
+    display: inline-flex;
+    margin-top: 28px;
+    color: var(--accent-teal);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    text-decoration: none;
+  }
+
+  .home-link:hover {
+    color: var(--accent-indigo);
+  }
+</style>
