@@ -5,6 +5,10 @@ export const SITE = {
     "Programming notes, project writeups and small technical guides, written while building real things.",
   author: "Niklas Tiede",
   url: "https://the-coding-lab.com",
+  social: {
+    github: "https://github.com/NiklasTiede",
+    linkedin: "https://www.linkedin.com/in/niklas-tiede/",
+  },
 };
 
 export type Tone = "teal" | "indigo" | "amber" | "coral" | "gray";

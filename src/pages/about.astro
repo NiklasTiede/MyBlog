@@ -1,6 +1,7 @@
 ---
 import { getEntry, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE } from "../consts";
 
 const about = await getEntry("pages", "about");
 
@@ -20,6 +21,10 @@ const { Content } = await render(about);
     <div class="body">
       <Content />
     </div>
+    <nav class="social-links" aria-label="Profile links">
+      <a href={SITE.social.github} rel="me">GitHub</a>
+      <a href={SITE.social.linkedin} rel="me">LinkedIn</a>
+    </nav>
   </article>
 </BaseLayout>
 
@@ -53,5 +58,30 @@ const { Content } = await render(about);
     margin: 0 0 24px;
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
+  }
+
+  .social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .social-links a {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 11px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-decoration: none;
+    transition:
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .social-links a:hover {
+    border-color: var(--border-strong);
+    color: var(--accent-teal);
   }
 </style>

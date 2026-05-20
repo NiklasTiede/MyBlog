@@ -7,7 +7,9 @@ const year = new Date().getFullYear();
   <div class="wrap inner">
     <span>© {year} {SITE.title}</span>
     <span class="dot" aria-hidden="true">·</span>
-    <span>Old posts keep their original publication dates.</span>
+    <a href={SITE.social.github} rel="me">GitHub</a>
+    <span class="dot" aria-hidden="true">·</span>
+    <a href={SITE.social.linkedin} rel="me">LinkedIn</a>
   </div>
 </footer>
 
@@ -29,5 +31,14 @@ const year = new Date().getFullYear();
 
   .dot {
     color: var(--border-strong);
+  }
+
+  a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--accent-teal);
   }
 </style>
