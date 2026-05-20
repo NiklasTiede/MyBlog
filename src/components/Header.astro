@@ -10,10 +10,12 @@ const isActive = (href: string) => (href === "/" ? path === "/" : path.startsWit
   <div class="wrap bar">
     <a href="/" class="brand">{SITE.title}</a>
     <nav aria-label="Primary navigation">
-      <a href="/" class:list={["link", { active: isActive("/") }]}>Posts</a>
-      <a href="/projects/" class:list={["link", { active: isActive("/projects") }]}>Projects</a>
-      <a href="/about/" class:list={["link", { active: isActive("/about") }]}>About</a>
-      <span class="profile-links">
+      <span class="site-links">
+        <a href="/" class:list={["link", { active: isActive("/") }]}>Posts</a>
+        <a href="/projects/" class:list={["link", { active: isActive("/projects") }]}>Projects</a>
+        <a href="/about/" class:list={["link", { active: isActive("/about") }]}>About</a>
+      </span>
+      <span class="utility-links">
         <a href={SITE.social.github} class="icon-link" rel="me" aria-label="GitHub profile">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path
@@ -28,8 +30,8 @@ const isActive = (href: string) => (href === "/" ? path === "/" : path.startsWit
             ></path>
           </svg>
         </a>
+        <ThemeToggle />
       </span>
-      <ThemeToggle />
     </nav>
   </div>
 </header>
@@ -67,6 +69,22 @@ const isActive = (href: string) => (href === "/" ? path === "/" : path.startsWit
     gap: 22px;
   }
 
+  .site-links,
+  .utility-links {
+    display: flex;
+    align-items: center;
+  }
+
+  .site-links {
+    gap: 22px;
+  }
+
+  .utility-links {
+    gap: 7px;
+    border-left: 1px solid var(--border);
+    padding-left: 18px;
+  }
+
   .link {
     color: var(--text-muted);
     font-size: 14px;
@@ -77,15 +95,6 @@ const isActive = (href: string) => (href === "/" ? path === "/" : path.startsWit
   .link:hover,
   .link.active {
     color: var(--text);
-  }
-
-  .profile-links {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    margin-left: 2px;
-    border-left: 1px solid var(--border);
-    padding-left: 18px;
   }
 
   .icon-link {
@@ -124,12 +133,18 @@ const isActive = (href: string) => (href === "/" ? path === "/" : path.startsWit
 
     nav {
       width: 100%;
+      align-items: flex-start;
+      flex-wrap: wrap;
       justify-content: space-between;
       gap: 12px;
     }
 
-    .profile-links {
-      margin-left: auto;
+    .site-links {
+      gap: 16px;
+    }
+
+    .utility-links {
+      margin-left: 0;
       padding-left: 12px;
     }
 
