@@ -17,12 +17,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Install, build, and upload site
-        uses: withastro/action@v6
+      - name: Setup Node
+        uses: actions/setup-node@v6
         with:
-          path: .
           node-version: 24
-          package-manager: npm
+          cache: npm
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site
+        run: npm run build
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./dist
 
   deploy:
     needs: build
