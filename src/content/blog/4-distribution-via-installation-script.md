@@ -1,6 +1,6 @@
 ---
 title: "Distribution via Installation Script - 4/9"
-description: "we try to distribute a Python App via Bash script"
+description: "Distributing a Python command-line app with a Bash installation script and learning its tradeoffs."
 pubDatetime: 2021-02-06
 slug: "4-distribution-via-installation-script"
 tags:

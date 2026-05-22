@@ -1,6 +1,6 @@
 ---
 title: "How to Cheaply Host Your Full-Stack Side-Project: Serving it From Home"
-description: "How to deploy a full-stack application on a home server cheaply"
+description: "Hosting a full-stack side project from a home server with Docker, dynamic DNS, port forwarding, and practical tradeoffs."
 pubDatetime: 2023-05-25
 slug: "deploy-full-stack-app-on-home-server"
 tags:

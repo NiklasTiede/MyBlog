@@ -1,6 +1,6 @@
 ---
 title: "Testing and CI - 6/9"
-description: "a Python app is tested with Pytest, Tox and Github Actions"
+description: "Testing a Python app with pytest and tox, then automating checks with GitHub Actions."
 pubDatetime: 2021-02-16
 slug: "6-testing-and-continous-integration"
 tags:

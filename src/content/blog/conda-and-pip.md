@@ -1,6 +1,6 @@
 ---
 title: "Managing Environments with Conda and pip"
-description: "Some basics about anaconda, a scientific package manager for python"
+description: "Managing Python environments with conda and pip, including channels, package exports, and reproducible setup files."
 pubDatetime: 2021-04-25
 slug: "conda-and-pip"
 tags:
@@ -26,7 +26,7 @@ Here I wanna show you some basic commands of `conda` and `pip` I'm using to mana
 
 At first you have to install Anaconda on your system if it's not already installed. In the following we will install pandas, matplotlib and jupyter lab so we have a nice environment for data scientific work.
 
-# Creating Environments and Installing Packages
+## Creating Environments and Installing Packages
 
 At first we create our new environment:
 
@@ -79,7 +79,7 @@ If you want to search through all anaconda repositories for a package, then use 
 $ anaconda search <package_name>
 ```
 
-# Managing Multiple Environments
+## Managing Multiple Environments
 
 But how do we deal with multiple environments? Let's clone the environment we created in the first place:
 
@@ -120,7 +120,7 @@ Conda caches all installed packages within the 'pkgs' directory, so from time to
 $ conda clean -h
 ```
 
-# Sharing Environments
+## Sharing Environments
 
 Developers are no one-man armies. We share our work to other developers/engineers and they should be able to reproduce our work. Conda is able to export the environments dependencies as a yaml file and recreate the environment from this file. 
 

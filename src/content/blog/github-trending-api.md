@@ -1,6 +1,6 @@
 ---
 title: "Turning a Website into an API"
-description: "Showing how to build an API which scrapes data from Githubs trending repositories/developers."
+description: "Building a FastAPI service that scrapes GitHub Trending data and exposes it as a developer-friendly API."
 pubDatetime: 2021-03-31
 slug: "github-trending-api"
 tags:
@@ -35,7 +35,7 @@ So I thought it would be nice to build such a web scraping API to learn more abo
 
 ---
 
-# Contents
+## Contents
 
 1. [Scraping Repository Data](#1-scraping-repository-data)
 2. [FastAPI](#2-fastapi)
@@ -48,7 +48,7 @@ Python has great 3rd party packages for web scraping like <a href="https://githu
 
 ---
 
-# 1. Scraping Repository Data
+## 1. Scraping Repository Data
 
 At first I wrote some Python code to scrape the desired data. I saved a sample of the trending repositories HTML to avoid sending dozens of requests to Github. I use <a href="https://github.com/httpie/httpie" target=”_blank” >HTTPie</a> as HTTP client to perform requests via the terminal.
 
@@ -142,7 +142,7 @@ For data about trending developers I have written a another scraping function. O
 
 ---
 
-# 2. FastAPI
+## 2. FastAPI
 
 FastAPI makes building APIs a breeze. Here's an example:
 
@@ -312,7 +312,7 @@ Three more routes will be written to cover all trending repositories and develop
 
 ---
 
-# 3. Deployment to Heroku
+## 3. Deployment to Heroku
 
 We'll use Heroku which is an excellent Platform as a service (PaaS) cloud provider. To deploy our API to heroku we need a `heroku.yml` file...
 
@@ -385,7 +385,7 @@ Aaaand, thats it! We deployed a nice-looking API 😙
 
 ---
 
-# 4. Conclusion and Future Directions
+## 4. Conclusion and Future Directions
 
 Here is the full source code of the project: <a href="https://github.com/NiklasTiede/Github-Trending-API" target=”_blank” >Github Trending API</a>
 
