@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE } from "../consts";
 import imdbScreenshot from "../../imdb-clone-screenshot.webp";
 
 const projects = [
@@ -16,9 +17,35 @@ const projects = [
     articleUrl: "/2023/imdb-clone-backend/",
   },
 ];
+
+const projectsStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Projects",
+  url: `${SITE.url}/projects/`,
+  description: "Selected software projects by Niklas Tiede.",
+  author: {
+    "@type": "Person",
+    name: SITE.author,
+    sameAs: [SITE.social.github, SITE.social.linkedin],
+  },
+  mainEntity: projects.map((project) => ({
+    "@type": "SoftwareSourceCode",
+    name: project.title,
+    description: project.description,
+    codeRepository: project.sourceUrl,
+    url: project.liveUrl,
+    programmingLanguage: project.stack,
+  })),
+};
 ---
 
-<BaseLayout title="Projects" description="Selected software projects by Niklas Tiede.">
+<BaseLayout
+  title="Projects"
+  description="Selected software projects by Niklas Tiede."
+  canonicalPath="/projects/"
+  structuredData={projectsStructuredData}
+>
   <section class="hero reveal">
     <p class="eyebrow">Selected work</p>
     <h1>

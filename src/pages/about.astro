@@ -10,9 +10,29 @@ if (!about) {
 }
 
 const { Content } = await render(about);
+
+const profileStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  name: "About Niklas Tiede",
+  url: `${SITE.url}/about/`,
+  description: about.data.description ?? SITE.description,
+  mainEntity: {
+    "@type": "Person",
+    name: SITE.author,
+    url: SITE.url,
+    sameAs: [SITE.social.github, SITE.social.linkedin],
+  },
+};
 ---
 
-<BaseLayout title={about.data.title} description={about.data.description}>
+<BaseLayout
+  title={about.data.title}
+  description={about.data.description}
+  canonicalPath="/about/"
+  ogType="profile"
+  structuredData={profileStructuredData}
+>
   <article class="about reveal">
     <header>
       <p class="eyebrow">About</p>
