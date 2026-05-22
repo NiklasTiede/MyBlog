@@ -1,6 +1,6 @@
 ---
 title: "Releasing a Python App at Github/PyPI and Automate it - 8/9"
-description: "how to release a Python app at Github, the python packaging index and automate this with Github Actions"
+description: "Releasing a Python app on GitHub and PyPI, then automating the release process with GitHub Actions."
 pubDatetime: 2021-02-23
 slug: "8-publishing-at-pypi"
 tags:
@@ -49,7 +49,7 @@ But how do we release our project so other can download it conveniently from the
 - Release it on PyPI
 
 
-# Git Tags and Release at Github
+## Git Tags and Release at Github
 
 Depending on the kind/size of a project developers use Git branching workflows when working as a team but for smaller projects it's sufficient to work on the main line and create only branches when introducing features that might affect the stability of the project. This way we keep the main line always in a releasable state. 
 
@@ -76,7 +76,7 @@ Now we browse our way to the Github repository and create a release. We go to `R
 
 At last, we publish the release. In the next section we will package our project and publish it at the Python Packaging Index (PyPI).
 
-# Publishing at PyPI
+## Publishing at PyPI
 
 To publish a python project at PyPI we have to package it by generating a source distribution (.tar.gz) and a wheel distribution (.whl). 
 
@@ -118,7 +118,7 @@ $ pip install tihttp
 
 Keep in mind that you can upload a specific semantic version just once to PyPI, thats why it's important to test uploading the version when just starting out the deployment process for a new project. Otherwise you have to bump the release version up and repeat the process (in that case the world will not end either). 
 
-# Automated Release with Github Actions
+## Automated Release with Github Actions
 
 Both processes (Github release and publishing at PyPI) can be automated using Github actions. The automation here is not that powerful for a project of this size but still I REALLY like Github actions and wanna let keep you in mind how nice it is! 😀 
 

@@ -19,9 +19,22 @@ for (const post of rest) {
 }
 
 const years = [...postsByYear.keys()].sort((a, b) => b - a);
+
+const websiteStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE.title,
+  url: SITE.url,
+  description: SITE.description,
+  author: {
+    "@type": "Person",
+    name: SITE.author,
+    sameAs: [SITE.social.github, SITE.social.linkedin],
+  },
+};
 ---
 
-<BaseLayout>
+<BaseLayout canonicalPath="/" structuredData={websiteStructuredData}>
   <section class="hero reveal">
     <p class="eyebrow">{SITE.tagline}</p>
     <h1>

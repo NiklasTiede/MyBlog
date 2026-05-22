@@ -1,6 +1,6 @@
 ---
 title: "Here is the backend to my IMDb Clone!"
-description: "How a movie apps spring boot backend with a MySQL db is build up"
+description: "Exploring the Spring Boot backend for an IMDb clone with MySQL, Elasticsearch, accounts, ratings, and watchlists."
 pubDatetime: 2023-04-10
 slug: "imdb-clone-backend"
 tags:
@@ -20,7 +20,7 @@ And for me it was not that easy to find projects from which I could learn. Peopl
 
 What does this project differentiate from other real-world example apps? It comes with the original IMDb dataset of ~9 million movies shipped!
 
-# Contents
+## Contents
 
 1. [What Functionality does this Backend provide?](#1-what-functionality-does-this-backend-provide)
 2. [How to Rebuild this Project](#2-how-to-rebuild-this-project)

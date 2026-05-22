@@ -1,6 +1,6 @@
 ---
 title: "Documentation - 7/9"
-description: "how to make solid documentation in python using clean code, docstrings, comments, git commit messages and Sphinx"
+description: "Documenting Python projects with readable code, docstrings, useful comments, commit history, READMEs, and Sphinx."
 pubDatetime: 2021-02-19
 slug: "7-documentation"
 tags:
@@ -31,7 +31,7 @@ This is part 7 of the multi-part series "The Evolution of a Script". The code of
 In this post I wanna talk about a few dimensions of how to document a project in the python world. This makes it easier for the user or fellow developers to understand the project as a whole or separate parts of it. We will start at the lowest level and move toward higher abstraction levels.
 
 
-# Clean, Self-Descriptive Code
+## Clean, Self-Descriptive Code
 
 The lowest level of documentation is the code itself. The goal is to create readable and reusable software.  This can be achieved by adhering to a few principles:
 
@@ -43,7 +43,7 @@ The lowest level of documentation is the code itself. The goal is to create read
 - Is the code elegant and pleasing? **Listen to your intuition**, your subconscious will point to the right things.
 
 
-# Docstrings, Comments and Git Commit Messages
+## Docstrings, Comments and Git Commit Messages
 
 
 ```python
@@ -92,18 +92,18 @@ It detects parameters automatically and you just have to fill out the marked fie
 Another source of documentation is available if the project has a Git history. A good git history gives you information about the reason for each code change. You can supercharge the git capabilities of VSCode by [GitLens](https://github.com/eamodio/vscode-gitlens) and you will see each commit message next to the code it was committed to.
 
 <p align="center">
-<img width="690px" src="/img/gitlens_example.png">
+<img width="690px" src="/img/gitlens_example.png" alt="GitLens commit annotation example in VS Code">
 </p>
 
 Furthermore, I like to use [gitmoji](https://github.com/carloscuesta/gitmoji) to make the reading of my commit messages visually more appealing and force myself to commit only code changes which fall into one category of the gitmojis.
 
-# README Files
+## README Files
 
 A nicely written README is the first document the visitor of a project will see. Here's a screenshot of [THELOUNGE](https://github.com/thelounge/thelounge), an IRC client for self-hosting:
 
 
 <p align="center">
-<img width="500px" src="/img/beautiful_readme_example.png">
+<img width="500px" src="/img/beautiful_readme_example.png" alt="Example of a polished GitHub README page">
 </p>
 
 What a beautiful README! What does it make so good? 
@@ -116,7 +116,7 @@ What a beautiful README! What does it make so good?
 
 Often README files also contain instructions for the installation or a tutorial on how to use it. The READMEs file format is `.md` (markdown) or `.rst` (reStructuredText). Sometimes it's also a good idea to provide examples to the user for certain, common use cases. Projects with a data scientific background tend to use jupyter notebooks (`.ipynb`) to demonstrate the capabilities of the project. Other projects use plain python files for demonstration purposes.
 
-# Sphinx Documentation
+## Sphinx Documentation
 
 For smaller projects the `README.md` can be sufficient whereas projects like libraries benefit from a more extensive hosted technical documentation. I will show you here how simple it is to create your own freely hosted documentation with [Sphinx](https://github.com/sphinx-doc/sphinx), [readthedocs](https://readthedocs.org/) and [Github Pages](https://pages.github.com/)!
 

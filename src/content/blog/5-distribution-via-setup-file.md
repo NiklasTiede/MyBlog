@@ -1,6 +1,6 @@
 ---
 title: "Distribution via Setup File - 5/9"
-description: "the normal workflow for distributing apps in Python is shown: using a setup.py file"
+description: "Packaging a Python app with setup.py so it can be installed and distributed more reliably."
 pubDatetime: 2021-02-11
 slug: "5-distribution-via-setup-file"
 tags:

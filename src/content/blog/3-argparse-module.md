@@ -1,6 +1,6 @@
 ---
 title: "Argparse Module - 3/9"
-description: "Pythons argparse module is used to simplify and professionalize the making of a command line app"
+description: "Using Python's argparse module to build a cleaner command-line interface with generated help output."
 pubDatetime: 2021-02-01
 slug: "3-argparse-module"
 tags:

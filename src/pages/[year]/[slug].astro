@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { categoryFor, formatDate, toneFor } from "../../consts";
+import { SITE, categoryFor, formatDate, postHref, toneFor } from "../../consts";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -19,9 +19,43 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 const category = categoryFor(post);
 const tone = toneFor(category);
+const canonicalPath = postHref(post);
+const publishedTime = post.data.pubDatetime.toISOString();
+const modifiedTime = (post.data.modDatetime ?? post.data.pubDatetime).toISOString();
+const articleStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: publishedTime,
+  dateModified: modifiedTime,
+  url: new URL(canonicalPath, SITE.url).toString(),
+  mainEntityOfPage: new URL(canonicalPath, SITE.url).toString(),
+  author: {
+    "@type": "Person",
+    name: SITE.author,
+    sameAs: [SITE.social.github, SITE.social.linkedin],
+  },
+  publisher: {
+    "@type": "Organization",
+    name: SITE.title,
+    url: SITE.url,
+  },
+  keywords: post.data.tags,
+  articleSection: category,
+};
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description}>
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  canonicalPath={canonicalPath}
+  ogType="article"
+  publishedTime={publishedTime}
+  modifiedTime={modifiedTime}
+  tags={post.data.tags}
+  structuredData={articleStructuredData}
+>
   <article class="article reveal">
     <header class="post-head">
       <a href="/" class="back">&lt;- All posts</a>

@@ -1,6 +1,6 @@
 ---
 title: "Sys Module - 2/9"
-description: "Pythons sys module is used to create a tiny command line app."
+description: "Using Python's sys module to read command-line arguments and turn a script into a tiny CLI app."
 pubDatetime: 2021-01-26
 slug: "2-sys-module"
 tags:

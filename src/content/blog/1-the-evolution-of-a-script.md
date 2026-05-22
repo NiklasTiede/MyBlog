@@ -1,6 +1,6 @@
 ---
 title: "The Evolution of a Script - 1/9"
-description: "A script for http requests is written."
+description: "Building a tiny Python HTTP client from a simple script and learning how scripts evolve into tools."
 pubDatetime: 2021-01-21
 slug: "1-the-evolution-of-a-script"
 tags:
@@ -36,7 +36,7 @@ It took me 8 month before I started to discover Github. What a phenomenal mistak
 
 Exploring the web through the command line is a fascinating experience. We will use the `requests` library to create a little [HTTPie](https://github.com/httpie/httpie) clone. HTTP clients are used to test how an API behaves when sending GET and POST requests to it.
 
-# 1. A Simple Script
+## 1. A Simple Script
 
 First we will create a simple script which can perform GET requests. I keep all my scripts within a `MyScripts` folder. Then I create a project folder, and a virtual environment using `pipenv`.
 
